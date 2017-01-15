@@ -3,13 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dxw", "dxw.csproj", "{98F3FABA-1841-488C-919F-DE71C7525FD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dxw", "dxw\dxw.csproj", "{98F3FABA-1841-488C-919F-DE71C7525FD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "..\Sample\Sample.csproj", "{F3C88736-757A-4361-B698-5AB465405755}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{F3C88736-757A-4361-B698-5AB465405755}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4DE629ED-2FA3-45CF-8EAB-BC028AAFA471}"
 	ProjectSection(SolutionItems) = preProject
-		..\README.md = ..\README.md
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
