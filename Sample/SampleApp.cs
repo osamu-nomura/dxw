@@ -39,6 +39,19 @@ namespace Sample
             base.Update();
             if (CheckOnKeyUp(DX.KEY_INPUT_Q))
                 Quit();
+            if (CheckOnKeyUp(DX.KEY_INPUT_1))
+            {
+                AddTask((tm, app) =>
+                {
+                    var ms = ElapsedTime - tm;
+                    if (ms >= 5000)
+                    {
+                        Quit();
+                        return true;
+                    }
+                    return false;
+                });
+            }
         }
         #endregion
 
@@ -49,7 +62,7 @@ namespace Sample
         protected override void DrawFrame()
         {
             base.DrawFrame();
-            DX.DrawBox(20, 20, 780, 580, DX.GetColor(255, 0, 0), DX.TRUE);
+            DX.DrawBox(0, 0, ScreenWidth, ScreenHeight, DX.GetColor(255, 0, 0), DX.TRUE);
 
             var sec = ElapsedTime / 1000.0;
             DX.DrawString(70, 70, sec.ToString(), DX.GetColor(255, 255, 255));

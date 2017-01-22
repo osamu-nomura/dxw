@@ -7,12 +7,43 @@ using DxLibDLL;
 
 namespace dxw
 {
-    #region 【BaseApplication】
+    #region 【Class ; BaseApplication】
     /// <summary>
     /// 基底アプリケーションクラス
     /// </summary>
     public class BaseApplication
     {
+        #region ■ Internal Classes
+
+        #region 【Class : Task】
+        /// <summary>
+        /// タスククラス
+        /// </summary>
+        private class Task
+        {
+            #region ■ Properties
+
+            #region - RequestTime : リクエスト時間
+            /// <summary>
+            /// リクエスト時間
+            /// </summary>
+            public ulong RequestTime { get; set; }
+            #endregion
+
+            #region - Proc : タスクプロセス
+            /// <summary>
+            /// タスクプロセス
+            /// </summary>
+            public Func<ulong, BaseApplication, bool> Proc { get; set; }
+            #endregion
+
+            #endregion
+        }
+        #endregion
+
+        #endregion
+
+
         #region ■ Members
 
         #region - _measuredTime : 基準計測時間
@@ -48,6 +79,27 @@ namespace dxw
         /// 離されたキー
         /// </summary>
         private byte[] _keyUps = new byte[256];
+        #endregion
+
+        #region - _taskList : 処理要求リクエストリスト
+        /// <summary>
+        /// 処理要求リクエストリスト
+        /// </summary>
+        private List<Task> _taskList { get; set; } = new List<Task>();
+        #endregion
+
+        #region - _systemFontHandle : システムフォントハンドル
+        /// <summary>
+        /// システムフォントハンドル
+        /// </summary>
+        private int _systemFontHandle = 0;
+        #endregion
+
+        #region - _colorWhite : 白色
+        /// <summary>
+        /// 白色
+        /// </summary>
+        private uint _colorWhite = 0;
         #endregion
 
         #endregion
@@ -96,6 +148,20 @@ namespace dxw
         public double FPS { get; private set; } = 0d;
         #endregion
 
+        #region - IsShowSystemInformation : システム情報表示フラグ
+        /// <summary>
+        /// システム情報表示フラグ
+        /// </summary>
+        public bool IsShowSystemInformation { get; set; }
+        #endregion
+
+        #region - Inputs : 入力情報
+        /// <summary>
+        /// 入力情報
+        /// </summary>
+        public List<InputInfo> Inputs { get; private set; } = new List<InputInfo>();
+        #endregion
+
         #endregion
 
         #region ■ Delegates
@@ -133,9 +199,9 @@ namespace dxw
         }
         #endregion
 
-        #region - UpdateKeyState : キーボードの状態を取得する
+        #region - UpdateKeyState : キーボードの状態を更新する
         /// <summary>
-        /// キーボードの状態を取得する
+        /// キーボードの状態を更新する
         /// </summary>
         public void UpdateKeyState()
         {
@@ -158,9 +224,61 @@ namespace dxw
         }
         #endregion
 
+        #region - UpdateInputState : タッチ＆マウスの入力状態を更新する
+        /// <summary>
+        /// タッチ＆マウスの入力状態を更新する
+        /// </summary>
+        public void UpdateInputState()
+        {
+            int x, y, id, device, buttons;
+
+            Inputs.Clear();
+            for (var i = 0; i < DX.GetTouchInputNum(); i++)
+            {
+                DX.GetTouchInput(i, out x, out y, out id, out device);
+                Inputs.Add(new InputInfo(DeviceType.Touch, id, x, y, DX.MOUSE_INPUT_LEFT));
+            }
+            // マウスの状態を取得
+            if ((buttons = DX.GetMouseInput()) != 0)
+            {
+                DX.GetMousePoint(out x, out y);
+                Inputs.Add(new InputInfo(DeviceType.Mouse, 0, x, y, buttons));
+            }
+        }
+        #endregion
+
+        #region - ShowSystemInformation : システム情報を表示
+        /// <summary>
+        /// システム情報を表示
+        /// </summary>
+        private void ShowSystemInformation()
+        {
+            DX.DrawStringToHandle(5, 5, $"FPS:{FPS:##0.0} ELAPS TIME:{ElapsedTime:#,##0}ms", _colorWhite, _systemFontHandle);
+            var keyBuff = (FlipFlop) ? _flipKeyBuff : _flipKeyBuff;
+            DX.DrawStringToHandle(5, 25, $"KeyBuff:{string.Join("", keyBuff.Select(n => n.ToString()))}", _colorWhite, _systemFontHandle);
+            for (var i = 0; i < Inputs.Count; i++)
+            {
+                var device = (Inputs[i].Device == DeviceType.Touch) ? "Touch" : "Mouse";
+                DX.DrawStringToHandle(5, 45 + (i * 20), $"input;[{device}] (X:{Inputs[i].X} Y:{Inputs[i].Y})", _colorWhite, _systemFontHandle);
+            }
+
+        }
+        #endregion
+
         #endregion
 
         #region ■ Protected Methods
+
+        #region - Init : 初期化処理
+        /// <summary>
+        /// DXライブラリ初期化後に行う必要のある初期化処理
+        /// </summary>
+        protected virtual  void Init()
+        {
+            _systemFontHandle = DX.CreateFontToHandle("Meiryo", 14, 3, DX.DX_FONTTYPE_ANTIALIASING);
+            _colorWhite = DX.GetColor(255, 255, 255);
+        }
+        #endregion
 
         #region - Update : 更新処理
         /// <summary>
@@ -202,6 +320,9 @@ namespace dxw
 
             try
             {
+                // 初期化処理
+                Init();
+
                 // 裏画面に描画するよう設定
                 DX.SetDrawScreen(DX.DX_SCREEN_BACK);
 
@@ -213,15 +334,21 @@ namespace dxw
                     // 状態の更新
                     UpdateElapsedTime();
                     UpdateKeyState();
+                    UpdateInputState();
 
                     // 描画画面をクリア
                     DX.ClearDrawScreen();
 
                     // 更新処理
                     Update();
+                    _taskList.RemoveAll(req => req.Proc.Invoke(req.RequestTime, this));
 
                     // フレームを描画
                     DrawFrame();
+
+                    // システム情報表示
+                    if (IsShowSystemInformation)
+                        ShowSystemInformation();
 
                     // 裏画面を表画面に転送
                     DX.ScreenFlip();
@@ -290,6 +417,17 @@ namespace dxw
                 return _keyUps[keyCode] == 1;
             else
                 return false;
+        }
+        #endregion
+
+        #region - AddTask : リクエストタスクの追加
+        /// <summary>
+        /// リクエストタスクの追加
+        /// </summary>
+        /// <param name="proc">リクエストタスク</param>
+        public void AddTask(Func<ulong, BaseApplication,bool> proc)
+        {
+            _taskList.Add(new Task { RequestTime = ElapsedTime, Proc = proc });
         }
         #endregion
 
