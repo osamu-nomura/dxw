@@ -251,6 +251,7 @@ paket-files/
 .idea/
 *.sln.iml
 
-# OSAMU NOMURA ’Ç‰Á
+# OSAMU NOMURA Add
 DXLib/
+hsb/
 

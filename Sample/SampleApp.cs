@@ -34,14 +34,14 @@ namespace Sample
         /// <summary>
         /// 更新処理
         /// </summary>
-        protected override void Update()
+        protected override void UpdateFrame()
         {
-            base.Update();
+            base.UpdateFrame();
             if (CheckOnKeyUp(DX.KEY_INPUT_Q))
                 Quit();
             if (CheckOnKeyUp(DX.KEY_INPUT_1))
             {
-                AddTask((tm, app) =>
+                AddTask((id, tm, app) =>
                 {
                     var ms = ElapsedTime - tm;
                     if (ms >= 5000)

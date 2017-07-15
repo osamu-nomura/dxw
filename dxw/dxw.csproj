@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,9 @@
     <Reference Include="DxLibDotNet">
       <HintPath>..\DXLib\DxLibDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="hsb">
+      <HintPath>..\hsb\hsb.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseApplication.cs" />
+    <Compile Include="BasePushButton.cs" />
+    <Compile Include="BaseScene.cs" />
+    <Compile Include="BaseSprite.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="InputInfo.cs" />
