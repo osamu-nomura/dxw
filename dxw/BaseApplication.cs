@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DxLibDLL;
+using System.IO;
+using hsb.Extensions;
+
+using static dxw.Helper;
 
 namespace dxw
 {
@@ -50,8 +53,14 @@ namespace dxw
 
         #endregion
 
-
         #region ■ Members
+
+        #region - _title : タイトル
+        /// <summary>
+        /// タイトル
+        /// </summary>
+        private string _title = string.Empty;
+        #endregion
 
         #region - _measuredTime : 基準計測時間
         /// <summary>
@@ -134,12 +143,65 @@ namespace dxw
         /// <summary>
         /// シーン変更要求No
         /// </summary>
-        public int? _requestSceneNo = null;
+        private int? _requestSceneNo = null;
+        #endregion
+
+        #region - _requestScene : シーン変更要求シーン
+        /// <summary>
+        /// シーン変更要求シーン
+        /// </summary>
+        private BaseScene _requestScene = null;
+        #endregion
+
+        #region - _dialogScene : ダイアログシーン
+        /// <summary>
+        /// ダイアログシーン
+        /// </summary>
+        private BaseScene _dialogScene = null;
+        #endregion
+
+        #region - _isCallParentUpdateFrame : ダイアログ表示時親のUpdateFrameを呼び出す？
+        /// <summary>
+        /// ダイアログ表示時親のUpdateFrameを呼び出す？
+        /// </summary>
+        private bool _isCallParentUpdateFrame = false;
+        #endregion
+
+        #region - _archiveFilePassword : アーカイブファイルのパスワード
+        /// <summary>
+        /// アーカイブファイルのパスワード
+        /// </summary>
+        private string _archiveFilePassword = null;
         #endregion
 
         #endregion
 
         #region ■ Properties
+
+        #region - Title : タイトル
+        /// <summary>
+        /// タイトル
+        /// </summary>
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                if (_title != value)
+                {
+                    _title = value;
+                    SetMainWindowText(_title);
+                }
+            }
+        }
+        #endregion
+
+        #region - WindowMode : ウィンドウモード
+        /// <summary>
+        /// ウィンドウモード
+        /// </summary>
+        public WindowMode WindowMode { get; private set; } = WindowMode.Window;
+        #endregion
 
         #region - ScreenWidth : 画面サイズ 幅
         /// <summary>
@@ -155,6 +217,26 @@ namespace dxw
         public int ScreenHeight { get; private set; }
         #endregion
 
+        #region - ScreenSize : 画面サイズ
+        /// <summary>
+        /// 画面サイズ
+        /// </summary>
+        public RectangleSize ScreenSize
+        {
+            get { return new RectangleSize(ScreenWidth, ScreenHeight);  }
+        }
+        #endregion
+
+        #region - ScreenRect : 画面矩形
+        /// <summary>
+        /// 画面矩形
+        /// </summary>
+        public Rectangle ScreenRect
+        {
+            get { return new Rectangle(0, 0, ScreenWidth, ScreenHeight);  }
+        }
+        #endregion
+
         #region - IsTerminate : アプリケーション終了フラグ
         /// <summary>
         /// アプリケーション終了フラグ
@@ -162,7 +244,7 @@ namespace dxw
         public bool IsTerminate { get; set; } = false;
         #endregion
 
-        #region - _flipFlop : フリップフロップ値
+        #region - FlipFlop : フリップフロップ値
         /// <summary>
         /// フリップフロップ値 - フレーム単位で反転する
         /// </summary>
@@ -281,6 +363,31 @@ namespace dxw
         public Random Random { get; private set; } = new Random();
         #endregion
 
+        #region - IsLoadCompleted : ロードが完了した？
+        /// <summary>
+        /// ロードが完了した？
+        /// </summary>
+        public bool IsLoadCompleted { get; protected set; } = false;
+        #endregion
+
+        #region - ArchiveFilePassword : アーカイブファイルのパスワード
+        /// <summary>
+        /// アーカイブファイルのパスワード
+        /// </summary>
+        public string ArchiveFilePassword
+        {
+            get { return _archiveFilePassword; }
+            set
+            {
+                if (_archiveFilePassword != value)
+                {
+                    _archiveFilePassword = value;
+                    SetDXArchiveKeyString(_archiveFilePassword);
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region ■ Delegates
@@ -288,18 +395,37 @@ namespace dxw
         #endregion
 
         #region ■ Constructor
+
+        #region - Constructor(1)
         /// <summary>
-        /// コンストラクター
+        /// コンストラクター(1)
         /// </summary>
         /// <param name="screenWidth">画面幅(ピクセル)</param>
         /// <param name="screenHeight">画面高さ(ピクセル)</param>
-        /// <param name="colorBitDepth">色進度(BIT)</param>
+        /// <param name="colorBitDepth">色深度(BIT)</param>
         public BaseApplication(int screenWidth = 640, int screenHeight = 480, ColorBitDepth colorBitDepth = ColorBitDepth.BitDepth32)
         {
-            DX.SetGraphMode(screenWidth, screenHeight, (int)colorBitDepth);
+            SetGraphMode(screenWidth, screenHeight, colorBitDepth);
             ScreenWidth = screenWidth;
             ScreenHeight = screenHeight;
         }
+        #endregion
+
+        #region - Constructor(2)
+        /// <summary>
+        /// コンストラクター(2)
+        /// </summary>
+        /// <param name="screenWidth">画面幅(ピクセル)</param>
+        /// <param name="screenHeight">画面高さ(ピクセル)</param>
+        /// <param name="colorBitDepth">色深度(BIT)</param>
+        public BaseApplication(RectangleSize screenSize, ColorBitDepth colorBitDepth = ColorBitDepth.BitDepth32)
+        {
+            SetGraphMode(screenSize, colorBitDepth);
+            ScreenWidth = screenSize.Width;
+            ScreenHeight = screenSize.Height;
+        }
+        #endregion
+
         #endregion
 
         #region ■ Private Methods
@@ -314,7 +440,7 @@ namespace dxw
             if (IsPause)
                 return;
 
-            var t = DX.GetNowCount();
+            var t = GetNowCount();
             var wrap = (t >= _measuredTime) ? (t - _measuredTime) : (int.MaxValue - _measuredTime + t);
             ElapsedTime += (ulong)wrap;
             FPS = (wrap != 0) ? 1000.0d / wrap : 0.0d;
@@ -331,17 +457,19 @@ namespace dxw
             var prevKeyBuff = FlipFlop ? _flopKeyBuff : _flipKeyBuff;
             var curKeyBuff = FlipFlop ? _flipKeyBuff : _flopKeyBuff;
 
-            DX.GetHitKeyStateAll(curKeyBuff);
-            for (var i = 0; i < 256; i++)
+            if (GetHitKeyStateAll(curKeyBuff))
             {
-                _keyDowns[i] = 0;
-                _keyUps[i] = 0;
-                if (prevKeyBuff[i] != curKeyBuff[i])
+                for (var i = 0; i < curKeyBuff.Length; i++)
                 {
-                    if (curKeyBuff[i] == 1)
-                        _keyDowns[i] = 1;
-                    else
-                        _keyUps[i] = 1;
+                    _keyDowns[i] = 0;
+                    _keyUps[i] = 0;
+                    if (prevKeyBuff[i] != curKeyBuff[i])
+                    {
+                        if (curKeyBuff[i] == 1)
+                            _keyDowns[i] = 1;
+                        else
+                            _keyUps[i] = 1;
+                    }
                 }
             }
         }
@@ -353,20 +481,11 @@ namespace dxw
         /// </summary>
         public void UpdateInputState()
         {
-            int x, y, id, device, buttons;
-
             Inputs.Clear();
-            for (var i = 0; i < DX.GetTouchInputNum(); i++)
-            {
-                DX.GetTouchInput(i, out x, out y, out id, out device);
-                Inputs.Add(new InputInfo(DeviceType.Touch, id, x, y, DX.MOUSE_INPUT_LEFT));
-            }
+            // タッチの状態を取得する
+            Inputs.AddRange(GetTouchInputs());
             // マウスの状態を取得
-            if ((buttons = DX.GetMouseInput()) != 0)
-            {
-                DX.GetMousePoint(out x, out y);
-                Inputs.Add(new InputInfo(DeviceType.Mouse, 0, x, y, buttons));
-            }
+            Inputs.AddWithoutNull(GetMouseInput());
         }
         #endregion
 
@@ -376,15 +495,15 @@ namespace dxw
         /// </summary>
         private void ShowSystemInformation()
         {
-            DX.DrawStringToHandle(5, 5, $"FPS:{FPS:##0.0} ELAPS TIME:{ElapsedTime:#,##0}ms", _colorWhite, _systemFontHandle);
+            DrawString(5, 5, $"FPS:{FPS:##0.0} ELAPS TIME:{ElapsedTime:#,##0}ms", _colorWhite, _systemFontHandle);
             if (IsShowInputStatus)
             {
                 var keyBuff = (FlipFlop) ? _flipKeyBuff : _flopKeyBuff;
-                DX.DrawStringToHandle(5, 25, $"KeyBuff:{string.Join("", keyBuff.Select(n => n.ToString()))}", _colorWhite, _systemFontHandle);
+                DrawString(5, 25, $"KeyBuff:{string.Join("", keyBuff.Select(n => n.ToString()))}", _colorWhite, _systemFontHandle);
                 for (var i = 0; i < Inputs.Count; i++)
                 {
                     var device = (Inputs[i].Device == DeviceType.Touch) ? "Touch" : "Mouse";
-                    DX.DrawStringToHandle(5, 45 + (i * 20), $"input;[{device}] (X:{Inputs[i].X} Y:{Inputs[i].Y})", _colorWhite, _systemFontHandle);
+                    DrawString(5, 45 + (i * 20), $"input;[{device}] (X:{Inputs[i].X} Y:{Inputs[i].Y})", _colorWhite, _systemFontHandle);
                 }
             }
         }
@@ -400,31 +519,36 @@ namespace dxw
             PreLoading();
 
             // リソースを非同期でロードする
-            DX.SetUseASyncLoadFlag(DX.TRUE);
-
-            var continueLoadiing = true;
-            var startTime = ElapsedTime;
-            while (DX.ProcessMessage() == 0 && !IsTerminate)
+            SetUseASyncLoadFlag(true);
+            try
             {
-                UpdateElapsedTime();
+                var continueLoadiing = true;
+                var startTime = ElapsedTime;
+                while (ProcessMessage() && !IsTerminate)
+                {
+                    UpdateElapsedTime();
 
-                // ロード処理
-                var loadingElapsedTime = ElapsedTime - startTime;
-                if (continueLoadiing)
-                    continueLoadiing = Loading(loadingElapsedTime);
-                else if (DX.GetASyncLoadNum() == 0)
-                    break;
+                    // ロード処理
+                    var loadingElapsedTime = ElapsedTime - startTime;
+                    if (continueLoadiing)
+                        continueLoadiing = Loading(loadingElapsedTime);
+                    else if (GetASyncLoadNum() == 0)
+                        break;
 
-                // 描画画面をクリア
-                DX.ClearDrawScreen();
-                // ローディング中画面の描画
-                DrawLodingFrame(loadingElapsedTime);
+                    // 描画画面をクリア
+                    ClearDrawScreen();
+                    // ローディング中画面の描画
+                    DrawLodingFrame(loadingElapsedTime);
+                    ScreenFlip();
+                }
+                IsLoadCompleted = true;
+                LoadCompleted();
             }
-            LoadCompleted();
-
-            // 非同期読み込みを解除
-            DX.SetUseASyncLoadFlag(DX.FALSE);
-
+            finally
+            {
+                // 非同期読み込みを解除
+               SetUseASyncLoadFlag(false);
+            }
         }
         #endregion
 
@@ -438,9 +562,9 @@ namespace dxw
         /// </summary>
         protected virtual  void Init()
         {
-            _systemFontHandle = DX.CreateFontToHandle("Meiryo", 14, 3, DX.DX_FONTTYPE_ANTIALIASING);
-            _colorWhite = DX.GetColor(255, 255, 255);
-            _colorBlack = DX.GetColor(0, 0, 0);
+            _systemFontHandle = CreateFont("Meiryo", 14, 3, FontType.AntiAlias);
+            _colorWhite = GetColor(255, 255, 255);
+            _colorBlack = GetColor(0, 0, 0);
         }
         #endregion
 
@@ -505,7 +629,14 @@ namespace dxw
         /// </summary>
         protected virtual void UpdateFrame()
         {
-            CurrentScene?.UpdateFrame();
+            if (_dialogScene != null)
+            {
+                if (_isCallParentUpdateFrame)
+                    CurrentScene?.UpdateFrame();
+                _dialogScene.UpdateFrame();
+            }
+            else
+                CurrentScene?.UpdateFrame();
         }
         #endregion
 
@@ -516,6 +647,7 @@ namespace dxw
         protected virtual void DrawFrame()
         {
             CurrentScene?.DrawFrame();
+            _dialogScene?.DrawFrame();
         }
         #endregion
 
@@ -531,14 +663,22 @@ namespace dxw
             UpdateInputState();
 
             // シーン変更
-            if (_requestSceneNo.HasValue)
+            if (_requestScene != null)
             {
-                CurrentScene = Scenes[_requestSceneNo.Value];
-                _requestSceneNo = null;
+                CurrentScene = _requestScene;
+                _requestScene = null;
+            }
+            else
+            {
+                if (_requestSceneNo.HasValue)
+                {
+                    CurrentScene = Scenes[_requestSceneNo.Value];
+                    _requestSceneNo = null;
+                }
             }
 
             // 描画画面をクリア
-            DX.ClearDrawScreen();
+            ClearDrawScreen();
         }
         #endregion
 
@@ -553,7 +693,7 @@ namespace dxw
                 ShowSystemInformation();
 
             // 裏画面を表画面に転送
-            DX.ScreenFlip();
+            ScreenFlip();
 
             FlipFlop = !FlipFlop;
 
@@ -563,9 +703,18 @@ namespace dxw
             if (!_requestPause && IsPause)
             {
                 IsPause = false;
-                _measuredTime = DX.GetNowCount();
+                _measuredTime = GetNowCount();
             }
         }
+        #endregion
+
+        #region - FillBackground : 背景を指定色で塗りつぶす
+        /// <summary>
+        /// 背景を指定色で塗りつぶす
+        /// </summary>
+        /// <param name="color">指定色</param>
+        protected void FillBackground(uint color) 
+            => DrawBox(ScreenRect, color, true);
         #endregion
 
         #endregion
@@ -580,10 +729,11 @@ namespace dxw
         public virtual void Run(WindowMode windowMode)
         {
             // Windowモードの設定
-            DX.ChangeWindowMode((int)windowMode);
+            if (ChangeWindowMode(windowMode))
+                WindowMode = windowMode;
 
             // DXライブラリの初期化
-            if (DX.DxLib_Init() == -1)
+            if (!InitializeDxLibrary())
                 throw new ApplicationException("DX Library initialize error!");
 
             try
@@ -592,9 +742,9 @@ namespace dxw
                 Init();
 
                 // 裏画面に描画するよう設定
-                DX.SetDrawScreen(DX.DX_SCREEN_BACK);
+                SetDrawScreen(DrawScreen.Background);
 
-                _measuredTime = DX.GetNowCount();
+                _measuredTime = GetNowCount();
 
                 // リソースのロード
                 LoadResource();
@@ -603,7 +753,7 @@ namespace dxw
                 _requestSceneNo = (Scenes.Count > 0) ? (int?)0 : null;
 
                 // メッセージループ
-                while (DX.ProcessMessage() == 0 && !IsTerminate)
+                while (ProcessMessage() && !IsTerminate)
                 {
                     // 前処理
                     MessageLoopBeginRound();
@@ -624,7 +774,7 @@ namespace dxw
             finally
             {
                 // DXライブラリの終了処理
-                DX.DxLib_End();
+                TerminateDxLibrary();
             }
         }
         #endregion
@@ -665,11 +815,11 @@ namespace dxw
         /// </summary>
         /// <param name="keyCode">キーコード</param>
         /// <returns>True ;  押下されている / False : されていない</returns>
-        public bool CheckHitKey(int keyCode)
+        public bool CheckHitKey(KeyCode keyCode)
         {
             var curKeyBuff = FlipFlop ? _flipKeyBuff : _flopKeyBuff;
-            if (keyCode >= 0 && keyCode < 256)
-                return curKeyBuff[keyCode] == 1;
+            if ((int)keyCode >= 0 && (int)keyCode < 256)
+                return curKeyBuff[(int)keyCode] == 1;
             else
                 return false;
         }
@@ -680,16 +830,10 @@ namespace dxw
         /// キーボードが押下されているキーのキーコードを取得する
         /// </summary>
         /// <returns>押下されているキーコードのリスト</returns>
-        public List<int> HitKeys()
+        public List<KeyCode> HitKeys()
         {
             var curKeyBuff = FlipFlop ? _flipKeyBuff : _flopKeyBuff;
-            var buff = new List<int>();
-            for (var i = 0; i < 255; i++)
-            {
-                if (curKeyBuff[i] == 1)
-                    buff.Add(i);
-            }
-            return buff;
+            return Enumerable.Range(0, 255).Where(n => curKeyBuff[n] == 1).Select(n => (KeyCode)n).ToList();
         }
         #endregion
 
@@ -699,12 +843,23 @@ namespace dxw
         /// </summary>
         /// <param name="keyCode">キーコード</param>
         /// <returns>True ;  押下されている / False : されていない</returns>
-        public bool CheckOnKeyDown(int keyCode)
+        public bool CheckOnKeyDown(KeyCode keyCode)
         {
-            if (keyCode >= 0 && keyCode < 256)
-                return _keyDowns[keyCode] == 1;
+            if ((int)keyCode >= 0 && (int)keyCode < 256)
+                return _keyDowns[(int)keyCode] == 1;
             else
                 return false;
+        }
+        #endregion
+
+        #region - GetKeyDowns : キーボードが押下されたキーのキーコードを取得する
+        /// <summary>
+        /// キーボードが押下されたキーのキーコードを取得する
+        /// </summary>
+        /// <returns>キーコードのリスト</returns>
+        public List<KeyCode> GetKeyDowns()
+        {
+            return Enumerable.Range(0, 255).Where(n => _keyDowns[n] == 1).Select(n => (KeyCode)n).ToList();
         }
         #endregion
 
@@ -714,12 +869,23 @@ namespace dxw
         /// </summary>
         /// <param name="keyCode">キーコード</param>
         /// <returns>True ;  押下されている / False : されていない</returns>
-        public bool CheckOnKeyUp(int keyCode)
+        public bool CheckOnKeyUp(KeyCode keyCode)
         {
-            if (keyCode >= 0 && keyCode < 256)
-                return _keyUps[keyCode] == 1;
+            if ((int)keyCode >= 0 && (int)keyCode < 256)
+                return _keyUps[(int)keyCode] == 1;
             else
                 return false;
+        }
+        #endregion
+
+        #region - GetKeyUps : キーボードが離されたキーのキーコードを取得する
+        /// <summary>
+        /// キーボードが離されたキーのキーコードを取得する
+        /// </summary>
+        /// <returns>キーコードのリスト</returns>
+        public List<KeyCode> GetKeyUps()
+        {
+            return Enumerable.Range(0, 255).Where(n => _keyUps[n] == 1).Select(n => (KeyCode)n).ToList();
         }
         #endregion
 
@@ -730,25 +896,25 @@ namespace dxw
         /// <returns>押下された数字</returns>
         public string GetHitNumberKey()
         {
-            if (CheckOnKeyUp(DX.KEY_INPUT_0) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD0))
+            if (CheckOnKeyUp(KeyCode.KEY_0) || CheckOnKeyUp(KeyCode.KEY_NUMPAD0))
                 return "0";
-            if (CheckOnKeyUp(DX.KEY_INPUT_1) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD1))
+            if (CheckOnKeyUp(KeyCode.KEY_1) || CheckOnKeyUp(KeyCode.KEY_NUMPAD1))
                 return "1";
-            if (CheckOnKeyUp(DX.KEY_INPUT_2) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD2))
+            if (CheckOnKeyUp(KeyCode.KEY_2) || CheckOnKeyUp(KeyCode.KEY_NUMPAD2))
                 return "2";
-            if (CheckOnKeyUp(DX.KEY_INPUT_3) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD3))
+            if (CheckOnKeyUp(KeyCode.KEY_3) || CheckOnKeyUp(KeyCode.KEY_NUMPAD3))
                 return "3";
-            if (CheckOnKeyUp(DX.KEY_INPUT_4) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD4))
+            if (CheckOnKeyUp(KeyCode.KEY_4) || CheckOnKeyUp(KeyCode.KEY_NUMPAD4))
                 return "4";
-            if (CheckOnKeyUp(DX.KEY_INPUT_5) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD5))
+            if (CheckOnKeyUp(KeyCode.KEY_5) || CheckOnKeyUp(KeyCode.KEY_NUMPAD5))
                 return "5";
-            if (CheckOnKeyUp(DX.KEY_INPUT_6) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD6))
+            if (CheckOnKeyUp(KeyCode.KEY_6) || CheckOnKeyUp(KeyCode.KEY_NUMPAD6))
                 return "6";
-            if (CheckOnKeyUp(DX.KEY_INPUT_7) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD7))
+            if (CheckOnKeyUp(KeyCode.KEY_7) || CheckOnKeyUp(KeyCode.KEY_NUMPAD7))
                 return "7";
-            if (CheckOnKeyUp(DX.KEY_INPUT_8) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD8))
+            if (CheckOnKeyUp(KeyCode.KEY_8) || CheckOnKeyUp(KeyCode.KEY_NUMPAD8))
                 return "8";
-            if (CheckOnKeyUp(DX.KEY_INPUT_9) || CheckOnKeyUp(DX.KEY_INPUT_NUMPAD9))
+            if (CheckOnKeyUp(KeyCode.KEY_9) || CheckOnKeyUp(KeyCode.KEY_NUMPAD9))
                 return "9";
             return null;
         }
@@ -778,14 +944,78 @@ namespace dxw
         }
         #endregion
 
-        #region - ChangeScene : シーンを変更する
+        #region - ChangeScene : シーンを変更する(1)
         /// <summary>
-        /// シーンを変更する
+        /// シーンを変更する(1)
         /// </summary>
         /// <param name="sceneNo">シーン番号</param>
         public void ChangeScene(int sceneNo)
         {
             _requestSceneNo = sceneNo;
+        }
+        #endregion
+
+        #region - ChangeScene : シーンを変更する(2)
+        /// <summary>
+        /// シーンを変更する(2)
+        /// </summary>
+        /// <param name="scene">シーン</param>
+        public void ChangeScene(BaseScene scene)
+        {
+            _requestScene = scene;
+        }
+        #endregion
+
+        #region - ShowDialog : ダイアログを表示する(1)
+        /// <summary>
+        /// ダイアログを表示する(1)
+        /// </summary>
+        /// <param name="dlgScene">ダイアログ用シーン</param>
+        /// <param name="isCallParentUpdateFrame">ダイアログ表示時に親のUpdateFrameを呼び出す？</param>
+        public void ShowDialog(BaseScene dlgScene, bool isCallParentUpdateFrame)
+        {
+            _dialogScene = dlgScene;
+            _isCallParentUpdateFrame = isCallParentUpdateFrame;
+            if (CurrentScene != null)
+                CurrentScene.OnShowDialog(_dialogScene);
+        }
+        #endregion
+
+        #region - ShowDialog : ダイアログを表示する(2)
+        /// <summary>
+        /// ダイアログを表示する(1)
+        /// </summary>
+        /// <param name="dlgSceneNo">ダイアログ用シーンNo</param>
+        /// <param name="isCallParentUpdateFrame">ダイアログ表示時に親のUpdateFrameを呼び出す？</param>
+        public void ShowDialog(int dlgSceneNo, bool isCallParentUpdateFrame)
+        {
+            ShowDialog(Scenes[dlgSceneNo], isCallParentUpdateFrame);
+        }
+        #endregion
+
+        #region - HideDialog : ダイアログを非表示にする
+        /// <summary>
+        /// ダイアログを非表示にする
+        /// </summary>
+        public void HideDialog()
+        {
+            if (_dialogScene != null)
+            {
+                if (CurrentScene != null)
+                    CurrentScene.OnHideDialog(_dialogScene);
+                _dialogScene = null;
+                _isCallParentUpdateFrame = false;
+            }
+        }
+        #endregion
+
+        #region - SaveSettings : 設定値を保存する
+        /// <summary>
+        /// 設定値を保存する
+        /// </summary>
+        public virtual void SaveSettings()
+        {
+            // 派生クラスで実装する
         }
         #endregion
 

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using static dxw.Helper;
 
 namespace dxw
 {
@@ -10,93 +8,158 @@ namespace dxw
     /// <summary>
     /// スプライトクラス
     /// </summary>
-    public class BaseSprite
+    public class BaseSprite : Rectangle
     {
+        #region ■ Members
+        /// <summary>
+        /// 有効？
+        /// </summary>
+        private bool _enabled = true;
+        #endregion
+
         #region ■ Properties
+
+        #region - ID : ID値
+        /// <summary>
+        /// ID値
+        /// </summary>
+        public string ID { get; set; } = Guid.NewGuid().ToString();
+        #endregion
 
         #region - Sceen : シーン
         /// <summary>
         /// シーン
         /// </summary>
-        public BaseScene Sceen { get; protected set; }
+        public BaseScene Sceen { get; protected set; } = null;
         #endregion
 
-        #region - X ; X座標
+        #region - Enabled : 有効？
         /// <summary>
-        /// X座標
+        ///  有効？
         /// </summary>
-        public int X { get; set; }
+        public bool Enabled
+        {
+            get { return _enabled; }
+            set
+            {
+                if (_enabled != value)
+                {
+                    _enabled = value;
+                    ChangeEnabled(_enabled);
+                }
+            }
+        }
         #endregion
 
-        #region - Y : Y座標
+        #region - Disabled : 無効？
         /// <summary>
-        /// Y座標
+        /// 無効？
         /// </summary>
-        public int Y { get; set; }
-        #endregion
-
-        #region - Width : 幅
-        /// <summary>
-        /// 幅
-        /// </summary>
-        public int Width { get; set; }
-        #endregion
-
-        #region - Height : 高さ
-        /// <summary>
-        /// 高さ
-        /// </summary>
-        public int Height { get; set; }
-        #endregion
-
-        #region - X2 : X2座標
-        /// <summary>
-        /// X2座標
-        /// </summary>
-        public int X2 { get { return X + Width; } }
-        #endregion
-
-        #region - Y2 : Y2座標
-        /// <summary>
-        /// Y2座標
-        /// </summary>
-        public int Y2 { get { return Y + Height; } }
-        #endregion
-
-        #region - Disable : 無効か？
-        /// <summary>
-        /// 無効か？
-        /// </summary>
-        public bool Disable { get; set; }
+        public bool Disabled
+        {
+            get { return !Enabled; }
+            set { Enabled = !value; }
+        }
         #endregion
 
         #region - Visible : 表示対象か？
         /// <summary>
         /// 表示対象か？
         /// </summary>
-        public bool Visible { get; set; }
+        public bool Visible { get; set; } = true;
+        #endregion
+
+        #region - Tag :  タグ
+        /// <summary>
+        /// タグ
+        /// </summary>
+        public Object Tag { get; set; } = null;
         #endregion
 
         #endregion
 
         #region ■ Constructor
+
+        #region - Constructor(1)
         /// <summary>
-        /// コンストラクター
+        /// コンストラクタ(1)
         /// </summary>
+        public BaseSprite()
+            : base(0, 0, 0, 0)
+        {
+        }
+        #endregion
+
+        #region - Constructor(2)
+        /// <summary>
+        /// コンストラクター(2)
+        /// </summary>
+        /// <param name="scene">シーン</param>
         /// <param name="x">X座標(px)</param>
         /// <param name="y">Y座標(px)</param>
         /// <param name="width">幅(px)</param>
         /// <param name="height">高さ(px)</param>
         public BaseSprite(BaseScene scene, int x, int y, int width, int height)
+            : base (x, y, width, height)
         {
             Sceen = scene;
-            X = x;
-            Y = y;
-            Width = width;
-            Height = height;
-            Disable = false;
-            Visible = true;
         }
+        #endregion
+
+        #region - Constructor(3)
+        /// <summary>
+        /// コンストラクタ(3)
+        /// </summary>
+        /// <param name="scene">シーン</param>
+        /// <param name="leftTop">左上座標(px)</param>
+        /// <param name="size">矩形サイズ(px)</param>
+        public BaseSprite(BaseScene scene, Point leftTop, RectangleSize size)
+            : this(scene, leftTop.X, leftTop.Y, size.Width, size.Height)
+        {
+        }
+        #endregion
+
+        #region - Constructor(4)
+        /// <summary>
+        /// コンストラクタ(4)
+        /// </summary>
+        /// <param name="scene">シーン</param>
+        /// <param name="rect">矩形</param>
+        public BaseSprite(BaseScene scene, Rectangle rect)
+            : this(scene, rect.X, rect.Y, rect.Width, rect.Height)
+        {
+        }
+        #endregion
+
+        #region - Constructor(5)
+        /// <summary>
+        /// コンストラクタ(5)
+        /// </summary>
+        /// <param name="scene">シーン</param>
+        /// <param name="leftTop">左上座標(px)</param>
+        /// <param name="rightBottom">右下座標(px)</param>
+        public BaseSprite(BaseScene scene, Point leftTop, Point rightBottom)
+            : this(scene, new Rectangle(leftTop, rightBottom))
+        {
+
+        }
+        #endregion
+
+        #endregion
+
+        #region ■ Protected Methods
+
+        #region - ChangeEnabled : 有効無効が変更された
+        /// <summary>
+        /// 有効無効が変更された
+        /// </summary>
+        /// <param name="enabled">有効？</param>
+        protected virtual  void ChangeEnabled(bool enabled)
+        {
+            // 派生クラスでオーバーロードする
+        }
+        #endregion
+
         #endregion
 
         #region ■ Methods
@@ -141,19 +204,6 @@ namespace dxw
         }
         #endregion
 
-        #region - CheckPointInRegion : ポイントが領域内かどうか判定
-        /// <summary>
-        /// ポイントが領域内かどうか判定
-        /// </summary>
-        /// <param name="x">X軸</param>
-        /// <param name="y">Y軸</param>
-        /// <returns>True;領域内 / False:領域外</returns>
-        public bool CheckPointInRegion(int x, int y)
-        {
-            return x >= X && x <= X2 && y >= Y && y <= Y2;
-        }
-        #endregion
-
         #region - CheckCollision : 衝突判定
         /// <summary>
         /// 衝突判定
@@ -164,6 +214,19 @@ namespace dxw
         {
             return (Math.Abs(X - target.X) < Width / 2 + target.Width / 2) &&
                    (Math.Abs(Y - target.Y) < Height / 2 + target.Height / 2);
+        }
+        #endregion
+
+        #region - SetImageSize : サイズを画像サイズに合わせる。
+        /// <summary>
+        /// サイズを画像サイズに合わせる。
+        /// </summary>
+        public void SetImageSize(int imageHandle)
+        {
+            // 画像サイズからボタンのサイズを取得する。
+            var size = GetGraphSize(imageHandle);
+            if (size.HasValue)
+                Size = size.Value;
         }
         #endregion
 

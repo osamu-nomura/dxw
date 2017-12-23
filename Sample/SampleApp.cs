@@ -37,9 +37,9 @@ namespace Sample
         protected override void UpdateFrame()
         {
             base.UpdateFrame();
-            if (CheckOnKeyUp(DX.KEY_INPUT_Q))
+            if (CheckOnKeyUp(KeyCode.KEY_Q))
                 Quit();
-            if (CheckOnKeyUp(DX.KEY_INPUT_1))
+            if (CheckOnKeyUp(KeyCode.KEY_1))
             {
                 AddTask((id, tm, app) =>
                 {

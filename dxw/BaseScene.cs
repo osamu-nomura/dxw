@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DxLibDLL;
 using hsb.Extensions;
+
+using static dxw.Helper;
 
 namespace dxw
 {
@@ -130,6 +129,17 @@ namespace dxw
         }
         #endregion
 
+        #region - FillBackground : 背景を指定色で塗りつぶす
+        /// <summary>
+        /// 背景を指定色で塗りつぶす
+        /// </summary>
+        /// <param name="color">指定色</param>
+        protected void FillBackground(uint color)
+        {
+           DrawBox(App.ScreenRect, color, true);
+        }
+        #endregion
+
         #endregion
 
         #region ■ Public Method
@@ -176,7 +186,7 @@ namespace dxw
         {
             Update();
             // 所有するスプライトの状態を順次更新する
-            Sprites.Where(sprite => !sprite.Disable && sprite.Visible).ForEach(sprite => sprite.Update());
+            Sprites.Where(sprite => !sprite.Disabled).ForEach(sprite => sprite.Update());
             Updated();
         }
         #endregion
@@ -195,6 +205,28 @@ namespace dxw
             Sprites.Where(sprites => sprites.Visible).ForEach(sprite => sprite.DrawEffect());
             // 前景を描画する
             DrawForeground();
+        }
+        #endregion
+
+        #region - OnShowDialog : ダイアログが表示された
+        /// <summary>
+        /// ダイアログが表示された
+        /// </summary>
+        /// <param name="dialog">ダイアログ</param>
+        public virtual void OnShowDialog(BaseScene dialog)
+        {
+            // 派生クラスでオーバーライドする
+        }
+        #endregion
+
+        #region - OnHideDialog : ダイアログが非表示になった
+        /// <summary>
+        /// ダイアログが非表示になった
+        /// </summary>
+        /// <param name="dialog">ダイアログ</param>
+        public virtual void OnHideDialog(BaseScene dialog)
+        {
+            // 派生クラスでオーバーライドする
         }
         #endregion
 
