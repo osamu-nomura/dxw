@@ -293,6 +293,13 @@ namespace dxw
         public List<InputInfo> Inputs { get; private set; } = new List<InputInfo>();
         #endregion
 
+        #region - MousePoint : マウス座標
+        /// <summary>
+        /// マウス座標
+        /// </summary>
+        public Point? MousePoint { get; private set; } = null;
+        #endregion
+
         #region - IsPause : 一時停止中フラグ
         /// <summary>
         /// 一時停止中フラグ
@@ -500,6 +507,7 @@ namespace dxw
             Inputs.AddRange(GetTouchInputs());
             // マウスの状態を取得
             Inputs.AddWithoutNull(GetMouseInput());
+            MousePoint = GetMousePoint();
         }
         #endregion
 
@@ -517,7 +525,7 @@ namespace dxw
                 for (var i = 0; i < Inputs.Count; i++)
                 {
                     var device = (Inputs[i].Device == DeviceType.Touch) ? "Touch" : "Mouse";
-                    DrawString(5, 45 + (i * 20), $"input;[{device}] (X:{Inputs[i].X} Y:{Inputs[i].Y})", _colorWhite, _systemFontHandle);
+                    DrawString(5, 45 + (i * 20), $"input;[{device}] (X:{Inputs[i].Point.X} Y:{Inputs[i].Point.Y} LeftButtonDown: {Inputs[i].IsMouseLeftButtonDown})", _colorWhite, _systemFontHandle);
                 }
             }
         }

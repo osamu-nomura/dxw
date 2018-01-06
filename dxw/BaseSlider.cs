@@ -12,7 +12,7 @@ namespace dxw
     /// <summary>
     /// スライダークラス
     /// </summary>
-    public class BaseSlider : BaseSprite
+    public class BaseSlider : BaseInteractiveSprite
     {
         #region ■ Members
         /// <summary>
@@ -91,47 +91,7 @@ namespace dxw
         protected BaseSprite Handle { get; set; }
         #endregion
 
-        #region - TouchId : タップされたタッチID
-        /// <summary>
-        /// タップされたタッチID
-        /// </summary>
-        protected int? TouchId { get; set; } = null;
         #endregion
-
-        #region - TapStartTime : タップされた時刻
-        /// <summary>
-        /// タップされた時刻
-        /// </summary>
-        protected ulong? TouchStartTime { get; set; } = null;
-        #endregion
-
-        #region - TouchPositionX : タップされたX座標(px)
-        /// <summary>
-        /// タップされたX座標(px)
-        /// </summary>
-        public int? TouchPositionX { get; set; } = null;
-        #endregion
-
-        #region - TouchPositionY : タップされたY座標(px)
-        /// <summary>
-        /// タップされたY座標(px)
-        /// </summary>
-        public int? TouchPositionY { get; set; } = null;
-        #endregion
-
-        #endregion
-
-        #region ■ Delegates
-
-        #region - Changed : 値が変更された
-        /// <summary>
-        /// ボタンがタップされた
-        /// </summary>
-        public Action<BaseSlider> Changed { get; set; } = null;
-        #endregion
-
-        #endregion
-
 
         #region ■ Constructor
         /// <summary>
@@ -141,8 +101,8 @@ namespace dxw
         /// <param name="y">Y座標(px)</param>
         /// <param name="width">幅(px)</param>
         /// <param name="height">高さ(px)</param>
-        public BaseSlider(BaseScene scene, int x, int y, int width, int height) 
-                : base(scene, x, y, width, height)
+        public BaseSlider(BaseScene scene) 
+                : base(scene)
         {
         }
         #endregion
@@ -210,6 +170,7 @@ namespace dxw
             return Value - mod + ((mod > (Step / 2)) ? Step.Value : 0);
         }
         #endregion
+
         #endregion
 
         #region ■ Protected Methods
@@ -251,68 +212,68 @@ namespace dxw
         }
         #endregion
 
+        #region - ValueChanged : 値が変更された
+        /// <summary>
+        /// 値が変更された
+        /// </summary>
+        protected virtual void ValueChanged()
+        {
+            // 派生クラスでオーバーライドする
+        }
         #endregion
 
-        #region ■ Methods
-
-        #region - Update : 状態を更新する
+        #region - TouchDown : タッチ or マウスで押された
         /// <summary>
-        /// 状態を更新する
+        /// タッチ or マウスで押された
         /// </summary>
-        public override void Update()
+        protected override void TouchDown()
         {
-            base.Update();
+            base.TouchDown();
+            if (TouchPoint.HasValue)
+                Value = CalcValue(TouchPoint.Value);
+        }
+        #endregion
 
-            if (Disabled)
-                return;
-
-            if (TouchId == null)
+        #region - TouchUp : タッチ or マウスが離された
+        /// <summary>
+        /// タッチ or マウスが離された
+        /// </summary>
+        public override void TouchUp()
+        {
+            base.TouchUp();
+            if (TouchPoint.HasValue)
             {
-                // タッチ or 左マウスがボタン上で押された？
-                var input = Sceen.App.Inputs.FirstOrDefault(i => CheckPointInRegion(i.X, i.Y) && i.IsMouseLeftButtonDown);
-                if (input != null)
-                {
-                    TouchId = input.Id;
-                    TouchStartTime = Sceen.App.ElapsedTime;
-                    TouchPositionX = input.X;
-                    TouchPositionY = input.Y;
-                    Value = CalcValue(input.Point);
-                }
+                Value = NormalizeValue(Value);
+                ValueChanged();
             }
-            else
+        }
+        #endregion
+
+        #region - TouchLeave : タッチ or マウスが領域を外れた
+        /// <summary>
+        /// タッチ or マウスが領域を外れた
+        /// </summary>
+        public override void TouchLeave()
+        {
+            base.TouchLeave();
+            if (TouchPoint.HasValue)
             {
-                // タッチ済なら、タッチIDをトラッキングする
-                var input = Sceen.App.Inputs.FirstOrDefault(i => i.Id == TouchId);
-                if (input != null)
-                {
-                    // 領域から外れた！
-                    if (!CheckPointInRegion(input.X, input.Y) || !input.IsMouseLeftButtonDown)
-                    {
-                        TouchId = null;
-                        TouchStartTime = null;
-                        TouchPositionX = null;
-                        TouchPositionY = null;
-                        Value = NormalizeValue(CalcValue(NormalizePoint(input.Point)));
-                        Changed?.Invoke(this);
-                    }
-                    else
-                    {
-                        // 領域内ならタッチ座標を更新する
-                        TouchPositionX = input.X;
-                        TouchPositionY = input.Y;
-                        Value = CalcValue(input.Point);
-                    }
-                }
-                else
-                {
-                    // 指が離された！
-                    TouchId = null;
-                    TouchStartTime = null;
-                    TouchPositionX = null;
-                    TouchPositionY = null;
-                    Value = NormalizeValue(Value);
-                    Changed?.Invoke(this);
-                }
+                Value = NormalizeValue(CalcValue(NormalizePoint(TouchPoint.Value)));
+                ValueChanged();
+            }
+        }
+        #endregion
+
+        #region - TouchContinue : タッチ or マウスダウンが継続中
+        /// <summary>
+        /// タッチ or マウスダウンが継続中
+        /// </summary>
+        public override void TouchContinue()
+        {
+            base.TouchContinue();
+            if (TouchPoint.HasValue)
+            {
+                Value = CalcValue(TouchPoint.Value);
             }
         }
         #endregion

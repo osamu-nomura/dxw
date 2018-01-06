@@ -94,6 +94,21 @@ namespace dxw
         }
         #endregion
 
+        #region - Center : 中心点
+        /// <summary>
+        /// 中心点
+        /// </summary>
+        public Point Center
+        {
+            get { return new Point(X + (X2 - X), Y + (Y2 - Y)); }
+            set
+            {
+                X = value.X - (Width / 2);
+                Y = value.Y - (Height / 2);
+            }
+        }
+        #endregion
+
         #region - Size : サイズ
         /// <summary>
         /// 矩形のサイズ
@@ -163,16 +178,44 @@ namespace dxw
         /// <param name="rect">矩形</param>
         public Rectangle(Rectangle rect)
         {
-            X = rect.X;
-            Y = rect.Y;
-            Width = rect.Width;
-            Height = rect.Height;
+            X = rect?.X ?? 0;
+            Y = rect?.Y ?? 0;
+            Width = rect?.Width ?? 0;
+            Height = rect?.Height ?? 0;
         }
         #endregion
 
         #endregion
 
         #region ■ Methods
+
+        #region - Set : 指定した位置に合わせる
+        /// <summary>
+        /// 指定した位置に合わせる
+        /// </summary>
+        /// <param name="pt">座標</param>
+        /// <param name="isCenter">中心基準？</param>
+        public void Set(Point pt, bool isCenter = false)
+        {
+            if (isCenter)
+                Center = pt;
+            else
+                LeftTop = pt;
+        }
+        #endregion
+
+        #region - Set : 指定した矩形の位置とサイズに合わせる
+        /// <summary>
+        /// 指定した矩形の位置とサイズに合わせる
+        /// </summary>
+        /// <param name="rect">矩形</param>
+        public void Set(Rectangle rect)
+        {
+            LeftTop = rect.LeftTop;
+            Size = rect.Size;
+        }
+        #endregion
+
 
         #region - CheckPointInRegion : ポイントが領域内かどうか判定
         /// <summary>
@@ -198,15 +241,16 @@ namespace dxw
 
         #endregion
 
-        #region - Set : 指定した矩形の位置とサイズに合わせる
+        #region - CheckCollision : 衝突判定
         /// <summary>
-        /// 指定した矩形の位置とサイズに合わせる
+        /// 衝突判定
         /// </summary>
-        /// <param name="rect">矩形</param>
-        public void Set(Rectangle rect)
+        /// <param name="target">対象矩形</param>
+        /// <returns>True : 諸突 / False : 衝突していない</returns>
+        public bool CheckCollision(Rectangle target)
         {
-            LeftTop = rect.LeftTop;
-            Size = rect.Size;
+            return (Math.Abs(X - target.X) < Width / 2 + target.Width / 2) &&
+                   (Math.Abs(Y - target.Y) < Height / 2 + target.Height / 2);
         }
         #endregion
 

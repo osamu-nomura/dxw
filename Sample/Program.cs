@@ -21,6 +21,7 @@ namespace Sample
             var app = new SampleApp(SCREEN_WIDTH, SCREEN_HEIGHT, ColorBitDepth.BitDepth32);
 
             app.IsShowSystemInformation = true;
+            app.IsShowInputStatus = true;
 
             // アプリケーションの実行
             app.Run(WindowMode.Window);

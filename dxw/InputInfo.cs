@@ -35,28 +35,11 @@ namespace dxw
         public int Id { get; private set; } = 0;
         #endregion
 
-        #region - X : X座標
-        /// <summary>
-        /// X座標
-        /// </summary>
-        public int X { get; private set; } = 0;
-        #endregion
-
-        #region - Y : Y座標
-        /// <summary>
-        /// Y座標
-        /// </summary>
-        public int Y { get; private set; } = 0;
-        #endregion
-
         #region - Point : 座標
         /// <summary>
         /// 座標
         /// </summary>
-        public Point Point
-        {
-            get { return new Point(X, Y);  }
-        }
+        public Point Point = new Point(0, 0);
         #endregion
 
         #region - Buttons : ボタン状態
@@ -103,8 +86,7 @@ namespace dxw
             Device = device;
             DeviceNo = deviceNo;
             Id = id;
-            X = x;
-            Y = y;
+            Point = new Point(x, y);
             Buttons = buttons;
         }
         #endregion

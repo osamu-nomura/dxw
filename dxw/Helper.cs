@@ -36,6 +36,10 @@ namespace dxw
         /// WindowのActiveStatusが変更されたときに呼ばれるコールバック
         /// </summary>
         private static Action<int> _activeStateChanged = null;
+        /// <summary>
+        /// マウスカーソルが表示されているか？
+        /// </summary>
+        private static bool _visibleMousrCursor = true;
         #endregion
 
         #region ■ Private Methods
@@ -164,8 +168,11 @@ namespace dxw
         /// </summary>
         /// <param name="windowMode">ウィンドウモード</param>
         /// <returns>True: 成功 / False: 失敗</returns>
-        public static bool ChangeWindowMode(WindowMode windowMode) 
-            => DX.ChangeWindowMode((int)windowMode) == DX.DX_CHANGESCREEN_OK;
+        public static bool ChangeWindowMode(WindowMode windowMode)
+        {
+            _visibleMousrCursor = (windowMode == WindowMode.Window);
+            return DX.ChangeWindowMode((int)windowMode) == DX.DX_CHANGESCREEN_OK;
+        }
         #endregion
 
         #endregion
@@ -717,6 +724,7 @@ namespace dxw
         /// <returns>True : 成功 / False : 失敗</returns>
         public static bool SetMouseDispFlag(bool isShow)
         {
+            _visibleMousrCursor = isShow;
             return DX.SetMouseDispFlag(DXBool(isShow)) == 0;
         }
         #endregion
@@ -736,6 +744,11 @@ namespace dxw
         /// <returns>True : 成功 / False : 失敗</returns>
         public static bool HideMouseCursor() => SetMouseDispFlag(false);
         #endregion
+
+        public static bool IsMouseCursorVisible
+        {
+            get { return _visibleMousrCursor;  }
+        }
 
         #endregion
 

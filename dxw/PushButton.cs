@@ -7,7 +7,7 @@ namespace dxw
     /// <summary>
     ///  画像プッシュボタンクラス
     /// </summary>
-    class PushButton : BasePushButton
+    public class PushButton : BaseInteractiveSprite
     {
         #region ■ Members
         /// <summary>
@@ -25,6 +25,13 @@ namespace dxw
         #endregion
 
         #region ■ Properties
+
+        #region - TappedSoundHandle : タップ音
+        /// <summary>
+        /// タップ音
+        /// </summary>
+        public int TappedSoundHandle { get; set; } = 0;
+        #endregion
 
         #region - ImageHandle : 標準画像
         /// <summary>
@@ -77,14 +84,40 @@ namespace dxw
 
         #endregion
 
+        #region ■ Delegate
+
+        #region - OnTapped : タップされた
+        /// <summary>
+        /// タップされた
+        /// </summary>
+        public Action<PushButton> OnTapped = null;
+        #endregion
+
+        #region - OnDraw : スプライトを描画する
+        /// <summary>
+        /// スプライトを描画する
+        /// </summary>
+        public Action<PushButton> OnDraw = null;
+        #endregion
+
+        #region - OnDrawEffect : 効果を描画する
+        /// <summary>
+        /// 効果を描画する
+        /// </summary>
+        public Action<PushButton> OnDrawEffect = null;
+        #endregion
+
+        #endregion
+
         #region ■ Constructor
 
         #region - Constructor(1)
         /// <summary>
         /// コンストラクタ(1)
         /// </summary>
-        public PushButton()
-            : base()
+        /// <param name="app">アプリケーション</param>
+        public PushButton(BaseApplication app)
+            : base(app)
         {
 
         }
@@ -92,28 +125,56 @@ namespace dxw
 
         #region - Constructor(2)
         /// <summary>
-        /// コンストラクター(2)
+        /// コンストラクタ(2)
         /// </summary>
         /// <param name="scene">シーン</param>
-        /// <param name="x">X座標(px)</param>
-        /// <param name="y">Y座標(px)</param>ram>
-        /// <param name="imageHandle">通常画像</param>
-        /// <param name="pushedImageHandle">押下時の画像</param>
-        /// <param name="callback">タップされた時のコールバック</param>
-        public PushButton(BaseScene scene, int x, int y, int imageHandle, int pushedImageHandle, 
-                            Action<BasePushButton> callback = null) 
-                : base(scene, x, y, 0, 0, callback)
+        public PushButton(BaseScene scene)
+            : base(scene)
         {
-            ImageHandle = imageHandle;
-            PushedImageHandle = pushedImageHandle;
+
         }
         #endregion
 
-
+        #region - Constructor(3)
+        /// <summary>
+        /// コンストラクター(3)
+        /// </summary>
+        /// <param name="scene">シーン</param>
+        /// <param name="x">座標(px)</param>
+        /// <param name="imageHandle">通常画像</param>
+        /// <param name="pushedImageHandle">押下時の画像</param>
+        /// <param name="callback">タップされた時のコールバック</param>
+        public PushButton(BaseScene scene, Point pt, int imageHandle, int pushedImageHandle, 
+                            Action<PushButton> callback = null) 
+                : base(scene)
+        {
+            LeftTop = pt;
+            ImageHandle = imageHandle;
+            PushedImageHandle = pushedImageHandle;
+            OnTapped = callback;
+        }
+        #endregion
 
         #endregion
 
-        #region ■ Methods
+        #region ■ Protected Methods
+
+        #region - TouchUp : タッチ or マウスが離された
+        /// <summary>
+        /// タッチ or マウスが離された
+        /// </summary>
+        public override void TouchUp()
+        {
+            base.TouchUp();
+            if (TappedSoundHandle != 0)
+                PlaySound(TappedSoundHandle, PlayType.Back, App?.SEVolume ?? 0);
+            OnTapped?.Invoke(this);
+        }
+        #endregion
+
+        #endregion
+
+        #region ■ Public Methods
 
         #region - Draw ; ボタンを描画する
         /// <summary>
@@ -121,7 +182,21 @@ namespace dxw
         /// </summary>
         public override void Draw()
         {
-            DrawGraph(X, Y, IsDown ? PushedImageHandle : ImageHandle, true);
+            if (OnDraw != null)
+                OnDraw(this);
+            else
+                DrawGraph(X, Y, IsDown ? PushedImageHandle : ImageHandle, true);
+        }
+        #endregion
+
+        #region - DrawEffect : 効果を描画する
+        /// <summary>
+        /// 効果を描画する
+        /// </summary>
+        public override void DrawEffect()
+        {
+            base.DrawEffect();
+            OnDrawEffect?.Invoke(this);
         }
         #endregion
 

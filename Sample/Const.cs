@@ -21,7 +21,14 @@ namespace Sample
         /// 画面高さ
         /// </summary>
         public const int SCREEN_HEIGHT = 600;
-
+        /// <summary>
+        /// 効果音音量
+        /// </summary>
+        public const int SE_VOLUME = 50;
+        /// <summary>
+        /// BGM音量
+        /// </summary>
+        public const int BGM_VOLUME = 50;
         #endregion
     }
     #endregion

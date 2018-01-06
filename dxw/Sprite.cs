@@ -1,4 +1,6 @@
-﻿using static dxw.Helper;
+﻿
+using System;
+using static dxw.Helper;
 
 namespace dxw
 {
@@ -61,14 +63,40 @@ namespace dxw
 
         #endregion
 
+        #region ■ Delegate
+
+        #region - OnUpdate : 状態を更新する
+        /// <summary>
+        /// 状態を更新する
+        /// </summary>
+        public Action<BaseSprite> OnUpdate = null;
+        #endregion
+
+        #region - OnDraw : スプライトを描画する
+        /// <summary>
+        /// スプライトを描画する
+        /// </summary>
+        public Action<BaseSprite> OnDraw = null;
+        #endregion
+
+        #region - OnDrawEffect : 効果を描画する
+        /// <summary>
+        /// 効果を描画する
+        /// </summary>
+        public Action<BaseSprite> OnDrawEffect = null;
+        #endregion
+
+        #endregion
+
         #region ■ Constructor
 
         #region - Constructor(1)
         /// <summary>
         /// コンストラクタ(1)
         /// </summary>
-        public Sprite()
-            : base()
+        /// <param name="app">アプリケーション</param>
+        public Sprite(BaseApplication app)
+            : base(app)
         {
         }
         #endregion
@@ -78,19 +106,32 @@ namespace dxw
         /// コンストラクタ(2)
         /// </summary>
         /// <param name="scene">シーン</param>
-        /// <param name="x">X座標(px)</param>
-        /// <param name="y">Y座標(px)</param>
-        /// <param name="imageHandle">画像ハンドル</param>
-        public Sprite(BaseScene scene, int x, int y, int imageHandle)
-            : base (scene, x, y, 0, 0)
+        public Sprite(BaseScene scene)
+            : base(scene)
         {
-            ImageHandle = imageHandle;
         }
         #endregion
 
         #region - Constructor(3)
         /// <summary>
-        /// /コンストラクタ(2)
+        /// コンストラクタ(3)
+        /// </summary>
+        /// <param name="scene">シーン</param>
+        /// <param name="x">X座標(px)</param>
+        /// <param name="y">Y座標(px)</param>
+        /// <param name="imageHandle">画像ハンドル</param>
+        public Sprite(BaseScene scene, int x, int y, int imageHandle)
+            : base (scene)
+        {
+            X = x;
+            Y = y;
+            ImageHandle = imageHandle;
+        }
+        #endregion
+
+        #region - Constructor(4)
+        /// <summary>
+        /// /コンストラクタ(4)
         /// </summary>
         /// <param name="scene">シーン</param>
         /// <param name="leftTop">座標(px)</param>
@@ -105,13 +146,39 @@ namespace dxw
 
         #region ■ Public Methods
 
+        #region - Update : 状態を更新する
+        /// <summary>
+        /// 状態を更新する
+        /// </summary>
+        public override void Update()
+        {
+            base.Update();
+            OnUpdate?.Invoke(this);
+        }
+        #endregion
+
         #region - Draw : スプライトを描画する
         /// <summary>
         /// スプライトを描画する
         /// </summary>
         public override void Draw()
         {
-            DrawGraph(X, Y, ImageHandle, true);
+            base.Draw();
+            if (OnDraw != null)
+                OnDraw(this);
+            else
+                DrawGraph(X, Y, ImageHandle, true);
+        }
+        #endregion
+
+        #region - DrawEffect : 効果を描画する
+        /// <summary>
+        /// 効果を描画する
+        /// </summary>
+        public override void DrawEffect()
+        {
+            base.DrawEffect();
+            OnDrawEffect?.Invoke(this);
         }
         #endregion
 

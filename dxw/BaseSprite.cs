@@ -26,6 +26,13 @@ namespace dxw
         public string ID { get; set; } = Guid.NewGuid().ToString();
         #endregion
 
+        #region - App : アプリケーション
+        /// <summary>
+        /// アプリケーション
+        /// </summary>
+        public BaseApplication App { get; protected set; } = null;
+        #endregion
+
         #region - Sceen : シーン
         /// <summary>
         /// シーン
@@ -76,6 +83,23 @@ namespace dxw
         public Object Tag { get; set; } = null;
         #endregion
 
+        #region - Rect : 矩形を返す
+        /// <summary>
+        /// 矩形を返す
+        /// </summary>
+        public Rectangle Rect
+        {
+            get { return this as Rectangle;  }
+            set
+            {
+                X = value?.X ?? 0;
+                Y = value?.Y ?? 0;
+                Width = value?.Width ?? 0;
+                Height = value?.Height ?? 0;
+            }
+        }
+        #endregion
+
         #endregion
 
         #region ■ Constructor
@@ -84,64 +108,24 @@ namespace dxw
         /// <summary>
         /// コンストラクタ(1)
         /// </summary>
-        public BaseSprite()
+        /// <param name="app">アプリケーション</param>
+        public BaseSprite(BaseApplication  app)
             : base(0, 0, 0, 0)
         {
+            App = app;
         }
         #endregion
 
         #region - Constructor(2)
         /// <summary>
-        /// コンストラクター(2)
+        /// コンストラクタ(2)
         /// </summary>
         /// <param name="scene">シーン</param>
-        /// <param name="x">X座標(px)</param>
-        /// <param name="y">Y座標(px)</param>
-        /// <param name="width">幅(px)</param>
-        /// <param name="height">高さ(px)</param>
-        public BaseSprite(BaseScene scene, int x, int y, int width, int height)
-            : base (x, y, width, height)
+        public BaseSprite(BaseScene scene)
+            : base(0, 0, 0, 0)
         {
             Sceen = scene;
-        }
-        #endregion
-
-        #region - Constructor(3)
-        /// <summary>
-        /// コンストラクタ(3)
-        /// </summary>
-        /// <param name="scene">シーン</param>
-        /// <param name="leftTop">左上座標(px)</param>
-        /// <param name="size">矩形サイズ(px)</param>
-        public BaseSprite(BaseScene scene, Point leftTop, RectangleSize size)
-            : this(scene, leftTop.X, leftTop.Y, size.Width, size.Height)
-        {
-        }
-        #endregion
-
-        #region - Constructor(4)
-        /// <summary>
-        /// コンストラクタ(4)
-        /// </summary>
-        /// <param name="scene">シーン</param>
-        /// <param name="rect">矩形</param>
-        public BaseSprite(BaseScene scene, Rectangle rect)
-            : this(scene, rect.X, rect.Y, rect.Width, rect.Height)
-        {
-        }
-        #endregion
-
-        #region - Constructor(5)
-        /// <summary>
-        /// コンストラクタ(5)
-        /// </summary>
-        /// <param name="scene">シーン</param>
-        /// <param name="leftTop">左上座標(px)</param>
-        /// <param name="rightBottom">右下座標(px)</param>
-        public BaseSprite(BaseScene scene, Point leftTop, Point rightBottom)
-            : this(scene, new Rectangle(leftTop, rightBottom))
-        {
-
+            App = scene?.App;
         }
         #endregion
 
@@ -201,19 +185,6 @@ namespace dxw
         public virtual void DrawEffect()
         {
             // 派生クラスでオーバーライドする
-        }
-        #endregion
-
-        #region - CheckCollision : 衝突判定
-        /// <summary>
-        /// 衝突判定
-        /// </summary>
-        /// <param name="target">対象スプライト</param>
-        /// <returns>True : 諸突 / False : 衝突していない</returns>
-        public bool CheckCollision(BaseSprite target)
-        {
-            return (Math.Abs(X - target.X) < Width / 2 + target.Width / 2) &&
-                   (Math.Abs(Y - target.Y) < Height / 2 + target.Height / 2);
         }
         #endregion
 

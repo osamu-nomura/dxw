@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DxLibDLL;
 using dxw;
+
+
+using static dxw.Helper;
 
 namespace Sample
 {
@@ -14,6 +16,10 @@ namespace Sample
     /// </summary>
     class SampleApp : BaseApplication
     {
+        private uint ColorRed = GetColor(255, 0, 0);
+        private uint ColorYellow = GetColor(255, 255, 0);
+        private PushButton btn { get; set; }
+
         #region ■ Constructor
         /// <summary>
         /// コンストラクタ
@@ -24,48 +30,24 @@ namespace Sample
         public SampleApp(int screenWidth = 640, int screenHeight = 480, ColorBitDepth colorBitDepth = ColorBitDepth.BitDepth32)
             : base(screenWidth, screenHeight, colorBitDepth)
         {
-
+            Title = "Sample Application";
+            Scenes.Add(new MainScene(this));
         }
         #endregion
 
         #region ■ Protected Methods
 
-        #region - Update : 更新処理
+        #region - Init : 初期化処理
         /// <summary>
-        /// 更新処理
+        /// 初期化処理
         /// </summary>
-        protected override void UpdateFrame()
+        protected override void Init()
         {
-            base.UpdateFrame();
-            if (CheckOnKeyUp(KeyCode.KEY_Q))
-                Quit();
-            if (CheckOnKeyUp(KeyCode.KEY_1))
-            {
-                AddTask((id, tm, app) =>
-                {
-                    var ms = ElapsedTime - tm;
-                    if (ms >= 5000)
-                    {
-                        Quit();
-                        return true;
-                    }
-                    return false;
-                });
-            }
-        }
-        #endregion
+            base.Init();
 
-        #region - DrawFrame : フレームを描画
-        /// <summary>
-        /// フレームを描画
-        /// </summary>
-        protected override void DrawFrame()
-        {
-            base.DrawFrame();
-            DX.DrawBox(0, 0, ScreenWidth, ScreenHeight, DX.GetColor(255, 0, 0), DX.TRUE);
-
-            var sec = ElapsedTime / 1000.0;
-            DX.DrawString(70, 70, sec.ToString(), DX.GetColor(255, 255, 255));
+            // 音量初期化
+            SEVolume = Const.SE_VOLUME;
+            BGMVolume = Const.BGM_VOLUME;
         }
         #endregion
 
