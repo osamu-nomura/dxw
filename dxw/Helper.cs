@@ -907,6 +907,43 @@ namespace dxw
         }
         #endregion
 
+        #region - SaveDrawScreen : 現在描画対象になっている画面をＢＭＰ形式で保存する
+        /// <summary>
+        /// 現在描画対象になっている画面をＢＭＰ形式で保存する
+        /// </summary>
+        /// <param name="x1">保存対象の左上X座標(px)</param>
+        /// <param name="y1">保存対象の左上Y座標(px)</param>
+        /// <param name="x2">保存対象の右下X座標(px)</param>
+        /// <param name="y2">保存対象の右下Y座標(px)</param>
+        /// <param name="fileName">保存先のファイル名</param>
+        /// <returns>True: 成功 / False: 失敗</returns>
+        public static bool SaveDrawScreen(int x1, int y1, int x2, int y2, string fileName)
+            => DX.SaveDrawScreen(x1, y1, x2, y2, fileName) == 0;
+        #endregion
+
+        #region - SaveDrawScreen : 現在描画対象になっている画面をＢＭＰ形式で保存する
+        /// <summary>
+        /// 現在描画対象になっている画面をＢＭＰ形式で保存する
+        /// </summary>
+        /// <param name="leftTop">保存対象の左上座標</param>
+        /// <param name="rightBottom">保存対象の右下座標</param>
+        /// <param name="fileName">保存先のファイル名</param>
+        /// <returns>True: 成功 / False: 失敗</returns>
+        public static bool SaveDrawScreen(Point leftTop, Point rightBottom, string fileName)
+            => DX.SaveDrawScreen(leftTop.X, leftTop.Y, rightBottom.X, rightBottom.Y, fileName) == 0;
+        #endregion
+
+        #region - SaveDrawScreen : 現在描画対象になっている画面をＢＭＰ形式で保存する
+        /// <summary>
+        /// 現在描画対象になっている画面をＢＭＰ形式で保存する
+        /// </summary>
+        /// <param name="rect">保存対象の矩形</param>
+        /// <param name="fileName">保存先のファイル名</param>
+        /// <returns>True: 成功 / False: 失敗</returns>
+        public static bool SaveDrawScreen(Rectangle rect, string fileName)
+            => DX.SaveDrawScreen(rect.X, rect.Y, rect.X2, rect.Y2, fileName) == 0;
+        #endregion
+
         #endregion
 
         #endregion

@@ -132,6 +132,13 @@ namespace dxw
         private bool _requestPause = false;
         #endregion
 
+        #region - _requestSuspendUpdateFrame : フレーム更新停止要求フラグ
+        /// <summary>
+        /// フレーム更新停止要求フラグ
+        /// </summary>
+        private bool _requestSuspendUpdateFrame = false;
+        #endregion
+
         #region - _currentScene : 現在描画対象シーン
         /// <summary>
         /// 現在描画対象シーン
@@ -291,6 +298,13 @@ namespace dxw
         /// 一時停止中フラグ
         /// </summary>
         public bool IsPause { get; private set; } = false;
+        #endregion
+
+        #region - IsSuspendUpdateFrame : フレーム更新処理停止中フラグ
+        /// <summary>
+        /// フレーム更新処理停止中フラグ
+        /// </summary>
+        public bool IsSuspendUpdateFrame { get; private set; } = false;
         #endregion
 
         #region - Scenes : シーンリスト
@@ -629,14 +643,17 @@ namespace dxw
         /// </summary>
         protected virtual void UpdateFrame()
         {
-            if (_dialogScene != null)
+            if (!IsSuspendUpdateFrame)
             {
-                if (_isCallParentUpdateFrame)
+                if (_dialogScene != null)
+                {
+                    if (_isCallParentUpdateFrame)
+                        CurrentScene?.UpdateFrame();
+                    _dialogScene.UpdateFrame();
+                }
+                else
                     CurrentScene?.UpdateFrame();
-                _dialogScene.UpdateFrame();
             }
-            else
-                CurrentScene?.UpdateFrame();
         }
         #endregion
 
@@ -700,11 +717,15 @@ namespace dxw
             // 一時停止処理
             if (_requestPause && !IsPause)
                 IsPause = true;
+            if (_requestSuspendUpdateFrame && !IsSuspendUpdateFrame)
+                IsSuspendUpdateFrame = true;
             if (!_requestPause && IsPause)
             {
                 IsPause = false;
                 _measuredTime = GetNowCount();
             }
+            if (!_requestSuspendUpdateFrame && IsSuspendUpdateFrame)
+                IsSuspendUpdateFrame = false;
         }
         #endregion
 
@@ -793,9 +814,11 @@ namespace dxw
         /// <summary>
         /// アプリケーションを一時停止させる
         /// </summary>
-        public void Pause()
+        /// <param name="suspendFrameUpdate">フレームの更新処理も停止する</param>
+        public void Pause(bool suspendFrameUpdate = false)
         {
             _requestPause = true;
+            _requestSuspendUpdateFrame = suspendFrameUpdate;
         }
         #endregion
 
@@ -806,6 +829,7 @@ namespace dxw
         public void Resume()
         {
             _requestPause = false;
+            _requestSuspendUpdateFrame = false;
         }
         #endregion
 
@@ -1016,6 +1040,25 @@ namespace dxw
         public virtual void SaveSettings()
         {
             // 派生クラスで実装する
+        }
+        #endregion
+
+        #region - SaveScreenImage : 画面をファイルに保存する
+        /// <summary>
+        /// 画面をファイルに保存する
+        /// </summary>
+        /// <param name="path">保存ファイル名</param>
+        public void SaveScreenImage(string path)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+            else
+            {
+                var directoryPath = Path.GetDirectoryName(path);
+                if (!Directory.Exists(directoryPath))
+                    Directory.CreateDirectory(directoryPath);
+            }
+            SaveDrawScreen(0, 0, ScreenWidth, ScreenHeight, path);
         }
         #endregion
 
