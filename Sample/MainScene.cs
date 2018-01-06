@@ -29,26 +29,65 @@ namespace Sample
 
         #region ■ Private Methods
 
-        #region - CreatePushButton : プッシュボタンの生成
+        #region - CreateOwn : 自機の生成
         /// <summary>
-        /// プッシュボタンの生成
+        /// 自機の生成
         /// </summary>
-        /// <returns>PushButton</returns>
-        private PushButton CreatePushButton()
+        /// <returns>Sprite</returns>
+        private Sprite CreateOwn()
         {
-            var btn = new PushButton(this);
-            btn.Rect = new Rectangle(100, 100, 200, 50);
-            btn.OnDraw = b =>
+            var initX = App.ScreenWidth / 2 - 64;
+            var initY = App.ScreenHeight - 82;
+
+            var own = new Sprite(this);
+            own.Rect = new Rectangle(initX, initY, 128, 32);
+            own.OnDraw = v => DrawBox(v, App.ColorWhite, true);
+            own.OnUpdate = v =>
             {
-                DrawBox(b, App.ColorWhite, true);
+                // ←が押下されたら自機を左に移動
+                if (App.CheckHitKey(KeyCode.KEY_LEFT))
+                {
+                    if (v.X > 128)
+                        v.X = v.X - 10;
+                }
+                // →が押下されたら自機を右に移動
+                if (App.CheckHitKey(KeyCode.KEY_RIGHT))
+                {
+                    if (v.X < App.ScreenWidth - 256)
+                        v.X = v.X + 10;
+                }
+
+                // SPEACEが押下されたらミサイル発射
+                if (App.CheckOnKeyUp(KeyCode.KEY_SPACE))
+                {
+                    App.AddMessageLoopPostProcess(() =>
+                    {
+                        AddSplite(CreateMissile(v.Center));
+                    });
+                }
             };
-            btn.OnTapped = b =>
-            {
-                App.Quit();
-            };
-            return btn;
+            return own;
         }
         #endregion
+
+        private Sprite CreateMissile(Point pt)
+        {
+            var missile = new Sprite(this);
+            missile.Rect = new Rectangle(pt.X - 2, pt.Y, 4, 10);
+            missile.OnDraw = v => DrawBox(missile, App.ColorWhite, true);
+            missile.OnUpdate = v =>
+            {
+                v.Y = v.Y - 10;
+                if (v.Y < 0)
+                {
+                    App.AddMessageLoopPostProcess(() =>
+                    {
+                        Sprites.Remove(v);
+                    });
+                }
+            };
+            return missile;
+        }
 
         #endregion
 
@@ -63,7 +102,7 @@ namespace Sample
             base.LoadCompleted();
 
             // スプライトの生成
-            AddSplite(CreatePushButton());
+            AddSplite(CreateOwn());
 
         }
         #endregion

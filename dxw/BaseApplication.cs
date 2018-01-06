@@ -181,6 +181,13 @@ namespace dxw
         private string _archiveFilePassword = null;
         #endregion
 
+        #region - _messageLoopPostProcessQueue : メッセージループ後処理キュー
+        /// <summary>
+        /// メッセージループ後処理キュー
+        /// </summary>
+        private Queue<Action> _messageLoopPostProcessQueue = new Queue<Action>();
+        #endregion
+
         #endregion
 
         #region ■ Properties
@@ -676,11 +683,11 @@ namespace dxw
         }
         #endregion
 
-        #region - MessageLoopBeginRound : ループ前処理
+        #region - MessageLoopPreProcess : ループ前処理
         /// <summary>
         /// ループ前処理
         /// </summary>
-        protected virtual void MessageLoopBeginRound()
+        protected virtual void MessageLoopPreProcess()
         {
             // 状態の更新
             UpdateElapsedTime();
@@ -707,12 +714,16 @@ namespace dxw
         }
         #endregion
 
-        #region - MessageLoopEndRound : ループ後処理
+        #region - MessageLoopPostProcess : ループ後処理
         /// <summary>
         /// ループ後処
         /// </summary>
-        protected virtual void MessageLoopEndRound()
+        protected virtual void MessageLoopPostProcess()
         {
+            // 追加された後処理を実行
+            _messageLoopPostProcessQueue.ForEach(act => act.Invoke());
+            _messageLoopPostProcessQueue.Clear();
+
             // システム情報表示
             if (IsShowSystemInformation)
                 ShowSystemInformation();
@@ -785,7 +796,7 @@ namespace dxw
                 while (ProcessMessage() && !IsTerminate)
                 {
                     // 前処理
-                    MessageLoopBeginRound();
+                    MessageLoopPreProcess();
 
                     // フレーム更新処理
                     UpdateFrame();
@@ -797,7 +808,7 @@ namespace dxw
                     DrawFrame();
 
                     // 後処理
-                    MessageLoopEndRound();
+                    MessageLoopPostProcess();
                 }
             }
             finally
@@ -973,6 +984,17 @@ namespace dxw
         public void RemoveTask(string taskId)
         {
             _taskList.RemoveAll(task => task.Id == taskId);
+        }
+        #endregion
+
+        #region - AddMessageLoopPostProcess : メッセージループ後処理に処理を追加する
+        /// <summary>
+        /// メッセージループ後処理に処理を追加する
+        /// </summary>
+        /// <param name="act">処理</param>
+        public void AddMessageLoopPostProcess(Action act)
+        {
+            _messageLoopPostProcessQueue.Enqueue(act);
         }
         #endregion
 

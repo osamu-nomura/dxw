@@ -100,7 +100,7 @@ namespace dxw
         /// </summary>
         public Point Center
         {
-            get { return new Point(X + (X2 - X), Y + (Y2 - Y)); }
+            get { return new Point(X + (Width / 2), Y + (Height / 2)); }
             set
             {
                 X = value.X - (Width / 2);

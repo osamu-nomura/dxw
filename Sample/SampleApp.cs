@@ -51,6 +51,18 @@ namespace Sample
         }
         #endregion
 
+        #region - MessageLoopEndRound : ループ後処理
+        /// <summary>
+        /// ループ後処理
+        /// </summary>
+        protected override void MessageLoopPostProcess()
+        {
+            base.MessageLoopPostProcess();
+            if (CheckOnKeyUp(KeyCode.KEY_Q))
+                Quit();
+        }
+        #endregion
+
         #endregion
     }
     #endregion
