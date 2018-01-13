@@ -711,6 +711,16 @@ namespace dxw
 
             // 描画画面をクリア
             ClearDrawScreen();
+
+            // カレントシーンのループ前処理を実行
+            if (_dialogScene != null)
+            {
+                if (_isCallParentUpdateFrame)
+                    CurrentScene?.MessageLoopPreProcess();
+                _dialogScene.MessageLoopPreProcess();
+            }
+            else
+                CurrentScene?.MessageLoopPreProcess();
         }
         #endregion
 
@@ -720,6 +730,16 @@ namespace dxw
         /// </summary>
         protected virtual void MessageLoopPostProcess()
         {
+            // カレントシーンのループ後処理を実行
+            if (_dialogScene != null)
+            {
+                _dialogScene.MessageLoopPreProcess();
+                if (_isCallParentUpdateFrame)
+                    CurrentScene?.MessageLoopPostProcess();
+            }
+            else
+                CurrentScene?.MessageLoopPostProcess();
+            
             // 追加された後処理を実行
             _messageLoopPostProcessQueue.ForEach(act => act.Invoke());
             _messageLoopPostProcessQueue.Clear();

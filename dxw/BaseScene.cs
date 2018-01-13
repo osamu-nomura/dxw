@@ -89,6 +89,16 @@ namespace dxw
         }
         #endregion
 
+        #region - SortSpite : スプライトをOrder順に並び替える
+        /// <summary>
+        /// スプライトをOrder順に並び替える
+        /// </summary>
+        protected void SortSpite()
+        {
+            Sprites.Sort((s1,s2)=> s1.Order.CompareTo(s2.Order));
+        }
+        #endregion
+
         #region - Update : 更新処理
         /// <summary>
         /// 更新前処理
@@ -175,6 +185,27 @@ namespace dxw
         public virtual void DettachCurrent(BaseScene nextScene)
         {
             AttachiTime = null;
+        }
+        #endregion
+
+        #region - MessageLoopPreProcess : ループ前処理
+        /// <summary>
+        /// ループ前処理
+        /// </summary>
+        public virtual void MessageLoopPreProcess()
+        {
+            // 派生クラスでオーバーライドする
+        }
+        #endregion
+
+        #region - MessageLoopPostProcess : ループ後処理
+        /// <summary>
+        /// ループ後処理
+        /// </summary>
+        public virtual void MessageLoopPostProcess()
+        {
+            // 削除フラグをセットされたスプライトを削除する
+            Sprites.RemoveAll(s => s.Removed);
         }
         #endregion
 

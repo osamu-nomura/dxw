@@ -182,6 +182,7 @@ namespace dxw
         /// </summary>
         public override void Draw()
         {
+            base.Draw();
             if (OnDraw != null)
                 OnDraw(this);
             else

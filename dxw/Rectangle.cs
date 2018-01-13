@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using static dxw.Helper;
+
 namespace dxw
 {
     #region 【Class : Rectangle】
@@ -74,6 +76,36 @@ namespace dxw
             set
             {
                 X = value.X;
+                Y = value.Y;
+            }
+        }
+        #endregion
+
+        #region - LeftBottom : 左下座標
+        /// <summary>
+        /// 左下座標
+        /// </summary>
+        public Point LeftBottom
+        {
+            get { return new Point(X, Y2); }
+            set
+            {
+                X = value.X;
+                Y2 = value.Y;
+            }
+        }
+        #endregion
+
+        #region - RightTop : 右上座標
+        /// <summary>
+        /// 右上座標
+        /// </summary>
+        public Point RightTop
+        {
+            get { return new Point(X2, Y); }
+            set
+            {
+                X2 = value.X;
                 Y = value.Y;
             }
         }
@@ -204,6 +236,17 @@ namespace dxw
         }
         #endregion
 
+        #region - Set : 指定サイズに合わせる
+        /// <summary>
+        /// 指定サイズに合わせる
+        /// </summary>
+        /// <param name="size">矩形サイズ</param>
+        public void Set(RectangleSize size)
+        {
+            Size = size;
+        }
+        #endregion
+
         #region - Set : 指定した矩形の位置とサイズに合わせる
         /// <summary>
         /// 指定した矩形の位置とサイズに合わせる
@@ -216,6 +259,18 @@ namespace dxw
         }
         #endregion
 
+        #region - SetImageSize : サイズを画像サイズに合わせる。
+        /// <summary>
+        /// サイズを画像サイズに合わせる。
+        /// </summary>
+        public void SetImageSize(int imageHandle)
+        {
+            // 画像サイズを取得して自身のサイズにセットする。
+            var size = GetGraphSize(imageHandle);
+            if (size.HasValue)
+                Size = size.Value;
+        }
+        #endregion
 
         #region - CheckPointInRegion : ポイントが領域内かどうか判定
         /// <summary>

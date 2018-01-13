@@ -26,6 +26,13 @@ namespace dxw
         public string ID { get; set; } = Guid.NewGuid().ToString();
         #endregion
 
+        #region - Order : 並び順
+        /// <summary>
+        /// 並び順
+        /// </summary>
+        public int Order { get; set; }
+        #endregion
+
         #region - App : アプリケーション
         /// <summary>
         /// アプリケーション
@@ -98,6 +105,13 @@ namespace dxw
                 Height = value?.Height ?? 0;
             }
         }
+        #endregion
+
+        #region - Removed : 削除する？
+        /// <summary>
+        /// ループの終了時に削除する
+        /// </summary>
+        public bool Removed { get; set; }
         #endregion
 
         #endregion
@@ -185,19 +199,6 @@ namespace dxw
         public virtual void DrawEffect()
         {
             // 派生クラスでオーバーライドする
-        }
-        #endregion
-
-        #region - SetImageSize : サイズを画像サイズに合わせる。
-        /// <summary>
-        /// サイズを画像サイズに合わせる。
-        /// </summary>
-        public void SetImageSize(int imageHandle)
-        {
-            // 画像サイズからボタンのサイズを取得する。
-            var size = GetGraphSize(imageHandle);
-            if (size.HasValue)
-                Size = size.Value;
         }
         #endregion
 

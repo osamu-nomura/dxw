@@ -70,6 +70,12 @@ namespace Sample
         }
         #endregion
 
+        #region - CreateMissile : ミサイルの生成
+        /// <summary>
+        /// ミサイルの生成
+        /// </summary>
+        /// <param name="pt"></param>
+        /// <returns></returns>
         private Sprite CreateMissile(Point pt)
         {
             var missile = new Sprite(this);
@@ -78,16 +84,11 @@ namespace Sample
             missile.OnUpdate = v =>
             {
                 v.Y = v.Y - 10;
-                if (v.Y < 0)
-                {
-                    App.AddMessageLoopPostProcess(() =>
-                    {
-                        Sprites.Remove(v);
-                    });
-                }
+                v.Removed = (v.Y < 0);
             };
             return missile;
         }
+        #endregion
 
         #endregion
 
