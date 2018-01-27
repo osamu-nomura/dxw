@@ -39,10 +39,7 @@ namespace Sample
             FillBackground(App.ColorWhite);
 
             var s = "SAMPLE";
-            var size = GetDrawStringSize(s, Stock.Font);
-            var x = (App.ScreenWidth - size.Width) / 2;
-            var y = (App.ScreenHeight - size.Height) / 2;
-            DrawString(x, y, s, Stock.Colors.Red, Stock.Font);
+            DrawString(App.ScreenRect, HAlignment.Center, VAlignment.Middle, s, Stock.Colors.Red, Stock.Font);
         }
         #endregion
 

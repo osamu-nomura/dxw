@@ -559,6 +559,58 @@ namespace dxw
             => DrawString(pt.X, pt.Y, s, color, font);
         #endregion
 
+        #region - DrawString : 文字列を描画する
+        /// <summary>
+        /// 文字列を描画する
+        /// </summary>
+        /// <param name="x">X座標(px)</param>
+        /// <param name="y">Y座標(px)</param>
+        /// <param name="width">幅</param>
+        /// <param name="textAlign">テキストアラインメント</param>
+        /// <param name="s">描画文字列</param>
+        /// <param name="color">色</param>
+        /// <param name="font">フォントハンドル</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool DrawString(int x, int y, int width, HAlignment textAlign, string s, uint color, int font)
+        {
+            var stringWidth = GetDrawStringWidth(s, font);
+            var offset = 0;
+            if (textAlign == HAlignment.Center)
+                offset = (width - stringWidth) / 2;
+            else if (textAlign == HAlignment.Right)
+                offset = (width - stringWidth);
+            return DrawString(x, y + offset, s, color, font);
+        }
+        #endregion
+
+        #region - DrawString : 文字列を描画する
+        /// <summary>
+        /// 文字列を描画する
+        /// </summary>
+        /// <param name="rect">描画領域（px）</param>
+        /// <param name="hAlign">水平アライメント</param>
+        /// <param name="vAlign">垂直アライメント</param>
+        /// <param name="s">描画文字列</param>
+        /// <param name="color">色</param>
+        /// <param name="font">フォントハンドル</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool DrawString(Rectangle rect, HAlignment hAlign, VAlignment vAlign, string s, uint color, int font)
+        {
+            var size = GetDrawStringSize(s, font);
+            var hOffset = 0;
+            if (hAlign == HAlignment.Center)
+                hOffset = (rect.Width - size.Width) / 2;
+            else if (hAlign == HAlignment.Right)
+                hOffset = (rect.Width - size.Width);
+            var vOffset = 0;
+            if (vAlign == VAlignment.Middle)
+                vOffset = (rect.Height - size.Height) / 2;
+            else if (vAlign == VAlignment.Bottom)
+                vOffset = (rect.Height - size.Height);
+            return DrawString(rect.X + hOffset, rect.Y + vOffset, s, color, font);
+        }
+        #endregion
+
         #region - GetDrawStringWidth 文字列を描画したさいの幅を取得する
         /// <summary>
         /// 文字列を描画したさいの幅を取得する
@@ -800,10 +852,15 @@ namespace dxw
         public static bool HideMouseCursor() => SetMouseDispFlag(false);
         #endregion
 
+        #region - IsMouseCursorVisible : マウスカーソルが表示されている？
+        /// <summary>
+        /// マウスカーソルが表示されている？
+        /// </summary>
         public static bool IsMouseCursorVisible
         {
             get { return _visibleMousrCursor;  }
         }
+        #endregion
 
         #endregion
 

@@ -243,5 +243,29 @@ namespace dxw
     }
     #endregion
 
+    #region - HAlignment : 水平アライメント
+    /// <summary>
+    /// 水平アライメント
+    /// </summary>
+    public enum HAlignment
+    {
+        Left,       // 左詰め
+        Center,     // センタリング
+        Right       // 右詰め
+    }
     #endregion
+
+    #region - VAlignment : 垂直アライメント
+    /// <summary>
+    /// 垂直アライメント
+    /// </summary>
+    public enum VAlignment
+    {
+        Top,        // 上端
+        Middle,     // 中央
+        Bottom      // 下端
+    }
+    #endregion
+
+#endregion
 }
