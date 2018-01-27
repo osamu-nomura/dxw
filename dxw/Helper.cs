@@ -9,6 +9,27 @@ using DxLibDLL;
 
 namespace dxw
 {
+    #region 【StringSize】
+    /// <summary>
+    /// 文字列描画サイズ
+    /// </summary>
+    public struct StringSize
+    {
+        /// <summary>
+        /// 幅
+        /// </summary>
+        public int Width { get; set; }
+        /// <summary>
+        /// 高さ
+        /// </summary>
+        public int Height { get; set; }
+        /// <summary>
+        /// 行数
+        /// </summary>
+        public int LineCount { get; set; }
+    }
+    #endregion
+
     #region 【Static Class : Helper】
     /// <summary>
     /// ヘルパーメソッド
@@ -517,11 +538,11 @@ namespace dxw
         /// <param name="y">Y座標(px)</param>
         /// <param name="s">描画文字列</param>
         /// <param name="color">色</param>
-        /// <param name="handle">フォントハンドル</param>
+        /// <param name="font">フォントハンドル</param>
         /// <returns>True : 成功 / False : 失敗</returns>
-        public static bool DrawString(int x, int y, string s, uint color, int handle)
+        public static bool DrawString(int x, int y, string s, uint color, int font)
         {
-            return DX.DrawStringToHandle(x, y, s, color, handle) == 0;
+            return DX.DrawStringToHandle(x, y, s, color, font) == 0;
         }
         #endregion
 
@@ -532,10 +553,44 @@ namespace dxw
         /// <param name="pt">座標</param>
         /// <param name="s">描画文字列</param>
         /// <param name="color">色</param>
-        /// <param name="handle">フォントハンドル</param>
+        /// <param name="font">フォントハンドル</param>
         /// <returns>True : 成功 / False : 失敗</returns>
-        public static bool DrawString(Point pt, string s, uint color, int handle)
-            => DrawString(pt.X, pt.Y, s, color, handle);
+        public static bool DrawString(Point pt, string s, uint color, int font)
+            => DrawString(pt.X, pt.Y, s, color, font);
+        #endregion
+
+        #region - GetDrawStringWidth 文字列を描画したさいの幅を取得する
+        /// <summary>
+        /// 文字列を描画したさいの幅を取得する
+        /// </summary>
+        /// <param name="s">文字列</param>
+        /// <param name="font">フォントハンドル</param>
+        /// <returns>描画幅(px)</returns>
+        public static int GetDrawStringWidth(string s, int font = 0)
+        {
+            if (font != 0)
+                return DX.GetDrawStringWidthToHandle(s, s.Length, font);
+            else
+                return DX.GetDrawStringWidth(s, s.Length);
+        }
+        #endregion
+
+        #region - GetDrawStringSize : 文字列を描画したさいのサイズを取得する
+        /// <summary>
+        /// 文字列を描画したさいのサイズを取得する
+        /// </summary>
+        /// <param name="s">文字列</param>
+        /// <param name="font">フォントハンドル</param>
+        /// <returns>描画サイズ</returns>
+        public static StringSize GetDrawStringSize(string s, int font = 0)
+        {
+            int width, height, lineCount;
+            if (font != 0)
+                DX.GetDrawStringSizeToHandle(out width, out height, out lineCount, s, s.Length, font);
+            else
+                DX.GetDrawStringSize(out width, out height, out lineCount, s, s.Length);
+            return new StringSize { Width = width, Height = height, LineCount = lineCount };
+        }
         #endregion
 
         #region - CreateFont : フォントを作製する

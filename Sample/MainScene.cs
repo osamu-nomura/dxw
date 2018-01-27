@@ -27,66 +27,22 @@ namespace Sample
         }
         #endregion
 
-        #region ■ Private Methods
+        #region ■ protected Methods
 
-        #region - CreateOwn : 自機の生成
+        #region - DrawBackground : 背景を描画する
         /// <summary>
-        /// 自機の生成
+        /// 背景を描画する
         /// </summary>
-        /// <returns>Sprite</returns>
-        private Sprite CreateOwn()
+        protected override void DrawBackground()
         {
-            var initX = App.ScreenWidth / 2 - 64;
-            var initY = App.ScreenHeight - 82;
+            base.DrawBackground();
+            FillBackground(App.ColorWhite);
 
-            var own = new Sprite(this);
-            own.Rect = new Rectangle(initX, initY, 128, 32);
-            own.OnDraw = v => DrawBox(v, App.ColorWhite, true);
-            own.OnUpdate = v =>
-            {
-                // ←が押下されたら自機を左に移動
-                if (App.CheckHitKey(KeyCode.KEY_LEFT))
-                {
-                    if (v.X > 128)
-                        v.X = v.X - 10;
-                }
-                // →が押下されたら自機を右に移動
-                if (App.CheckHitKey(KeyCode.KEY_RIGHT))
-                {
-                    if (v.X < App.ScreenWidth - 256)
-                        v.X = v.X + 10;
-                }
-
-                // SPEACEが押下されたらミサイル発射
-                if (App.CheckOnKeyUp(KeyCode.KEY_SPACE))
-                {
-                    App.AddMessageLoopPostProcess(() =>
-                    {
-                        AddSplite(CreateMissile(v.Center));
-                    });
-                }
-            };
-            return own;
-        }
-        #endregion
-
-        #region - CreateMissile : ミサイルの生成
-        /// <summary>
-        /// ミサイルの生成
-        /// </summary>
-        /// <param name="pt"></param>
-        /// <returns></returns>
-        private Sprite CreateMissile(Point pt)
-        {
-            var missile = new Sprite(this);
-            missile.Rect = new Rectangle(pt.X - 2, pt.Y, 4, 10);
-            missile.OnDraw = v => DrawBox(missile, App.ColorWhite, true);
-            missile.OnUpdate = v =>
-            {
-                v.Y = v.Y - 10;
-                v.Removed = (v.Y < 0);
-            };
-            return missile;
+            var s = "SAMPLE";
+            var size = GetDrawStringSize(s, Stock.Font);
+            var x = (App.ScreenWidth - size.Width) / 2;
+            var y = (App.ScreenHeight - size.Height) / 2;
+            DrawString(x, y, s, Stock.Colors.Red, Stock.Font);
         }
         #endregion
 
@@ -101,10 +57,6 @@ namespace Sample
         public override void LoadCompleted()
         {
             base.LoadCompleted();
-
-            // スプライトの生成
-            AddSplite(CreateOwn());
-
         }
         #endregion
 

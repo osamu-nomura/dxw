@@ -20,8 +20,8 @@ namespace Sample
             // アプリケーションオブジェクトの生成
             var app = new SampleApp(SCREEN_WIDTH, SCREEN_HEIGHT, ColorBitDepth.BitDepth32);
 
-            app.IsShowSystemInformation = true;
-            app.IsShowInputStatus = true;
+            app.IsShowSystemInformation = false;
+            app.IsShowInputStatus = false;
 
             // アプリケーションの実行
             app.Run(WindowMode.Window);
