@@ -146,7 +146,7 @@ namespace dxw
         /// <param name="color">指定色</param>
         protected void FillBackground(uint color)
         {
-           DrawBox(App.ScreenRect, color, true);
+            App.FillBackground(color);
         }
         #endregion
 

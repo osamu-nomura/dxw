@@ -88,6 +88,22 @@ namespace dxw
         private static int DXBool(bool sw) => sw ? DX.TRUE : DX.FALSE;
         #endregion
 
+        #region - NormarizeVolume :　音量の正規化
+        /// <summary>
+        /// 音量の正規化 (0～250の範囲に収める）
+        /// </summary>
+        /// <param name="volume">音量</param>
+        /// <returns>正規化された音量</returns>
+        private static int NormarizeVolume(int volume)
+        {
+            if (volume < 0)
+                return 0;
+            if (volume > 250)
+                return 250;
+            return volume;
+        }
+        #endregion
+
         #endregion
 
         #region ■ Public Methods
@@ -200,7 +216,7 @@ namespace dxw
 
         #region ☆ グラフィックデータ制御関数
 
-        #region - CreateDrawbleGraph : 描画可能なグラフィックを生成する。
+        #region - CreateDrawableGraph : 描画可能なグラフィックを生成する。
         /// <summary>
         /// 描画可能なグラフィックを生成する。
         /// </summary>
@@ -208,22 +224,22 @@ namespace dxw
         /// <param name="height">高さ(PX)</param>
         /// <param name="useAlphaChannel">アルファチャネルの有効化</param>
         /// <returns>グラフィックハンドル</returns>
-        public static int CreateDrawbleGraph(int width, int height, bool useAlphaChannel = false) 
+        public static int CreateDrawableGraph(int width, int height, bool useAlphaChannel = false) 
             => DX.MakeScreen(width, height, DXBool(useAlphaChannel));
         #endregion
 
-        #region - CreateDrawbleGraph : 描画可能なグラフィックを生成する。
+        #region - CreateDrawableGraph : 描画可能なグラフィックを生成する。
         /// <summary>
         /// 描画可能なグラフィックを生成する。
         /// </summary>
         /// <param name="size">サイズ</param>
         /// <param name="useAlphaChannel">アルファチャネルの有効化</param>
         /// <returns>グラフィックハンドル</returns>
-        public static int CreateDrawbleGraph(RectangleSize size, bool useAlphaChannel = false)
+        public static int CreateDrawableGraph(RectangleSize size, bool useAlphaChannel = false)
             => DX.MakeScreen(size.Width, size.Height, DXBool(useAlphaChannel));
         #endregion
 
-        #region - CreateDrawbleGraph : 描画可能なグラフィックを生成する。
+        #region - CreateDrawableGraph : 描画可能なグラフィックを生成する。
         /// <summary>
         ///  描画可能なグラフィックを生成する。
         /// </summary>
@@ -232,9 +248,9 @@ namespace dxw
         /// <param name="useAlphaChannel">アルファチャネルの有効化</param>
         /// <param name="callback">コールバック</param>
         /// <returns>グラフィックハンドル</returns>
-        public static int CreateDrawbleGraph(int width, int height, bool useAlphaChannel, Action callback)
+        public static int CreateDrawableGraph(int width, int height, bool useAlphaChannel, Action callback)
         {
-            var graph = CreateDrawbleGraph(width, height, useAlphaChannel);
+            var graph = CreateDrawableGraph(width, height, useAlphaChannel);
             if (graph >= 0)
             {
                 if (callback != null)
@@ -259,7 +275,7 @@ namespace dxw
         }
         #endregion
 
-        #region - CreateDrawbleGraph : 描画可能なグラフィックを生成する。
+        #region - CreateDrawableGraph : 描画可能なグラフィックを生成する。
         /// <summary>
         ///  描画可能なグラフィックを生成する。
         /// </summary>
@@ -267,8 +283,8 @@ namespace dxw
         /// <param name="useAlphaChannel">アルファチャネルの有効化</param>
         /// <param name="callback">コールバック</param>
         /// <returns>グラフィックハンドル</returns>
-        public static int CreateDrawbleGraph(RectangleSize size, bool useAlphaChannel, Action callback)
-            => CreateDrawbleGraph(size.Width, size.Height, useAlphaChannel, callback);
+        public static int CreateDrawableGraph(RectangleSize size, bool useAlphaChannel, Action callback)
+            => CreateDrawableGraph(size.Width, size.Height, useAlphaChannel, callback);
         #endregion
 
         #region - DeleteGraph : グラフィックをメモリから削除する。
@@ -876,7 +892,7 @@ namespace dxw
         /// <returns>True : 成功 / False : 失敗</returns>
         public static bool PlaySound(int handle, PlayType playType, int volume)
         {
-            DX.ChangeNextPlayVolumeSoundMem(volume, handle);
+            DX.ChangeNextPlayVolumeSoundMem(NormarizeVolume(volume), handle);
             return DX.PlaySoundMem(handle, (int)playType, DX.TRUE) == 0;
         }
         #endregion
@@ -891,7 +907,7 @@ namespace dxw
         public static bool ChangeSoundVolume(int handle, int newVolume)
         {
             if (DX.CheckSoundMem(handle) == DX.TRUE)
-                return DX.ChangeVolumeSoundMem(newVolume, handle) == 0;
+                return DX.ChangeVolumeSoundMem(NormarizeVolume(newVolume), handle) == 0;
             return false;
         }
         #endregion

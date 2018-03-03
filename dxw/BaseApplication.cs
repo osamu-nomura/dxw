@@ -768,15 +768,6 @@ namespace dxw
         }
         #endregion
 
-        #region - FillBackground : 背景を指定色で塗りつぶす
-        /// <summary>
-        /// 背景を指定色で塗りつぶす
-        /// </summary>
-        /// <param name="color">指定色</param>
-        protected void FillBackground(uint color) 
-            => DrawBox(ScreenRect, color, true);
-        #endregion
-
         #endregion
 
         #region ■ Public Methods
@@ -1110,6 +1101,15 @@ namespace dxw
             }
             SaveDrawScreen(0, 0, ScreenWidth, ScreenHeight, path);
         }
+        #endregion
+
+        #region - FillBackground : 背景を指定色で塗りつぶす
+        /// <summary>
+        /// 背景を指定色で塗りつぶす
+        /// </summary>
+        /// <param name="color">指定色</param>
+        public void FillBackground(uint color)
+            => DrawBox(ScreenRect, color, true);
         #endregion
 
         #endregion
