@@ -30,6 +30,107 @@ namespace dxw
     }
     #endregion
 
+    #region 【JoyPadState】
+    /// <summary>
+    /// ジョイパッド状態
+    /// </summary>
+    public struct JoyPadState
+    {
+        /// <summary>
+        /// 各ボタン状態
+        /// </summary>
+        public byte[] Buttons;
+        /// <summary>
+        /// 右トリガ
+        /// </summary>
+        public byte RightTrigger;
+        /// <summary>
+        /// 左トリガ
+        /// </summary>
+        public byte LeftTrigger;
+        /// <summary>
+        /// 左スティックY軸
+        /// </summary>
+        public short ThumbLY;
+        /// <summary>
+        /// 左スティックX軸
+        /// </summary>
+        public short ThumbLX;
+        /// <summary>
+        /// 右スティックX軸
+        /// </summary>
+        public short ThumbRX;
+        /// <summary>
+        /// 右スティックY軸
+        /// </summary>
+        public short ThumbRY;
+
+        /// <summary>
+        /// ボタンが押下されている？
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        private bool IsDownButton(int n) => (Buttons?[n] ?? 0) == 1;
+
+        /// <summary>
+        /// デジタル方向キー上
+        /// </summary>
+        public bool DPadUp => IsDownButton(DX.XINPUT_BUTTON_DPAD_UP);
+        /// <summary>
+        /// デジタル方向キー下
+        /// </summary>
+        public bool DPadDown => IsDownButton(DX.XINPUT_BUTTON_DPAD_DOWN);
+        /// <summary>
+        /// デジタル方向キー左
+        /// </summary>
+        public bool DPadLeft => IsDownButton(DX.XINPUT_BUTTON_DPAD_LEFT);
+        /// <summary>
+        /// デジタル方向キー右
+        /// </summary>
+        public bool DPadRight => IsDownButton(DX.XINPUT_BUTTON_DPAD_RIGHT);
+        /// <summary>
+        /// スタートボタン
+        /// </summary>
+        public bool Start => IsDownButton(DX.XINPUT_BUTTON_START);
+        /// <summary>
+        /// バックボタン
+        /// </summary>
+        public bool Back => IsDownButton(DX.XINPUT_BUTTON_BACK);
+        /// <summary>
+        /// 左スティック
+        /// </summary>
+        public bool LeftThumb => IsDownButton(DX.XINPUT_BUTTON_LEFT_THUMB);
+        /// <summary>
+        /// 右スティック
+        /// </summary>
+        public bool RightThumb => IsDownButton(DX.XINPUT_BUTTON_RIGHT_THUMB);
+        /// <summary>
+        /// 左肩ボタン
+        /// </summary>
+        public bool LeftShoulder => IsDownButton(DX.XINPUT_BUTTON_LEFT_SHOULDER);
+        /// <summary>
+        /// 右肩ボタン
+        /// </summary>
+        public bool RightShoulder => IsDownButton(DX.XINPUT_BUTTON_RIGHT_SHOULDER);
+        /// <summary>
+        /// A ボタン
+        /// </summary>
+        public bool A => IsDownButton(DX.XINPUT_BUTTON_A);
+        /// <summary>
+        /// Bボタン
+        /// </summary>
+        public bool B => IsDownButton(DX.XINPUT_BUTTON_B);
+        /// <summary>
+        /// Xボタン
+        /// </summary>
+        public bool X => IsDownButton(DX.XINPUT_BUTTON_X);
+        /// <summary>
+        /// Yボタン
+        /// </summary>
+        public bool Y => IsDownButton(DX.XINPUT_BUTTON_Y);
+    }
+    #endregion
+
     #region 【Static Class : Helper】
     /// <summary>
     /// ヘルパーメソッド
@@ -46,6 +147,28 @@ namespace dxw
         /// <returns></returns>
         [DllImport("DxLib.dll", EntryPoint = "dx_SetActiveStateChangeCallBackFunction")]
         extern unsafe static int SetActiveStateChangeCallBackFunction(DX.SetActiveStateChangeCallBackFunctionCallback Callback, IntPtr UserData);
+        /// <summary>
+        /// GetJoypadXInputStateで使用する構造体
+        /// </summary>
+        private unsafe struct _XInputState
+        {
+            public fixed byte Buttons[16];
+            public byte RightTrigger;
+            public byte LeftTrigger;
+            public short ThumbLY;
+            public short ThumbLX;
+            public short ThumbRX;
+            public short ThumbRY;
+        }
+        /// <summary>
+        /// GetJoypadXInputState
+        /// DXライブラリのC#用DLLの定義では利用しづらいので直接DxLib.dllからインポートする
+        /// </summary>
+        /// <param name="padNo">取得したいジョイパッドの番号</param>
+        /// <param name="state">ジョイパッドのステータス(OUT)</param>
+        /// <returns>0 : 正常 / 非0 : エラー</returns>
+        [DllImport("DxLib.dll", EntryPoint = "dx_GetJoypadXInputState")]
+        extern unsafe static int GetJoypadXInputState(int padNo, out _XInputState state);
         #endregion
 
         #region ■ Members
@@ -875,6 +998,87 @@ namespace dxw
         public static bool IsMouseCursorVisible
         {
             get { return _visibleMousrCursor;  }
+        }
+        #endregion
+
+        #endregion
+
+        #region ☆ ジョイパッド入力関連関数
+
+        #region - GetJoyPadNum : ジョイパッドが接続されている数を取得する
+        /// <summary>
+        /// ジョイパッドが接続されている数を取得する
+        /// </summary>
+        /// <returns>ジョイパッドの接続数</returns>
+        public static int GetJoyPadNum()
+        {
+            return DX.GetJoypadNum();
+        }
+        #endregion
+
+        #region - GetJoypadState : ジョイパッドの状態を取得する
+        /// <summary>
+        /// ジョイパッドの状態を取得する
+        /// </summary>
+        /// <param name="padNo">取得したいジョイパッドの番号</param>
+        /// <returns>ジョイパッドの状態を保持したJoyPadState構造体</returns>
+        public static unsafe JoyPadState? GetJoypadState(int padNo)
+        {
+            if (GetJoypadXInputState(padNo, out _XInputState state) == 0)
+            {
+                var buttons = new byte[16];
+                Marshal.Copy((IntPtr)state.Buttons, buttons, 0, 16);
+                return new JoyPadState
+                {
+                    Buttons = buttons,
+                    RightTrigger = state.RightTrigger,
+                    LeftTrigger = state.LeftTrigger,
+                    ThumbLX = state.ThumbLX,
+                    ThumbLY = state.ThumbLY,
+                    ThumbRX = state.ThumbRX,
+                    ThumbRY = state.ThumbRY
+                };
+            }
+            return null;
+        }
+        #endregion
+
+        #region - SetJoypadDeadZone : ジョイパッドの方向入力の無効範囲を設定する
+        /// <summary>
+        /// ジョイパッドの方向入力の無効範囲を設定する
+        /// </summary>
+        /// <param name="padNo">取得したいジョイパッドの番号</param>
+        /// <param name="zone">無効範囲( 0.0 ～ 1.0 )、デフォルト値は 0.35</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool SetJoypadDeadZone(int padNo, double zone)
+        {
+            return DX.SetJoypadDeadZone(padNo, zone) == 0;
+        }
+        #endregion
+
+        #region - StartJoypadVibration : ジョイパッドの振動を開始する
+        /// <summary>
+        /// ジョイパッドの振動を開始する
+        /// </summary>
+        /// <param name="padNo">取得したいジョイパッドの番号</param>
+        /// <param name="power">振動の強さ(0～1000)</param>
+        /// <param name="time">振動させる時間(ミリ秒単位) (-1 で StopJoypadVibration が呼ばれるまで振動し続ける)</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool StartJoypadVibration(int padNo, int power, int time)
+        {
+            return DX.StartJoypadVibration(padNo, power, time) == 0;
+        }
+        #endregion
+
+        #region - StopJoypadVibration : ジョイパッドの振動を停止する
+        /// <summary>
+        /// ジョイパッドの振動を停止する
+        /// </summary>
+        /// <param name="padNo">取得したいジョイパッドの番号</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool StopJoypadVibration(int padNo)
+        {
+            return DX.StopJoypadVibration(padNo) == 0;
         }
         #endregion
 

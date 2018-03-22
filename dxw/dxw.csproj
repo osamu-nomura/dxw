@@ -36,7 +36,7 @@
       <HintPath>..\DXLib\DxLibDotNet.dll</HintPath>
     </Reference>
     <Reference Include="hsb">
-      <HintPath>..\hsb\hsb.dll</HintPath>
+      <HintPath>..\..\hsb\hsb\bin\Debug\hsb.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

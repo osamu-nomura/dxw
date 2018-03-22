@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using dxw;
@@ -28,6 +29,16 @@ namespace Sample
         #endregion
 
         #region ■ protected Methods
+
+        #region - UpdateFrame : フレームを更新する
+        /// <summary>
+        /// フレームを更新する
+        /// </summary>
+        public override void UpdateFrame()
+        {
+            base.UpdateFrame();
+        }
+        #endregion
 
         #region - DrawBackground : 背景を描画する
         /// <summary>
