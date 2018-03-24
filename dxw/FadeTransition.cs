@@ -59,6 +59,7 @@ namespace dxw
             // トランジション時間に達した場合は処理終了
             if (elapsedTime > TransitionTime)
             {
+                // 描画輝度を元に戻しておく
                 SetDrawBright(255, 255, 255);
                 return false;
             }
@@ -66,20 +67,19 @@ namespace dxw
             if (elapsedTime < TransitionTime / 2)
             {
                 // 前半は直前シーンをフェードアウト
+                var hGraph = GetPrevSceneGraph();
                 var rate = elapsedTime / (double)(TransitionTime / 2);
                 var bright = 255 - (int)Math.Ceiling(255.0 * rate);
                 SetDrawBright(bright, bright, bright);
-                var hGraph = GetPrevSceneGraph();
                 DrawGraph(0, 0, hGraph, false);
-                System.Diagnostics.Debug.WriteLine($"ElapsedTime:{elapsedTime} / Rate:{rate} / Bright:{bright}");
             }
             else
             {
                 // 後半は次シーンをフェードイン
+                var hGraph = GetNextSceneGraph();
                 var rate = (TransitionTime - elapsedTime) / (double)(TransitionTime / 2);
                 var bright = 255 - (int)Math.Ceiling(255.0 * rate);
                 SetDrawBright(bright, bright, bright);
-                var hGraph = GetNextSceneGraph();
                 DrawGraph(0, 0, hGraph, false);
             }
             return true;
