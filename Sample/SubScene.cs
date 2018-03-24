@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using dxw;
@@ -10,11 +9,11 @@ using static dxw.Helper;
 
 namespace Sample
 {
-    #region 【Class : MainScene】
+    #region 【Class : SubScene】
     /// <summary>
-    /// メインシーン
+    /// サブシーン
     /// </summary>
-    class MainScene : BaseScene
+    class SubScene : BaseScene
     {
         #region ■ Properties
 
@@ -32,7 +31,7 @@ namespace Sample
         /// コンストラクタ
         /// </summary>
         /// <param name="app"></param>
-        public MainScene(SampleApp app)
+        public SubScene(SampleApp app)
             : base(app)
         {
 
@@ -63,7 +62,7 @@ namespace Sample
             };
             btn.OnTapped = b =>
             {
-                App.Transition(new FadeTransition(this, App.GetScene(1), 1000));
+                App.Transition(new FadeTransition(this, App.GetScene(0), 1000));
             };
             return btn;
         }
@@ -89,7 +88,7 @@ namespace Sample
         protected override void DrawBackground()
         {
             base.DrawBackground();
-            FillBackground(Stock.Colors.Red);
+            FillBackground(Stock.Colors.Yellow);
         }
         #endregion
 

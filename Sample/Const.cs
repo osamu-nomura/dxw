@@ -16,11 +16,11 @@ namespace Sample
         /// <summary>
         /// 画面幅
         /// </summary>
-        public const int SCREEN_WIDTH = 800;
+        public const int SCREEN_WIDTH = 640;
         /// <summary>
         /// 画面高さ
         /// </summary>
-        public const int SCREEN_HEIGHT = 600;
+        public const int SCREEN_HEIGHT = 480;
         /// <summary>
         /// 効果音音量
         /// </summary>

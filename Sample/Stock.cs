@@ -23,9 +23,21 @@ namespace Sample
         {
             #region ■ Static Properties
             /// <summary>
+            /// 白
+            /// </summary>
+            public static uint White { get; private set; } = 0;
+            /// <summary>
+            /// 黒
+            /// </summary>
+            public static uint Black { get; private set; } = 0;
+            /// <summary>
             /// 赤
             /// </summary>
             public static uint Red { get; private set; } = 0;
+            /// <summary>
+            /// 黄色
+            /// </summary>
+            public static uint Yellow { get; private set; } = 0;
             #endregion
 
             #region ■ Statuc Methods
@@ -36,7 +48,10 @@ namespace Sample
             /// </summary>
             public static void Init()
             {
+                White = GetColor(255, 255, 255);
+                Black = GetColor(0, 0, 0);
                 Red = GetColor(255, 0, 0);
+                Yellow = GetColor(255, 255, 0);
             }
             #endregion
 

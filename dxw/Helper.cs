@@ -528,6 +528,18 @@ namespace dxw
         }
         #endregion
 
+        #region - SetDrawBright : 	描画輝度をセット
+        /// <summary>
+        /// 	描画輝度をセット
+        /// </summary>
+        /// <param name="redBright">赤描画輝度(0-255)</param>
+        /// <param name="greenBright">緑描画輝度(0-255)</param>
+        /// <param name="blueBright">青描画輝度(0-255)</param>
+        /// <returns>true: 成功 / False: 失敗</returns>
+        public static bool SetDrawBright(int redBright, int greenBright, int blueBright)
+            => DX.SetDrawBright(redBright, greenBright, blueBright) == 0;
+        #endregion
+
         #endregion
 
         #region ☆ 図形描画関数

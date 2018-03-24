@@ -82,7 +82,7 @@ namespace dxw
         /// スプライトをシーンに追加する。
         /// </summary>
         /// <param name="sprite"></param>
-        public BaseSprite AddSplite(BaseSprite sprite)
+        public T AddSplite<T>(T sprite) where T : BaseSprite
         {
             Sprites.Add(sprite);
             return sprite;

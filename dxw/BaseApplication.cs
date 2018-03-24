@@ -188,6 +188,13 @@ namespace dxw
         private Queue<Action> _messageLoopPostProcessQueue = new Queue<Action>();
         #endregion
 
+        #region - _requestTransition : 要求トランジション
+        /// <summary>
+        /// 要求トランジション
+        /// </summary>
+        private BaseTransition _requestTransition = null;
+        #endregion
+
         #endregion
 
         #region ■ Properties
@@ -581,6 +588,35 @@ namespace dxw
         }
         #endregion
 
+        #region - TransitionRoop : トランジション処理
+        /// <summary>
+        /// トランジション処理
+        /// </summary>
+        private void TransitionRoop()
+        {
+            while(_requestTransition.Proc())
+            {
+                // システム情報表示
+                if (IsShowSystemInformation)
+                    ShowSystemInformation();
+
+                // 裏画面を表画面に転送
+                ScreenFlip();
+
+                FlipFlop = !FlipFlop;
+
+                if (!ProcessMessage() || IsTerminate)
+                    break;
+
+                UpdateElapsedTime();
+                UpdateKeyState();
+                UpdateInputState();
+            }
+            ChangeScene(_requestTransition.NextScene);
+            _requestTransition = null;
+        }
+        #endregion
+
         #endregion
 
         #region ■ Protected Methods
@@ -820,7 +856,10 @@ namespace dxw
 
                     // 後処理
                     MessageLoopPostProcess();
-                }
+
+                    // トランジションが要求しれていれば実行
+                    if (_requestTransition != null)
+                        TransitionRoop();                }
             }
             finally
             {
@@ -1110,6 +1149,31 @@ namespace dxw
         /// <param name="color">指定色</param>
         public void FillBackground(uint color)
             => DrawBox(ScreenRect, color, true);
+        #endregion
+
+        #region - GetScene : シーンを取得する
+        /// <summary>
+        /// GetScene : シーンを取得する
+        /// </summary>
+        /// <param name="sceneNo">シーン番号</param>
+        /// <returns>シーン</returns>
+        public BaseScene GetScene(int sceneNo)
+        {
+            if (sceneNo >= 0 && sceneNo < Scenes.Count)
+                return Scenes[sceneNo];
+            return null;
+        }
+        #endregion
+
+        #region - Transition : トランジションを要求する
+        /// <summary>
+        /// トランジションを要求する
+        /// </summary>
+        /// <param name="transition">トランジションオブジェクト</param>
+        public void Transition(BaseTransition transition)
+        {
+            _requestTransition = transition;
+        }
         #endregion
 
         #endregion

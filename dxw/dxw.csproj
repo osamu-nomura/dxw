@@ -53,7 +53,9 @@
     <Compile Include="BaseSlider.cs" />
     <Compile Include="BaseSprite.cs" />
     <Compile Include="BaseInteractiveSprite.cs" />
+    <Compile Include="BaseTransition.cs" />
     <Compile Include="Enum.cs" />
+    <Compile Include="FadeTransition.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="PushButton.cs" />
     <Compile Include="InputInfo.cs" />
