@@ -62,7 +62,8 @@ namespace Sample
             };
             btn.OnTapped = b =>
             {
-                App.Transition(new FadeTransition(this, App.GetScene(0), 1000));
+                var orientation = (TransitionOrientation)GetRand(3);
+                App.Transition(new SlideTransition(this, App.GetScene(0), 1000, orientation));
             };
             return btn;
         }

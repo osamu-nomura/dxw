@@ -307,6 +307,24 @@ namespace dxw
             => DX.ProcessMessage() == 0;
         #endregion
 
+        #region - GetRand : 整数の乱数を取得する
+        /// <summary>
+        /// 整数の乱数を取得する
+        /// </summary>
+        /// <param name="max">最大値</param>
+        /// <returns>乱数値</returns>
+        public static int GetRand(int max)
+            => DX.GetRand(max);
+        /// <summary>
+        /// 整数の乱数を取得する
+        /// </summary>
+        /// <param name="min">最小値</param>
+        /// <param name="max">最大値</param>
+        /// <returns>乱数値</returns>
+        public static int GetRand(int min, int max)
+            => min + DX.GetRand(max - min);
+        #endregion
+
         #endregion
 
         #region ☆　ウィンドウモード関連関数

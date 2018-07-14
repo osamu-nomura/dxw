@@ -267,5 +267,18 @@ namespace dxw
     }
     #endregion
 
-#endregion
+    #region - TransitionOrientation : トランジション方向
+    /// <summary>
+    /// トランジション方向
+    /// </summary>
+    public enum TransitionOrientation
+    {
+        Up,     // 下から上
+        Down,   // 上から下
+        Left,   // 右から左
+        Right   // 左から右
+    }
+    #endregion
+
+    #endregion
 }
