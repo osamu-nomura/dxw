@@ -61,6 +61,13 @@ namespace dxw
         }
         #endregion
 
+        #region - Vector : ベクトル
+        /// <summary>
+        /// ベクトル
+        /// </summary>
+        public Vector Vector { get; set; } = new Vector();
+        #endregion
+
         #endregion
 
         #region ■ Delegate

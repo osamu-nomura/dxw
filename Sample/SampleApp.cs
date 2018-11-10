@@ -48,6 +48,7 @@ namespace Sample
             // 音量初期化
             SEVolume = Const.SE_VOLUME;
             BGMVolume = Const.BGM_VOLUME;
+
         }
         #endregion
 
