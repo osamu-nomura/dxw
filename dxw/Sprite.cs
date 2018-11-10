@@ -190,6 +190,18 @@ namespace dxw
         }
         #endregion
 
+        #region - NewPos : 経過時間に応じた新しい位置を取得する
+        /// <summary>
+        /// 経過時間に応じた新しい位置(LeftTop)を取得する
+        /// </summary>
+        /// <param name="s">経過時間</param>
+        /// <returns>Point</returns>
+        public Point NewPos(int s)
+        {
+            return LeftTop + (Vector * s);
+        }
+        #endregion
+
         #endregion
     }
     #endregion

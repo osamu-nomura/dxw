@@ -279,6 +279,13 @@ namespace dxw
         public ulong ElapsedTime { get; private set; } = 0L;
         #endregion
 
+        #region - WrapTime : 前回フレームからの経過時間
+        /// <summary>
+        /// 前回フレームからの経過時間
+        /// </summary>
+        public int WrapTime { get; private set; } = 0;
+        #endregion
+
         #region - FPS : フレーム数/秒
         /// <summary>
         /// フレーム数/秒
@@ -473,11 +480,15 @@ namespace dxw
         {
             // 一時停止中なら更新はなし
             if (IsPause)
+            {
+                WrapTime = 0;
                 return;
+            }
 
             var t = GetNowCount();
             var wrap = (t >= _measuredTime) ? (t - _measuredTime) : (int.MaxValue - _measuredTime + t);
             ElapsedTime += (ulong)wrap;
+            WrapTime = wrap;
             FPS = (wrap != 0) ? 1000.0d / wrap : 0.0d;
             _measuredTime = t;
         }

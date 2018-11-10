@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace dxw
 {
-    #region 【Class : Venctor】
+    #region 【Struct : Venctor】
     /// <summary>
-    /// ベクトルクラス
+    /// ベクトル構造体
     /// </summary>
-    public class Vector
+    public struct Vector
     {
         #region ■ Properties
 
@@ -18,14 +18,14 @@ namespace dxw
         /// <summary>
         /// X方向
         /// </summary>
-        public int X { get; set; } = 0;
+        public int X { get; set; }
         #endregion
 
         #region - Y : Y方向
         /// <summary>
         /// Y方向
         /// </summary>
-        public int Y { get; set; } = 0;
+        public int Y { get; set; }
         #endregion
 
         #endregion
@@ -41,6 +41,21 @@ namespace dxw
             X = x;
             Y = y;
         }
+        #endregion
+
+        #region ■ Operator Overload
+
+        #region + Multiplication Operator : Vecror * int
+        /// <summary>
+        /// Vecror * int
+        /// </summary>
+        /// <param name="v">Vector</param>
+        /// <param name="s">int</param>
+        /// <returns>Vector</returns>
+        public static Vector operator *(Vector v, int s)
+            => new Vector(v.X * s, v.Y * s);
+        #endregion
+
         #endregion
     }
     #endregion
