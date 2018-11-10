@@ -69,7 +69,7 @@ namespace dxw
         /// <summary>
         /// 状態を更新する
         /// </summary>
-        public Action<BaseSprite> OnUpdate = null;
+        public Action<Sprite> OnUpdate = null;
         #endregion
 
         #region - OnDraw : スプライトを描画する
@@ -120,12 +120,13 @@ namespace dxw
         /// <param name="x">X座標(px)</param>
         /// <param name="y">Y座標(px)</param>
         /// <param name="imageHandle">画像ハンドル</param>
-        public Sprite(BaseScene scene, int x, int y, int imageHandle)
+        public Sprite(BaseScene scene, int x, int y, int imageHandle, Action<Sprite> callback = null)
             : base (scene)
         {
             X = x;
             Y = y;
             ImageHandle = imageHandle;
+            OnUpdate = callback;
         }
         #endregion
 
@@ -136,8 +137,8 @@ namespace dxw
         /// <param name="scene">シーン</param>
         /// <param name="leftTop">座標(px)</param>
         /// <param name="imageHandle">画像ハンドル</param>
-        public Sprite(BaseScene scene, Point leftTop, int imageHandle)
-            : this(scene, leftTop.X, leftTop.Y, imageHandle)
+        public Sprite(BaseScene scene, Point leftTop, int imageHandle, Action<Sprite> callback = null)
+            : this(scene, leftTop.X, leftTop.Y, imageHandle, callback)
         {
         }
         #endregion

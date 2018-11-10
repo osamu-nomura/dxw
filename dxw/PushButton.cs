@@ -14,10 +14,7 @@ namespace dxw
         /// 標準画像
         /// </summary>
         private int _imageHandle = 0;
-        /// <summary>
-        /// 押下時画像
-        /// </summary>
-        private int _pushedImageHandle = 0;
+
         /// <summary>
         /// サイズを画像サイズに合わせる。
         /// </summary>
@@ -56,11 +53,7 @@ namespace dxw
         /// <summary>
         /// 押下時画像
         /// </summary>
-        public int PushedImageHandle
-        {
-            get { return _pushedImageHandle; }
-            set { _pushedImageHandle = value; }
-        }
+        public int PushedImageHandle { get; set; } = 0;
         #endregion
 
         #region - FitButtonSize : ボタンのサイズを画像サイズに合わせる

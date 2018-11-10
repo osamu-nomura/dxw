@@ -16,10 +16,6 @@ namespace Sample
     /// </summary>
     class SampleApp : BaseApplication
     {
-        private uint ColorRed = GetColor(255, 0, 0);
-        private uint ColorYellow = GetColor(255, 255, 0);
-        private PushButton btn { get; set; }
-
         #region ■ Constructor
         /// <summary>
         /// コンストラクタ

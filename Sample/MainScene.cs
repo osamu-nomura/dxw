@@ -43,30 +43,32 @@ namespace Sample
 
         private PushButton CreateButton()
         {
-            var btn = new PushButton(this);
-            btn.Width = 100;
-            btn.Height = 50;
-            btn.X = (App.ScreenWidth - 100) / 2;
-            btn.Y = (App.ScreenHeight - 50) / 2;
-            btn.OnDraw = b =>
+            return new PushButton(this)
             {
-                if (b.IsDown)
+                Width = 100,
+                Height = 50,
+                X = (App.ScreenWidth - 100) / 2,
+                Y = (App.ScreenHeight - 50) / 2,
+                OnDraw = b =>
                 {
-                    DrawBox(b, Stock.Colors.Black, true);
-                    DrawString(b, HAlignment.Center, VAlignment.Middle, "Push", Stock.Colors.White, Stock.Font);
-                }
-                else
+                    if (b.IsDown)
+                    {
+                        DrawBox(b, Stock.Colors.Black, true);
+                        DrawString(b, HAlignment.Center, VAlignment.Middle, "Push", Stock.Colors.White, Stock.Font);
+                    }
+                    else
+                    {
+                        DrawBox(b, Stock.Colors.White, true);
+                        DrawString(b, HAlignment.Center, VAlignment.Middle, "Push", Stock.Colors.Black, Stock.Font);
+                    }
+                },
+                OnTapped = b =>
                 {
-                    DrawBox(b, Stock.Colors.White, true);
-                    DrawString(b, HAlignment.Center, VAlignment.Middle, "Push", Stock.Colors.Black, Stock.Font);
+                    App.Transition(new FadeTransition(this, App.GetScene(1), 1000));
                 }
             };
-            btn.OnTapped = b =>
-            {
-                App.Transition(new FadeTransition(this, App.GetScene(1), 1000));
-            };
-            return btn;
         }
+
 
         #endregion
 
