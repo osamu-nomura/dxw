@@ -65,7 +65,7 @@ namespace dxw
         /// <summary>
         /// ベクトル
         /// </summary>
-        public Vector Vector { get; set; } = new Vector();
+        public Vector? Vector { get; set; } = null;
         #endregion
 
         #endregion
@@ -197,9 +197,7 @@ namespace dxw
         /// <param name="s">経過時間</param>
         /// <returns>Point</returns>
         public Point NewPos(int s)
-        {
-            return LeftTop + (Vector * s);
-        }
+            => Vector.HasValue ? LeftTop + (Vector.Value * s) : LeftTop;
         #endregion
 
         #endregion
