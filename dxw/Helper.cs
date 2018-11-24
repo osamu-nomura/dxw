@@ -1254,6 +1254,28 @@ namespace dxw
 
         #region ☆　その他
 
+        #region - Pt : Point型の生成
+        /// <summary>
+        /// Point型の生成
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <returns>Point</returns>
+        public static Point Pt(int x, int y)
+            => new Point(x, y);
+        #endregion
+
+        #region - Vec : Vector型の生成
+        /// <summary>
+        /// Vector型の生成
+        /// </summary>
+        /// <param name="x">X方向</param>
+        /// <param name="y">Y方向</param>
+        /// <returns>Vector</returns>
+        public static Vector Vec(int x, int y)
+            => new Vector(x, y);
+        #endregion
+
         #region - Distance : 2点間の距離を算出する
         /// <summary>
         /// 2点間の距離を算出する

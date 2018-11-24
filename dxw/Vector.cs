@@ -43,17 +43,112 @@ namespace dxw
         }
         #endregion
 
+        #region ■ Methods
+
+        #region - ModX : ベクトルのX軸成分を変更する
+        /// <summary>
+        /// ベクトルのX軸成分を変更する
+        /// </summary>
+        /// <param name="n">変更値</param>
+        /// <returns>Vector</returns>
+        public Vector ModX(int n)
+            => new Vector(n, Y);
+        #endregion
+
+        #region - ModY : ベクトルのY軸成分を変更する
+        /// <summary>
+        /// ベクトルのY軸成分を変更する
+        /// </summary>
+        /// <param name="n">変更値</param>
+        /// <returns>Vector</returns>
+        public Vector ModY(int n)
+            => new Vector(X, n);
+        #endregion
+
+        #region - Flip : ベクトルを反転させる
+        /// <summary>
+        /// ベクトルを反転させる
+        /// </summary>
+        /// <returns>Vector</returns>
+        public Vector Flip()
+            => new Vector(X * -1, Y * -1);
+        #endregion
+
+        #region - FlipHorizontal : ベクトルを水平方向に反転させる
+        /// <summary>
+        /// ベクトルを水平方向に反転させる
+        /// </summary>
+        /// <returns>Vector</returns>
+        public Vector FlipHorizontal()
+            => new Vector(X * -1, Y);
+        #endregion
+
+        #region - FlipVertical : ベクトルを垂直方向に反転させる
+        /// <summary>
+        /// ベクトルを垂直方向に反転させる
+        /// </summary>
+        /// <returns>Vector</returns>
+        public Vector FlipVertical()
+            => new Vector(X, Y * 1);
+        #endregion
+
+        #endregion
+
         #region ■ Operator Overload
 
-        #region + Multiplication Operator : Vecror * int
+        #region - Plus Operator : Vector + Vector
+        /// <summary>
+        /// Vector + Vector
+        /// </summary>
+        /// <param name="v1">Vector1</param>
+        /// <param name="v2">Vector2</param>
+        /// <returns>Vector</returns>
+        public static Vector operator +(Vector v1, Vector v2)
+            => new Vector(v1.X + v2.X, v1.Y + v2.Y);
+        #endregion
+
+        #region - Plus Operator : Vector + int
+        /// <summary>
+        /// Vector + int
+        /// </summary>
+        /// <param name="v">Vector</param>
+        /// <param name="n">int</param>
+        /// <returns>Vector</returns>
+        public static Vector operator +(Vector v, int n)
+            => new Vector(v.X + n, v.Y + n);
+        #endregion
+
+        #region - Plus Operator : int + Vector
+        /// <summary>
+        /// int + Vector
+        /// </summary>
+        /// <param name="n">int</param>
+        /// <param name="v">Vector</param>
+        /// <returns>Vector</returns>
+        public static Vector operator +(int n, Vector v)
+            => new Vector(v.X + n, v.Y + n);
+        #endregion
+
+        #region - Multiplication Operator : Vecror * int
         /// <summary>
         /// Vecror * int
         /// </summary>
         /// <param name="v">Vector</param>
-        /// <param name="s">int</param>
+        /// <param name="n">int</param>
         /// <returns>Vector</returns>
-        public static Vector operator *(Vector v, int s)
-            => new Vector(v.X * s, v.Y * s);
+        public static Vector operator *(Vector v, int n)
+            => new Vector(v.X * n, v.Y * n);
+        #endregion
+
+        #region - Multiplication Operator : int * Vector
+        /// <summary>
+        /// int * Vector
+        /// </summary>
+        /// <param name="n">int</param>
+        /// <param name="v">Vector</param>
+        /// <returns>Vector</returns>
+        public static Vector operator *(int n, Vector v)
+            => new Vector(v.X * n, v.Y * n);
         #endregion
 
         #endregion

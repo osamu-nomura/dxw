@@ -123,15 +123,16 @@ namespace dxw
         /// <summary>
         /// コンストラクタ(3)
         /// </summary>
-        /// <param name="scene">シーン</param>
-        /// <param name="x">X座標(px)</param>
-        /// <param name="y">Y座標(px)</param>
+        /// <param name="app">アプリケーション</param>
+        /// <param name="leftTop">左上座標</param>
+        /// <param name="vec">ベクトル</param>
         /// <param name="imageHandle">画像ハンドル</param>
-        public Sprite(BaseScene scene, int x, int y, int imageHandle, Action<Sprite> callback = null)
-            : base (scene)
+        /// <param name="callback">コールバック</param>
+        public Sprite(BaseApplication app, Point leftTop, Vector? vec, int imageHandle, Action<Sprite> callback = null)
+            : this(app)
         {
-            X = x;
-            Y = y;
+            LeftTop = leftTop;
+            Vector = vec;
             ImageHandle = imageHandle;
             OnUpdate = callback;
         }
@@ -139,14 +140,20 @@ namespace dxw
 
         #region - Constructor(4)
         /// <summary>
-        /// /コンストラクタ(4)
+        /// コンストラクタ(4)
         /// </summary>
         /// <param name="scene">シーン</param>
-        /// <param name="leftTop">座標(px)</param>
+        /// <param name="leftTop">左上座標</param>
+        /// <param name="vec">ベクトル</param>
         /// <param name="imageHandle">画像ハンドル</param>
-        public Sprite(BaseScene scene, Point leftTop, int imageHandle, Action<Sprite> callback = null)
-            : this(scene, leftTop.X, leftTop.Y, imageHandle, callback)
+        /// <param name="callback">コールバック</param>
+        public Sprite(BaseScene scene, Point leftTop, Vector? vec, int imageHandle, Action<Sprite> callback = null)
+            : this(scene)
         {
+            LeftTop = leftTop;
+            Vector = vec;
+            ImageHandle = imageHandle;
+            OnUpdate = callback;
         }
         #endregion
 
