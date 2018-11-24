@@ -1272,7 +1272,7 @@ namespace dxw
         /// <param name="x">X方向</param>
         /// <param name="y">Y方向</param>
         /// <returns>Vector</returns>
-        public static Vector Vec(int x, int y)
+        public static Vector Vec(double x, double y)
             => new Vector(x, y);
         #endregion
 
