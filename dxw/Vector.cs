@@ -18,14 +18,14 @@ namespace dxw
         /// <summary>
         /// X方向
         /// </summary>
-        public int X { get; set; }
+        public double X { get; set; }
         #endregion
 
         #region - Y : Y方向
         /// <summary>
         /// Y方向
         /// </summary>
-        public int Y { get; set; }
+        public double Y { get; set; }
         #endregion
 
         #endregion
@@ -36,7 +36,7 @@ namespace dxw
         /// </summary>
         /// <param name="x">X方向</param>
         /// <param name="y">Y方向</param>
-        public Vector(int x = 0, int y = 0)
+        public Vector(double x = 0, double y = 0)
         {
             X = x;
             Y = y;
@@ -51,7 +51,7 @@ namespace dxw
         /// </summary>
         /// <param name="n">変更値</param>
         /// <returns>Vector</returns>
-        public Vector ModX(int n)
+        public Vector ModX(double n)
             => new Vector(n, Y);
         #endregion
 
@@ -61,7 +61,7 @@ namespace dxw
         /// </summary>
         /// <param name="n">変更値</param>
         /// <returns>Vector</returns>
-        public Vector ModY(int n)
+        public Vector ModY(double n)
             => new Vector(X, n);
         #endregion
 
@@ -69,9 +69,11 @@ namespace dxw
         /// <summary>
         /// ベクトルを反転させる
         /// </summary>
+        /// <param name="x">X軸成分を反転させる</param>
+        /// <param name="y">y軸成分を反転させる</param>
         /// <returns>Vector</returns>
-        public Vector Flip()
-            => new Vector(X * -1, Y * -1);
+        public Vector Flip(bool x = true, bool y = true)
+            => new Vector(X * (x ? -1.0d : 1.0d), Y * (y ? -1.0d : 1.0d));
         #endregion
 
         #region - FlipHorizontal : ベクトルを水平方向に反転させる
@@ -80,7 +82,7 @@ namespace dxw
         /// </summary>
         /// <returns>Vector</returns>
         public Vector FlipHorizontal()
-            => new Vector(X * -1, Y);
+            => new Vector(X * -1.0d, Y);
         #endregion
 
         #region - FlipVertical : ベクトルを垂直方向に反転させる
@@ -89,7 +91,7 @@ namespace dxw
         /// </summary>
         /// <returns>Vector</returns>
         public Vector FlipVertical()
-            => new Vector(X, Y * 1);
+            => new Vector(X, Y * -1.0d);
         #endregion
 
         #endregion
@@ -107,48 +109,48 @@ namespace dxw
             => new Vector(v1.X + v2.X, v1.Y + v2.Y);
         #endregion
 
-        #region - Plus Operator : Vector + int
+        #region - Plus Operator : Vector + double
         /// <summary>
-        /// Vector + int
+        /// Vector + double
         /// </summary>
         /// <param name="v">Vector</param>
-        /// <param name="n">int</param>
+        /// <param name="n">double</param>
         /// <returns>Vector</returns>
-        public static Vector operator +(Vector v, int n)
+        public static Vector operator +(Vector v, double n)
             => new Vector(v.X + n, v.Y + n);
         #endregion
 
-        #region - Plus Operator : int + Vector
+        #region - Plus Operator : double + Vector
         /// <summary>
-        /// int + Vector
+        /// double + Vector
         /// </summary>
-        /// <param name="n">int</param>
+        /// <param name="n">double</param>
         /// <param name="v">Vector</param>
         /// <returns>Vector</returns>
-        public static Vector operator +(int n, Vector v)
+        public static Vector operator +(double n, Vector v)
             => new Vector(v.X + n, v.Y + n);
         #endregion
 
-        #region - Multiplication Operator : Vecror * int
+        #region - Multiplication Operator : Vector * double
         /// <summary>
-        /// Vecror * int
+        /// Vector * double
         /// </summary>
         /// <param name="v">Vector</param>
-        /// <param name="n">int</param>
+        /// <param name="n">double</param>
         /// <returns>Vector</returns>
-        public static Vector operator *(Vector v, int n)
+        public static Vector operator *(Vector v, double n)
             => new Vector(v.X * n, v.Y * n);
         #endregion
 
-        #region - Multiplication Operator : int * Vector
+        #region - Multiplication Operator : double * Vector
         /// <summary>
-        /// int * Vector
+        /// double * Vector
         /// </summary>
-        /// <param name="n">int</param>
+        /// <param name="n">double</param>
         /// <param name="v">Vector</param>
         /// <returns>Vector</returns>
-        public static Vector operator *(int n, Vector v)
-            => new Vector(v.X * n, v.Y * n);
+        public static Vector operator *(double n, Vector v)
+            => v * n;
         #endregion
 
         #endregion

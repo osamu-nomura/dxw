@@ -46,7 +46,7 @@ namespace dxw
         /// <param name="v">Vector</param>
         /// <returns>Point</returns>
         public static Point operator +(Point pt, Vector v)
-            => new Point(pt.X + v.X, pt.Y + v.Y);
+            => new Point(pt.X + (int)Math.Ceiling(v.X), pt.Y + (int)Math.Ceiling(v.Y));
         #endregion
 
         #region - Plus Operator : Vector + Point
@@ -57,7 +57,7 @@ namespace dxw
         /// <param name="pt">Point</param>
         /// <returns>Point</returns>
         public static Point operator +(Vector v, Point pt)
-            => new Point(pt.X + v.X, pt.Y + v.Y);
+            => new Point(pt.X + (int)Math.Ceiling(v.X), pt.Y + (int)Math.Ceiling(v.Y));
         #endregion
 
         #endregion
