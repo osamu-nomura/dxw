@@ -28,7 +28,6 @@ namespace Sample
         {
             Title = "Sample Application";
             Scenes.Add(new MainScene(this));
-            Scenes.Add(new SubScene(this));
         }
         #endregion
 

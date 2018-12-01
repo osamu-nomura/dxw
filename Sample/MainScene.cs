@@ -18,13 +18,6 @@ namespace Sample
     {
         #region ■ Properties
 
-        #region - Btn : ボタン
-        /// <summary>
-        /// ボタン
-        /// </summary>
-        private PushButton Btn { get; set; }
-        #endregion
-
         #endregion
 
         #region ■ Constructor
@@ -41,48 +34,10 @@ namespace Sample
 
         #region ■ Private Methods
 
-        private PushButton CreateButton()
-        {
-            return new PushButton(this)
-            {
-                Width = 100,
-                Height = 50,
-                X = (App.ScreenWidth - 100) / 2,
-                Y = (App.ScreenHeight - 50) / 2,
-                OnDraw = b =>
-                {
-                    if (b.IsDown)
-                    {
-                        DrawBox(b, Stock.Colors.Black, true);
-                        DrawString(b, HAlignment.Center, VAlignment.Middle, "Push", Stock.Colors.White, Stock.Font);
-                    }
-                    else
-                    {
-                        DrawBox(b, Stock.Colors.White, true);
-                        DrawString(b, HAlignment.Center, VAlignment.Middle, "Push", Stock.Colors.Black, Stock.Font);
-                    }
-                },
-                OnTapped = b =>
-                {
-                    App.Transition(new FadeTransition(this, App.GetScene(1), 1000));
-                }
-            };
-        }
-
 
         #endregion
 
         #region ■ protected Methods
-
-        #region - UpdateFrame : フレームを更新する
-        /// <summary>
-        /// フレームを更新する
-        /// </summary>
-        public override void UpdateFrame()
-        {
-            base.UpdateFrame();
-        }
-        #endregion
 
         #region - DrawBackground : 背景を描画する
         /// <summary>
@@ -91,7 +46,7 @@ namespace Sample
         protected override void DrawBackground()
         {
             base.DrawBackground();
-            FillBackground(Stock.Colors.Red);
+            FillBackground(Stock.Colors.White);
         }
         #endregion
 
@@ -106,8 +61,15 @@ namespace Sample
         public override void LoadCompleted()
         {
             base.LoadCompleted();
-
-            Btn = AddSplite(CreateButton());
+            var sprite = new Sprite(this, new Rectangle(0, 50, 20, 20));
+            sprite.Motion = new VectorMotion(new Vector(0.5, 0.7), App.ScreenRect, 
+                (sender,args) => args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical)
+            );
+            sprite.OnDraw = v =>
+            {
+                DrawBox(v, Stock.Colors.Red, true);
+            };
+            AddSplite(sprite);
         }
         #endregion
 

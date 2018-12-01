@@ -272,6 +272,46 @@ namespace dxw
         }
         #endregion
 
+        #region - CheckPointInHorizontalRegion : ポイントが水平領域内かどうか判定
+        /// <summary>
+        /// ポイントが水平領域内かどうか判定
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <returns>True;領域内 / False:領域外</returns>
+        public bool CheckPointInHorizontalRegion(int x)
+            => x >= X && x <= X2;
+        #endregion
+
+        #region - CheckPointInHorizontalRegion : ポイントが水平領域内かどうか判定
+        /// <summary>
+        /// ポイントが水平領域内かどうか判定
+        /// </summary>
+        /// <param name="pt">座標</param>
+        /// <returns>True;領域内 / False:領域外</returns>
+        public bool CheckPointInHorizontalRegion(Point pt)
+            => pt.X >= X && pt.X <= X2;
+        #endregion
+
+        #region - CheckPointInVerticalRegion : ポイントが垂直領域内かどうか判定
+        /// <summary>
+        /// ポイントが垂直領域内かどうか判定
+        /// </summary>
+        /// <param name="y">Y座標</param>
+        /// <returns>True;領域内 / False:領域外</returns>
+        public bool CheckPointInVerticalRegion(int y)
+            => y >= Y && y <= Y2;
+        #endregion
+
+        #region - CheckPointInVerticalRegion : ポイントが垂直領域内かどうか判定
+        /// <summary>
+        /// ポイントが垂直領域内かどうか判定
+        /// </summary>
+        /// <param name="pt">座標</param>
+        /// <returns>True;領域内 / False:領域外</returns>
+        public bool CheckPointInVerticalRegion(Point pt)
+            => pt.Y >= Y && pt.Y <= Y2;
+        #endregion
+
         #region - CheckPointInRegion : ポイントが領域内かどうか判定
         /// <summary>
         /// ポイントが領域内かどうか判定
@@ -280,9 +320,7 @@ namespace dxw
         /// <param name="y">Y座標</param>
         /// <returns>True;領域内 / False:領域外</returns>
         public bool CheckPointInRegion(int x, int y)
-        {
-            return x >= X && x <= X2 && y >= Y && y <= Y2;
-        }
+            => x >= X && x <= X2 && y >= Y && y <= Y2;
         #endregion
 
         #region - CheckPointInRegion : ポイントが領域内かどうか判定

@@ -61,11 +61,11 @@ namespace dxw
         }
         #endregion
 
-        #region - Vector : ベクトル
+        #region - Motion : スプライトのモーション定義
         /// <summary>
-        /// ベクトル
+        /// スプライトのモーション定義
         /// </summary>
-        public Vector? Vector { get; set; } = null;
+        public ISpriteMotion Motion { get; set; } = null;
         #endregion
 
         #endregion
@@ -125,14 +125,12 @@ namespace dxw
         /// </summary>
         /// <param name="app">アプリケーション</param>
         /// <param name="leftTop">左上座標</param>
-        /// <param name="vec">ベクトル</param>
         /// <param name="imageHandle">画像ハンドル</param>
         /// <param name="callback">コールバック</param>
-        public Sprite(BaseApplication app, Point leftTop, Vector? vec, int imageHandle, Action<Sprite> callback = null)
+        public Sprite(BaseApplication app, Point leftTop, int imageHandle, Action<Sprite> callback = null)
             : this(app)
         {
             LeftTop = leftTop;
-            Vector = vec;
             ImageHandle = imageHandle;
             OnUpdate = callback;
         }
@@ -143,16 +141,12 @@ namespace dxw
         /// コンストラクタ(4)
         /// </summary>
         /// <param name="scene">シーン</param>
-        /// <param name="leftTop">左上座標</param>
-        /// <param name="vec">ベクトル</param>
-        /// <param name="imageHandle">画像ハンドル</param>
+        /// <param name="rect">サイズ</param>
         /// <param name="callback">コールバック</param>
-        public Sprite(BaseScene scene, Point leftTop, Vector? vec, int imageHandle, Action<Sprite> callback = null)
+        public Sprite(BaseScene scene, Rectangle rect, Action<Sprite> callback = null)
             : this(scene)
         {
-            LeftTop = leftTop;
-            Vector = vec;
-            ImageHandle = imageHandle;
+            Set(rect);
             OnUpdate = callback;
         }
         #endregion
@@ -168,7 +162,10 @@ namespace dxw
         public override void Update()
         {
             base.Update();
-            OnUpdate?.Invoke(this);
+            if (OnUpdate != null)
+                OnUpdate(this);
+            else
+                Motion?.Update(this);
         }
         #endregion
 
@@ -197,41 +194,6 @@ namespace dxw
         }
         #endregion
 
-        #region - NewPos : 経過時間に応じた新しい位置を取得する
-        /// <summary>
-        /// 経過時間に応じた新しい位置(LeftTop)を取得する
-        /// </summary>
-        /// <param name="s">経過時間</param>
-        /// <returns>Point</returns>
-        public Point NewPos(double s)
-            => Vector.HasValue ? LeftTop + (Vector.Value * s) : LeftTop;
-        #endregion
-
-        #region - NewPos : 経過時間に応じた新しい位置を取得する
-        /// <summary>
-        /// 経過時間に応じた新しい位置(LeftTop)を取得する
-        /// 指定した矩形に衝突した場合は反転する
-        /// </summary>
-        /// <param name="s">経過時間</param>
-        /// <param name="range">範囲</param>
-        /// <param name="r">反発係数</param>
-        /// <returns>Point</returns>
-        public Point NewPos(double s, Rectangle range, double r = 1.0)
-        {
-            if (!Vector.HasValue)
-                return LeftTop;
-
-            var pt = NewPos(s);
-            var x = pt.X < 0 || range.Width < pt.X;
-            var y = pt.Y < 0 || range.Height < pt.Y;
-            if (x || y)
-            {
-                Vector = Vector.Value.Flip(x, y) * r;
-                pt = NewPos(s);
-            }
-            return pt;
-        }
-        #endregion
 
         #endregion
     }
