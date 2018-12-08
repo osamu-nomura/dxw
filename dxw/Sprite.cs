@@ -79,6 +79,13 @@ namespace dxw
         public Action<Sprite> OnUpdate = null;
         #endregion
 
+        #region - OnCollision : 他のスプライトが衝突した
+        /// <summary>
+        /// 他のスプライトが衝突した
+        /// </summary>
+        public Action<Sprite, BaseSprite> OnCollision = null;
+        #endregion
+
         #region - OnDraw : スプライトを描画する
         /// <summary>
         /// スプライトを描画する
@@ -166,6 +173,21 @@ namespace dxw
                 OnUpdate(this);
             else
                 Motion?.Update(this);
+        }
+        #endregion
+
+        #region - Colision : 他のスプライトが衝突した
+        /// <summary>
+        /// 他のスプライトが衝突した
+        /// </summary>
+        /// <param name="target">対象スプライト/param>
+        public override void Collision(BaseSprite target)
+        {
+            base.Collision(target);
+            if (OnCollision != null)
+                OnCollision(this, target);
+            else
+                Motion?.Colision(this, target);
         }
         #endregion
 

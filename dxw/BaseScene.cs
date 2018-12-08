@@ -218,6 +218,28 @@ namespace dxw
             Update();
             // 所有するスプライトの状態を順次更新する
             Sprites.Where(sprite => !sprite.Disabled).ForEach(sprite => sprite.Update());
+            //所有するスプライト間の衝突をチェックする
+            for (var i = 0; i < Sprites.Count; i++)
+            {
+                var sprite = Sprites[i];
+                for (var j = i + 1; j < Sprites.Count; j++)
+                {
+                    var target = Sprites[j];
+                    if (sprite.CheckCollision(target))
+                    {
+                        if (sprite.CollisionSprite != target)
+                        {
+                            sprite.CollisionSprite = target;
+                            sprite.Collision(target);
+                        }
+                    }
+                    else
+                    {
+                        if (sprite.CollisionSprite == target)
+                            sprite.CollisionSprite = null;
+                    }
+                }
+            }
             Updated();
         }
         #endregion

@@ -36,6 +36,20 @@ namespace dxw
         public Point Point { get; set; }
         #endregion
 
+        #region - TargetSprite : 対象スプライト
+        /// <summary>
+        /// 対象スプライト
+        /// </summary>
+        public BaseSprite TargetSprite { get; set; }
+        #endregion
+
+        #region - IsCollisionSprite : 他のスプライトと衝突した
+        /// <summary>
+        /// 他のスプライトと衝突した
+        /// </summary>
+        public bool IsCollisionSprite { get; set; }
+        #endregion
+
         #region - IsCollisionHorizontal : 水平領域が衝突した
         /// <summary>
         /// 水平領域が衝突した
@@ -140,13 +154,38 @@ namespace dxw
                         Vector = Vector,
                         Region = Region,
                         Point = newPos,
+                        TargetSprite = null,
+                        IsCollisionSprite = false,
                         IsCollisionHorizontal = isCollisionHorizontal,
                         IsCollisionVertical = isCollisionVertical
                     }) ?? Vector;
                     newPos = sprite.LeftTop + (Vector * sprite.App.WrapTime);
                 }
+                else
+                    Vector = Vector * 0.99d;
             }
             sprite.LeftTop = newPos;
+        }
+        #endregion
+
+        #region - Colision : 他のスプライトと衝突した
+        /// <summary>
+        /// 他のスプライトと衝突した
+        /// </summary>
+        /// <param name="sprite"></param>
+        /// <param name="target"></param>
+        public void Colision(Sprite sprite, BaseSprite target)
+        {
+            Vector = OnCollision(sprite, new CollisionEventArgs
+            {
+                Vector = Vector,
+                Region = Region,
+                Point = sprite.LeftTop,
+                TargetSprite = target,
+                IsCollisionSprite = true,
+                IsCollisionHorizontal = false,
+                IsCollisionVertical = false
+            }) ?? Vector;
         }
         #endregion
 

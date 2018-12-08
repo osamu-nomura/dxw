@@ -34,6 +34,36 @@ namespace Sample
 
         #region ■ Private Methods
 
+        private Vector RoundVector(Vector v)
+        {
+            return new Vector(
+                v.X > 0.9d ? 0.9d : (v.X < -0.9d ? -0.9d : v.X),
+                v.Y > 0.9d ? 0.9d : (v.Y < -0.9d ? -0.9d : v.Y)
+                );
+        }
+
+        private Sprite CreateSprite(int x, int y, double vx, double vy)
+        {
+            var sprite = new Sprite(this, new Rectangle(x, y, 10, 10));
+            sprite.Motion = new VectorMotion(new Vector(vx, vy), App.ScreenRect,
+                (sender, args) => {
+                    if (args.IsCollisionSprite)
+                    {
+                        var targetMotion = (args.TargetSprite as Sprite).Motion as VectorMotion;
+                        var vec = targetMotion.Vector;
+                        targetMotion.Vector = RoundVector(targetMotion.Vector + args.Vector * 2);
+                        return RoundVector(args.Vector + vec * 2);
+                    }
+                    else
+                        return args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical);
+                }
+            );
+            sprite.OnDraw = v =>
+            {
+                DrawBox(v, Stock.Colors.Red, true);
+            };
+            return sprite;
+        }
 
         #endregion
 
@@ -61,15 +91,15 @@ namespace Sample
         public override void LoadCompleted()
         {
             base.LoadCompleted();
-            var sprite = new Sprite(this, new Rectangle(0, 50, 20, 20));
-            sprite.Motion = new VectorMotion(new Vector(0.5, 0.7), App.ScreenRect, 
-                (sender,args) => args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical)
-            );
-            sprite.OnDraw = v =>
+            var r = new Random(1000);
+            foreach (var n in Enumerable.Range(0, 100))
             {
-                DrawBox(v, Stock.Colors.Red, true);
-            };
-            AddSplite(sprite);
+                AddSplite(CreateSprite(
+                    GetRand(App.ScreenWidth),
+                    GetRand(App.ScreenHeight),
+                    r.NextDouble(),
+                    r.NextDouble()));
+            }
         }
         #endregion
 

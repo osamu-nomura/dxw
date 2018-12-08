@@ -15,6 +15,7 @@ namespace dxw
         /// 有効？
         /// </summary>
         private bool _enabled = true;
+        private Rectangle _colisionRect = null;
         #endregion
 
         #region ■ Properties
@@ -107,6 +108,24 @@ namespace dxw
         }
         #endregion
 
+        #region - ColisionRect : 衝突判定用の矩形を返す
+        /// <summary>
+        /// 衝突判定用の矩形を返す
+        /// </summary>
+        public Rectangle ColisionRect
+        {
+            get { return _colisionRect ?? Rect;  }
+            set { _colisionRect = value;  }
+        }
+        #endregion
+
+        #region - CollisionSprite : 衝突対象スプライト
+        /// <summary>
+        /// 衝突対象スプライト
+        /// </summary>
+        public BaseSprite CollisionSprite { get; set; } = null;
+        #endregion
+
         #region - Removed : 削除する？
         /// <summary>
         /// ループの終了時に削除する
@@ -177,6 +196,17 @@ namespace dxw
         /// 状態を更新する。
         /// </summary>
         public virtual void Update()
+        {
+            // 派生クラスでオーバーライドする
+        }
+        #endregion
+
+        #region - Collision (Virtual) : 他のスプライトと衝突した
+        /// <summary>
+        /// 他のスプライトと衝突した
+        /// </summary>
+        /// <param name="target">対象スプライト</param>
+        public virtual void Collision(BaseSprite target)
         {
             // 派生クラスでオーバーライドする
         }
