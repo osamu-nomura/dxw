@@ -69,14 +69,28 @@ namespace Sample
 
         #region ■ protected Methods
 
-        #region - DrawBackground : 背景を描画する
+        #region - DrawFrameBeforeSpriteDrawing : フレームを描画する（スプライト描画前）
         /// <summary>
-        /// 背景を描画する
+        /// フレームを描画する（スプライト描画前）
         /// </summary>
-        protected override void DrawBackground()
+        protected override void DrawFrameBeforeSpriteDrawing()
         {
-            base.DrawBackground();
+            base.DrawFrameBeforeSpriteDrawing();
+            FillBackground(Stock.Colors.Yellow);
+            SetDrawingWindow(App.ScreenRect.Scaling(-100));
             FillBackground(Stock.Colors.White);
+            DrawString(10, 10, "TEST TEST TEST", Stock.Colors.Red);
+        }
+        #endregion
+
+        #region - DrawFrameAfterEffectDrawing : フレームを描画する（効果描画後）
+        /// <summary>
+        /// フレームを描画する（効果描画後）
+        /// </summary>
+        protected override void DrawFrameAfterEffectDrawing()
+        {
+            base.DrawFrameAfterEffectDrawing();
+            ClearDrawingWindow();
         }
         #endregion
 

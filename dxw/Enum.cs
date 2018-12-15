@@ -280,5 +280,19 @@ namespace dxw
     }
     #endregion
 
+    #region - RectangleOrigin : 矩形基準点
+    /// <summary>
+    /// 矩形基準点
+    /// </summary>
+    public enum RectangleOrigin
+    {
+        Center,         // 中央
+        LeftTop,        // 左上
+        RightTop,       // 右上
+        LeftBottom,     // 左下
+        RightBottom     // 右下
+    }
+    #endregion
+
     #endregion
 }

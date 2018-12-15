@@ -184,6 +184,14 @@ namespace dxw
         /// マウスカーソルが表示されているか？
         /// </summary>
         private static bool _visibleMousrCursor = true;
+        /// <summary>
+        /// Ｘ軸オフセット値
+        /// </summary>
+        private static int _offsetX = 0;
+        /// <summary>
+        /// Y軸オフセット値
+        /// </summary>
+        private static int _offsetY = 0;
         #endregion
 
         #region ■ Private Methods
@@ -453,7 +461,7 @@ namespace dxw
         {
             if (handle == 0)
                 return false;
-            return DX.DrawGraph(x, y, handle, DXBool(enableTranslate)) == 0;
+            return DX.DrawGraph(x + _offsetX, y + _offsetY, handle, DXBool(enableTranslate)) == 0;
         }
         #endregion
 
@@ -482,7 +490,8 @@ namespace dxw
         /// <returns>True : 成功 . False : 失敗</returns>
         public static bool DrawExtendGraph(int x1, int y1, int x2, int y2, int handle, bool enableTranslate = false)
         {
-           return  DX.DrawExtendGraph(x1, y1, x2, y2, handle, DXBool(enableTranslate)) == 0;
+           return  DX.DrawExtendGraph(x1 + _offsetX, y1 + _offsetY, x2 + _offsetX, y2 + _offsetY, 
+                        handle, DXBool(enableTranslate)) == 0;
         }
         #endregion
 
@@ -546,7 +555,7 @@ namespace dxw
         }
         #endregion
 
-        #region - SetDrawBright : 	描画輝度をセット
+        #region - SetDrawBright : 描画輝度をセット
         /// <summary>
         /// 	描画輝度をセット
         /// </summary>
@@ -556,6 +565,63 @@ namespace dxw
         /// <returns>true: 成功 / False: 失敗</returns>
         public static bool SetDrawBright(int redBright, int greenBright, int blueBright)
             => DX.SetDrawBright(redBright, greenBright, blueBright) == 0;
+        #endregion
+
+        #region - SetDrawArea : 描画領域を指定する
+        /// <summary>
+        /// 描画領域を指定する
+        /// </summary>
+        /// <param name="x1">X1座標</param>
+        /// <param name="y1">Y1座標</param>
+        /// <param name="x2">X2座標</param>
+        /// <param name="y2">Y2座標</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool SetDrawArea(int x1, int y1, int x2, int y2)
+            => DX.SetDrawArea(x1, y1, x2, y2) == 0;
+        #endregion
+
+        #region - SetDrawArea : 描画領域を指定する
+        /// <summary>
+        /// 描画領域を指定する
+        /// </summary>
+        /// <param name="r">描画領域とする矩形</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool SetDrawArea(Rectangle r)
+            => DX.SetDrawArea(r.X, r.Y, r.X2, r.Y2) == 0;
+        #endregion
+
+        #region - ClearDrawArea : 指定した描画領域を解除する
+        /// <summary>
+        /// 指定した描画領域を解除する
+        /// </summary>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool ClearDrawArea()
+            => DX.SetDrawAreaFull() == 0;
+        #endregion
+
+        #region - SetDrawingWindow : 描画領域を指定する
+        /// <summary>
+        /// 描画領域を指定する
+        /// </summary>
+        /// <param name="r">描画領域</param>
+        public static void SetDrawingWindow(Rectangle r)
+        {
+            SetDrawArea(r);
+            _offsetX = r.X;
+            _offsetY = r.Y;
+        }
+        #endregion
+
+        #region - ClearDrawingWindow: 描画領域をクリアする
+        /// <summary>
+        /// 描画領域をクリアする
+        /// </summary>
+        public static void ClearDrawingWindow()
+        {
+            ClearDrawArea();
+            _offsetX = 0;
+            _offsetY = 0;
+        }
         #endregion
 
         #endregion
@@ -573,7 +639,7 @@ namespace dxw
         /// <param name="color">色</param>
         /// <returns>True: 成功 / False: 失敗</returns>
         public static bool DrawLine(int x1, int y1, int x2, int y2, uint color)
-            => DX.DrawLine(x1, y1, x2, y2, color) == 0;
+            => DX.DrawLine(x1 + _offsetX, y1 + _offsetY, x2 + _offsetX, y2 + _offsetY, color) == 0;
         #endregion
 
         #region - DrawLine : 直線を描画する
@@ -585,7 +651,7 @@ namespace dxw
         /// <param name="color">色</param>
         /// <returns>True: 成功 / False: 失敗</returns>
         public static bool DrawLine(Point pt1, Point pt2, uint color)
-            => DX.DrawLine(pt1.X, pt1.Y, pt2.X, pt2.Y, color) == 0;
+            => DX.DrawLine(pt1.X + _offsetX, pt1.Y + _offsetY, pt2.X + _offsetX, pt2.Y + _offsetY, color) == 0;
         #endregion
 
         #region - DrawAntiAliasingLine : 直線を描画する(アンチエリアス適用）
@@ -599,7 +665,7 @@ namespace dxw
         /// <param name="color">色</param>
         /// <returns>True: 成功 / False: 失敗</returns>
         public static bool DrawAntiAliasingLine(float x1, float y1, float x2, float y2, uint color)
-            => DX.DrawLineAA(x1, y1, x2, y2, color) == 0;
+            => DX.DrawLineAA(x1 + _offsetX, y1 + _offsetY, x2 + _offsetX, y2 + _offsetY, color) == 0;
         #endregion
 
         #region - DrawBox : 矩形を描画する
@@ -614,7 +680,8 @@ namespace dxw
         /// <param name="isFill">塗りつぶす？</param>
         public static bool DrawBox(int x, int y, int width, int height, uint color, bool isFill = false)
         {
-            return DX.DrawBox(x, y, x + width, y + height, color, DXBool(isFill)) == 0;
+            return DX.DrawBox(x + _offsetX, y + _offsetY, x + width + _offsetX, y + height + _offsetY, 
+                        color, DXBool(isFill)) == 0;
         }
         #endregion
 
@@ -666,7 +733,8 @@ namespace dxw
         /// <param name="isFill">塗りつぶす？</param>
         /// <returns>True: 成功 / False: 失敗</returns>
         public static bool DrawAntiAliasingBox(float x, float y, float width, float height, uint color, bool isFill = false)
-            => DX.DrawBoxAA(x, y, x + width, y + height, color,DXBool(isFill)) == 0;
+            => DX.DrawBoxAA(x + _offsetX, y + _offsetY, x + width + _offsetX, y + height + _offsetY, 
+                    color,DXBool(isFill)) == 0;
 
         #endregion
 
@@ -684,7 +752,7 @@ namespace dxw
         /// <param name="color">色</param>
         /// <returns>True : 成功 / False : 失敗</returns>
         public static bool DrawString(int x, int y, string s, uint color) 
-            => DX.DrawString(x, y, s, color) == 0;
+            => DX.DrawString(x + _offsetX, y + _offsetY, s, color) == 0;
         #endregion
 
         #region - DrawString : 文字列を描画する
@@ -711,7 +779,7 @@ namespace dxw
         /// <returns>True : 成功 / False : 失敗</returns>
         public static bool DrawString(int x, int y, string s, uint color, int font)
         {
-            return DX.DrawStringToHandle(x, y, s, color, font) == 0;
+            return DX.DrawStringToHandle(x + _offsetX, y + _offsetY, s, color, font) == 0;
         }
         #endregion
 

@@ -259,6 +259,33 @@ namespace dxw
         }
         #endregion
 
+        #region - Scaling : 拡大・縮小した矩形を返す
+        /// <summary>
+        /// 拡大・縮小した矩形を返す
+        /// </summary>
+        /// <param name="n">拡大するサイズ(px)</param>
+        /// <param name="origin">基準点</param>
+        /// <returns>拡大・縮小した矩形</returns>
+        public Rectangle Scaling(int n, RectangleOrigin origin = RectangleOrigin.Center)
+        {
+            switch (origin)
+            {
+                case RectangleOrigin.Center:
+                    return new Rectangle(X - n / 2, Y - n / 2, Width + n, Height + n);
+                case RectangleOrigin.LeftTop:
+                    return new Rectangle(X, Y, Width + n, Height + n);
+                case RectangleOrigin.RightTop:
+                    return new Rectangle(X - n, Y, Width + n, Height + n);
+                case RectangleOrigin.LeftBottom:
+                    return new Rectangle(X, Y - n, Width + n, Height + n);
+                case RectangleOrigin.RightBottom:
+                    return new Rectangle(X - n, Y - n, Width + n, Height + n);
+                default:
+                    throw new ApplicationException("この行が実行されることはない！");
+            }
+        }
+        #endregion
+
         #region - SetImageSize : サイズを画像サイズに合わせる。
         /// <summary>
         /// サイズを画像サイズに合わせる。

@@ -97,10 +97,6 @@ namespace dxw
         /// <summary>
         ///  コンストラクター
         /// </summary>
-        /// <param name="x">X座標(px)</param>
-        /// <param name="y">Y座標(px)</param>
-        /// <param name="width">幅(px)</param>
-        /// <param name="height">高さ(px)</param>
         public BaseSlider(BaseScene scene) 
                 : base(scene)
         {

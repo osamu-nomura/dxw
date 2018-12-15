@@ -119,21 +119,31 @@ namespace dxw
         }
         #endregion
 
-        #region - DrawBackground : 背景を描画する
+        #region - DrawFrameBeforeSpriteDrawing : フレームの描画（スプライト描画前）
         /// <summary>
-        /// 背景を描画する
+        /// フレームの描画（スプライト描画前）
         /// </summary>
-        protected virtual void DrawBackground()
+        protected virtual void DrawFrameBeforeSpriteDrawing()
         {
             // 派生クラスでオーバーライドする
         }
         #endregion
 
-        #region - DrawForeground : 前景を描画する
+        #region - DrawFrameAfterSpriteDrawing : フレームの描画（スプライト描画後）
         /// <summary>
-        /// 前景を描画する
+        /// フレームの描画（スプライト描画後）
         /// </summary>
-        protected virtual void DrawForeground()
+        protected virtual void DrawFrameAfterSpriteDrawing()
+        {
+            // 派生クラスでオーバーライドする
+        }
+        #endregion
+
+        #region - DrawFrameAfterEffectDrawing : フレームを描画する（効果描画後）
+        /// <summary>
+        /// フレームを描画する（効果描画後
+        /// </summary>
+        protected virtual void DrawFrameAfterEffectDrawing()
         {
             // 派生クラスでオーバーライドする
         }
@@ -225,7 +235,7 @@ namespace dxw
                 for (var j = i + 1; j < Sprites.Count; j++)
                 {
                     var target = Sprites[j];
-                    if (sprite.CheckCollision(target))
+                    if (sprite.ColisionRect.CheckCollision(target.ColisionRect))
                     {
                         if (sprite.CollisionSprite != target)
                         {
@@ -250,14 +260,16 @@ namespace dxw
         /// </summary>
         public virtual void DrawFrame()
         {
-            // 背景を描画
-            DrawBackground();
+            // フレームを描画（スプライト描画前）
+            DrawFrameBeforeSpriteDrawing();
             // スプライトを描画
             Sprites.Where(sprites => sprites.Visible).ForEach(sprite => sprite.Draw());
+            // フレームを描画（スプライト描画後）
+            DrawFrameAfterSpriteDrawing();
             // 効果を描画
             Sprites.Where(sprites => sprites.Visible).ForEach(sprite => sprite.DrawEffect());
-            // 前景を描画する
-            DrawForeground();
+            // フレームを描画（エフェクト描画後）
+            DrawFrameAfterEffectDrawing();
         }
         #endregion
 
