@@ -289,8 +289,7 @@ namespace dxw
         {
             base.Removed();
             // 削除フラグをセットされたスプライトを削除する
-            Sprites.Where(s => s.Remove).ForEach(s => s.Removed());
-            Sprites.RemoveAll(s => s.Remove);
+            Sprites.ForEach(s => s.Removed());
         }
         #endregion
 

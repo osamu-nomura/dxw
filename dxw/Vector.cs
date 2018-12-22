@@ -18,14 +18,14 @@ namespace dxw
         /// <summary>
         /// X方向
         /// </summary>
-        public double X { get; set; }
+        public readonly double X;
         #endregion
 
         #region - Y : Y方向
         /// <summary>
         /// Y方向
         /// </summary>
-        public double Y { get; set; }
+        public readonly double Y;
         #endregion
 
         #endregion
@@ -36,7 +36,7 @@ namespace dxw
         /// </summary>
         /// <param name="x">X方向</param>
         /// <param name="y">Y方向</param>
-        public Vector(double x = 0, double y = 0)
+        public Vector(double x = 0.0d, double y = 0.0d)
         {
             X = x;
             Y = y;
