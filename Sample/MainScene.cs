@@ -54,7 +54,10 @@ namespace Sample
                         return RoundVector(args.Vector + vec * 2);
                     }
                     else
-                        return args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical);
+                    {
+                        return args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical) 
+                                    * (1 + (new Random()).NextDouble());
+                    }
                 }
             );
             sprite.OnDraw = v => v.FillBox(Stock.Colors.Red);
@@ -78,7 +81,7 @@ namespace Sample
             panel.OnDrawBeforeSpriteDrawing = p => DrawBox(p.SizeRectangle, Stock.Colors.Black, true);
 
             var r = new Random(1000);
-            foreach (var n in Enumerable.Range(0, 100))
+            foreach (var n in Enumerable.Range(0, 1000))
             {
                 panel.AddSplite(CreateSprite(panel, GetRand(panel.Width), GetRand(panel.Height),
                     r.NextDouble(), r.NextDouble()));
