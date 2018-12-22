@@ -6,76 +6,81 @@ using System.Threading.Tasks;
 
 namespace dxw
 {
-
-    #region 【Class : CollisionEventArgs】
-    /// <summary>
-    /// 衝突イベント引数
-    /// </summary>
-    public class CollisionEventArgs : EventArgs
-    {
-        #region ■ Properties
-
-        #region - Vector : ベクター
-        /// <summary>
-        /// ベクター
-        /// </summary>
-        public Vector Vector { get; set; }
-        #endregion
-
-        #region - Region : 領域
-        /// <summary>
-        /// 領域
-        /// </summary>
-        public Rectangle Region { get; set; }
-        #endregion
-
-        #region - Point : 座標
-        /// <summary>
-        /// 座標
-        /// </summary>
-        public Point Point { get; set; }
-        #endregion
-
-        #region - TargetSprite : 対象スプライト
-        /// <summary>
-        /// 対象スプライト
-        /// </summary>
-        public BaseSprite TargetSprite { get; set; }
-        #endregion
-
-        #region - IsCollisionSprite : 他のスプライトと衝突した
-        /// <summary>
-        /// 他のスプライトと衝突した
-        /// </summary>
-        public bool IsCollisionSprite { get; set; }
-        #endregion
-
-        #region - IsCollisionHorizontal : 水平領域が衝突した
-        /// <summary>
-        /// 水平領域が衝突した
-        /// </summary>
-        public bool IsCollisionHorizontal { get; set; }
-        #endregion
-
-        #region - IsCollisionVertical : 垂直領域が衝突した
-        /// <summary>
-        /// 垂直領域が衝突した
-        /// </summary>
-        public bool IsCollisionVertical { get; set; }
-        #endregion
-
-        #endregion
-    }
-    #endregion
-
-
     #region 【Class : VectorMotion】
     /// <summary>
     /// ベクターモーションクラス
     /// </summary>
     public class VectorMotion : ISpriteMotion
     {
+        #region 【Class : CollisionEventArgs】
+        /// <summary>
+        /// 衝突イベント引数
+        /// </summary>
+        public class CollisionEventArgs : EventArgs
+        {
+            #region ■ Properties
+
+            #region - Vector : ベクター
+            /// <summary>
+            /// ベクター
+            /// </summary>
+            public Vector Vector { get; set; }
+            #endregion
+
+            #region - Region : 領域
+            /// <summary>
+            /// 領域
+            /// </summary>
+            public Rectangle Region { get; set; }
+            #endregion
+
+            #region - Position : 座標
+            /// <summary>
+            /// 座標
+            /// </summary>
+            public FPoint Position { get; set; }
+            #endregion
+
+            #region - TargetSprite : 対象スプライト
+            /// <summary>
+            /// 対象スプライト
+            /// </summary>
+            public BaseSprite TargetSprite { get; set; }
+            #endregion
+
+            #region - IsCollisionSprite : 他のスプライトと衝突した
+            /// <summary>
+            /// 他のスプライトと衝突した
+            /// </summary>
+            public bool IsCollisionSprite { get; set; }
+            #endregion
+
+            #region - IsCollisionHorizontal : 水平領域が衝突した
+            /// <summary>
+            /// 水平領域が衝突した
+            /// </summary>
+            public bool IsCollisionHorizontal { get; set; }
+            #endregion
+
+            #region - IsCollisionVertical : 垂直領域が衝突した
+            /// <summary>
+            /// 垂直領域が衝突した
+            /// </summary>
+            public bool IsCollisionVertical { get; set; }
+            #endregion
+
+            #endregion
+        }
+        #endregion
+
         #region ■ Properties
+
+        #region - Position : ポジション
+        /// <summary>
+        /// ポジション
+        /// </summary>
+        public FPoint Position { get; set; }
+        #endregion
 
         #region - Vector : ベクター
         /// <summary>
@@ -110,9 +115,11 @@ namespace dxw
         /// <summary>
         /// コンストラクタ(2)
         /// </summary>
+        /// <param name="position">位置</param>
         /// <param name="vector">ベクター</param>
-        public VectorMotion(Vector vector)
+        public VectorMotion(FPoint position, Vector vector)
         {
+            Position = position;
             Vector = vector;
         }
         #endregion
@@ -121,10 +128,13 @@ namespace dxw
         /// <summary>
         /// コンストラクタ2
         /// </summary>
+        /// <param name="position">位置</param>
         /// <param name="vector">ベクター</param>
         /// <param name="region">領域</param>
-        public VectorMotion(Vector vector, Rectangle region, Func<Sprite, CollisionEventArgs, Vector?> callback)
+        /// <param name="callback">コールバック</param>
+        public VectorMotion(FPoint position, Vector vector, Rectangle region, Func<Sprite, CollisionEventArgs, Vector?> callback)
         {
+            Position = position;
             Vector = vector;
             Region = region;
             OnCollision = callback;
@@ -142,29 +152,34 @@ namespace dxw
         /// <param name="sprite">スプライト</param>
         public void Update(Sprite sprite)
         {
-            var newPos = sprite.LeftTop + (Vector * sprite.App.WrapTime);
+            var newPos = Position + (Vector * sprite.App.WrapTime);
             if (Region != null && OnCollision != null)
             {
-                var isCollisionHorizontal = !Region.CheckPointInHorizontalRegion(newPos);
-                var isCollisionVertical = !Region.CheckPointInVerticalRegion(newPos);
+                var isCollisionHorizontal = !Region.CheckPointInHorizontalRegion((Point)newPos);
+                var isCollisionVertical = !Region.CheckPointInVerticalRegion((Point)newPos);
                 if (isCollisionHorizontal || isCollisionVertical)
                 {
                     Vector = OnCollision(sprite, new CollisionEventArgs
                     {
                         Vector = Vector,
                         Region = Region,
-                        Point = newPos,
+                        Position = newPos,
                         TargetSprite = null,
                         IsCollisionSprite = false,
                         IsCollisionHorizontal = isCollisionHorizontal,
                         IsCollisionVertical = isCollisionVertical
                     }) ?? Vector;
-                    newPos = sprite.LeftTop + (Vector * sprite.App.WrapTime);
+                    var newX = newPos.X < 0 ? 0 : newPos.X > Region.Width  ? Region.Width : newPos.X;
+                    var newY = newPos.Y < 0 ? 0 : newPos.Y > Region.Height  ? Region.Height : newPos.Y;
+                    newPos = new FPoint(newX, newY);
                 }
                 else
+                {
                     Vector = Vector * 0.99d;
+                }
             }
-            sprite.LeftTop = newPos;
+            Position = newPos;
+            sprite.LeftTop = (Point)Position;
         }
         #endregion
 
@@ -180,7 +195,7 @@ namespace dxw
             {
                 Vector = Vector,
                 Region = Region,
-                Point = sprite.LeftTop,
+                Position = Position,
                 TargetSprite = target,
                 IsCollisionSprite = true,
                 IsCollisionHorizontal = false,

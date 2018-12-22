@@ -109,8 +109,9 @@ namespace dxw
         /// コンストラクタ(1)
         /// </summary>
         /// <param name="app">アプリケーション</param>
-        public Sprite(BaseApplication app)
-            : base(app)
+        /// <param name="rect">矩形</param>
+        public Sprite(BaseApplication app, Rectangle rect = null)
+            : base(app, rect)
         {
         }
         #endregion
@@ -120,8 +121,9 @@ namespace dxw
         /// コンストラクタ(2)
         /// </summary>
         /// <param name="scene">シーン</param>
-        public Sprite(BaseScene scene)
-            : base(scene)
+        /// <param name="rect">矩形</param>
+        public Sprite(BaseScene scene, Rectangle rect = null)
+            : base(scene, rect)
         {
         }
         #endregion
@@ -129,6 +131,19 @@ namespace dxw
         #region - Constructor(3)
         /// <summary>
         /// コンストラクタ(3)
+        /// </summary>
+        /// <param name="parent">親スプライト</param>
+        /// <param name="rect">矩形</param>
+        public Sprite(BaseSprite parent, Rectangle rect = null)
+            : base (parent, rect)
+        {
+
+        }
+        #endregion
+
+        #region - Constructor(4)
+        /// <summary>
+        /// コンストラクタ(4)
         /// </summary>
         /// <param name="app">アプリケーション</param>
         /// <param name="leftTop">左上座標</param>
@@ -143,20 +158,90 @@ namespace dxw
         }
         #endregion
 
-        #region - Constructor(4)
+        #region - Constructor(5)
         /// <summary>
-        /// コンストラクタ(4)
+        /// コンストラクタ(5)
         /// </summary>
         /// <param name="scene">シーン</param>
-        /// <param name="rect">サイズ</param>
+        /// <param name="leftTop">左上座標</param>
+        /// <param name="imageHandle">画像ハンドル</param>
         /// <param name="callback">コールバック</param>
-        public Sprite(BaseScene scene, Rectangle rect, Action<Sprite> callback = null)
+        public Sprite(BaseScene scene, Point leftTop, int imageHandle, Action<Sprite> callback = null)
             : this(scene)
         {
-            Set(rect);
+            LeftTop = leftTop;
+            ImageHandle = imageHandle;
             OnUpdate = callback;
         }
         #endregion
+
+        #region - Constructor(6)
+        /// <summary>
+        /// コンストラクタ(6)
+        /// </summary>
+        /// <param name="parent">親スプライト</param>
+        /// <param name="leftTop">左上座標</param>
+        /// <param name="imageHandle">画像ハンドル</param>
+        /// <param name="callback">コールバック</param>
+        public Sprite(BaseSprite parent, Point leftTop, int imageHandle, Action<Sprite> callback = null)
+            : this(parent)
+        {
+            LeftTop = leftTop;
+            ImageHandle = imageHandle;
+            OnUpdate = callback;
+        }
+        #endregion
+
+        #region - Constructor(7)
+        /// <summary>
+        /// コンストラクタ(7)
+        /// </summary>
+        /// <param name="app">アプリケーション</param>
+        /// <param name="leftTop">左上座標</param>
+        /// <param name="imageHandle">画像ハンドル</param>
+        /// <param name="motion">モーション定義</param>
+        public Sprite(BaseApplication app, Point leftTop, int imageHandle, ISpriteMotion motion)
+            : this(app)
+        {
+            LeftTop = leftTop;
+            ImageHandle = imageHandle;
+            Motion = motion;
+        }
+        #endregion
+
+        #region - Constructor(8)
+        /// <summary>
+        /// コンストラクタ(8)
+        /// </summary>
+        /// <param name="scene">シーン</param>
+        /// <param name="leftTop">左上座標</param>
+        /// <param name="imageHandle">画像ハンドル</param>
+        /// <param name="motion">モーション定義</param>
+        public Sprite(BaseScene scene, Point leftTop, int imageHandle, ISpriteMotion motion)
+            : this(scene)
+        {
+            LeftTop = leftTop;
+            ImageHandle = imageHandle;
+            Motion = motion;
+        }
+        #endregion
+
+        #region - Constructor(9)
+        /// <summary>
+        /// コンストラクタ(9)
+        /// </summary>
+        /// <param name="parent">親スプライト</param>
+        /// <param name="leftTop">左上座標</param>
+        /// <param name="imageHandle">画像ハンドル</param>
+        /// <param name="motion">モーション定義</param>
+        public Sprite(BaseSprite parent, Point leftTop, int imageHandle, ISpriteMotion motion)
+            : this(parent)
+        {
+            LeftTop = leftTop;
+            ImageHandle = imageHandle;
+            Motion = motion;
+        }
+        #endregion        #endregion
 
         #endregion
 
@@ -169,10 +254,10 @@ namespace dxw
         public override void Update()
         {
             base.Update();
-            if (OnUpdate != null)
-                OnUpdate(this);
+            if (Motion != null)
+                Motion.Update(this);
             else
-                Motion?.Update(this);
+                OnUpdate?.Invoke(this);
         }
         #endregion
 
@@ -184,10 +269,10 @@ namespace dxw
         public override void Collision(BaseSprite target)
         {
             base.Collision(target);
-            if (OnCollision != null)
-                OnCollision(this, target);
+            if (Motion != null)
+                Motion.Colision(this, target);
             else
-                Motion?.Colision(this, target);
+                OnCollision?.Invoke(this, target);
         }
         #endregion
 
@@ -215,7 +300,6 @@ namespace dxw
             OnDrawEffect?.Invoke(this);
         }
         #endregion
-
 
         #endregion
     }

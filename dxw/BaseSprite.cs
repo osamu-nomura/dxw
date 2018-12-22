@@ -48,6 +48,13 @@ namespace dxw
         public BaseScene Sceen { get; protected set; } = null;
         #endregion
 
+        #region - Parent : 親スプライト
+        /// <summary>
+        /// 親スプライト
+        /// </summary>
+        public BaseSprite Parent { get; private set; } = null;
+        #endregion
+
         #region - Enabled : 有効？
         /// <summary>
         ///  有効？
@@ -126,11 +133,11 @@ namespace dxw
         public BaseSprite CollisionSprite { get; set; } = null;
         #endregion
 
-        #region - Removed : 削除する？
+        #region - Remove : 削除する？
         /// <summary>
         /// ループの終了時に削除する
         /// </summary>
-        public bool Removed { get; set; }
+        public bool Remove { get; set; }
         #endregion
 
         #endregion
@@ -142,8 +149,9 @@ namespace dxw
         /// コンストラクタ(1)
         /// </summary>
         /// <param name="app">アプリケーション</param>
-        public BaseSprite(BaseApplication  app)
-            : base(0, 0, 0, 0)
+        /// <param name="rect">矩形</param>
+        public BaseSprite(BaseApplication  app, Rectangle rect = null)
+            : base(rect)
         {
             App = app;
         }
@@ -154,11 +162,27 @@ namespace dxw
         /// コンストラクタ(2)
         /// </summary>
         /// <param name="scene">シーン</param>
-        public BaseSprite(BaseScene scene)
-            : base(0, 0, 0, 0)
+        /// <param name="rect">矩形</param>
+        public BaseSprite(BaseScene scene, Rectangle rect = null)
+            : base(rect)
         {
             Sceen = scene;
             App = scene?.App;
+        }
+        #endregion
+
+        #region - COnstructor (3)
+        /// <summary>
+        /// コンストラクタ(3)
+        /// </summary>
+        /// <param name="parent">親スプライト</param>
+        /// <param name="rect">矩形</param>
+        public BaseSprite(BaseSprite parent, Rectangle rect = null)
+            : base (rect)
+        {
+            Parent = parent;
+            Sceen = parent.Sceen;
+            App = parent.App;
         }
         #endregion
 
@@ -179,7 +203,7 @@ namespace dxw
 
         #endregion
 
-        #region ■ Methods
+        #region ■ Public Methods
 
         #region - LoadCompleted : リソースのロードが完了
         /// <summary>
@@ -227,6 +251,16 @@ namespace dxw
         /// 効果を描画する
         /// </summary>
         public virtual void DrawEffect()
+        {
+            // 派生クラスでオーバーライドする
+        }
+        #endregion
+
+        #region - Removed : コンテナから削除された
+        /// <summary>
+        /// コンテナから削除された
+        /// </summary>
+        public virtual void Removed()
         {
             // 派生クラスでオーバーライドする
         }

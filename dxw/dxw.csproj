@@ -59,6 +59,7 @@
     <Compile Include="FadeTransition.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ISpriteMotion.cs" />
+    <Compile Include="Panel.cs" />
     <Compile Include="PushButton.cs" />
     <Compile Include="InputInfo.cs" />
     <Compile Include="Point.cs" />

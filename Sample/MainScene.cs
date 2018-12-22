@@ -28,7 +28,6 @@ namespace Sample
         public MainScene(SampleApp app)
             : base(app)
         {
-
         }
         #endregion
 
@@ -42,10 +41,10 @@ namespace Sample
                 );
         }
 
-        private Sprite CreateSprite(int x, int y, double vx, double vy)
+        private Sprite CreateSprite(Panel panel, int x, int y, double vx, double vy)
         {
-            var sprite = new Sprite(this, new Rectangle(x, y, 10, 10));
-            sprite.Motion = new VectorMotion(new Vector(vx, vy), App.ScreenRect,
+            var sprite = new Sprite(panel, new Rectangle(x, y, 10, 10));
+            sprite.Motion = new VectorMotion(new FPoint(x, y), new Vector(vx, vy), panel.SizeRectangle.Scaling(-10,RectangleOrigin.LeftTop),
                 (sender, args) => {
                     if (args.IsCollisionSprite)
                     {
@@ -58,41 +57,9 @@ namespace Sample
                         return args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical);
                 }
             );
-            sprite.OnDraw = v =>
-            {
-                DrawBox(v, Stock.Colors.Red, true);
-            };
+            sprite.OnDraw = v => v.FillBox(Stock.Colors.Red);
             return sprite;
         }
-
-        #endregion
-
-        #region ■ protected Methods
-
-        #region - DrawFrameBeforeSpriteDrawing : フレームを描画する（スプライト描画前）
-        /// <summary>
-        /// フレームを描画する（スプライト描画前）
-        /// </summary>
-        protected override void DrawFrameBeforeSpriteDrawing()
-        {
-            base.DrawFrameBeforeSpriteDrawing();
-            FillBackground(Stock.Colors.Yellow);
-            SetDrawingWindow(App.ScreenRect.Scaling(-100));
-            FillBackground(Stock.Colors.White);
-            DrawString(10, 10, "TEST TEST TEST", Stock.Colors.Red);
-        }
-        #endregion
-
-        #region - DrawFrameAfterEffectDrawing : フレームを描画する（効果描画後）
-        /// <summary>
-        /// フレームを描画する（効果描画後）
-        /// </summary>
-        protected override void DrawFrameAfterEffectDrawing()
-        {
-            base.DrawFrameAfterEffectDrawing();
-            ClearDrawingWindow();
-        }
-        #endregion
 
         #endregion
 
@@ -105,17 +72,25 @@ namespace Sample
         public override void LoadCompleted()
         {
             base.LoadCompleted();
+
+            var panel = AddSplite(new Panel(this, new Rectangle(20, 20, 600, 400)));
+            panel.EnableCollisionCheck = true;
+            panel.OnDrawBeforeSpriteDrawing = p => DrawBox(p.SizeRectangle, Stock.Colors.Black, true);
+
             var r = new Random(1000);
             foreach (var n in Enumerable.Range(0, 100))
             {
-                AddSplite(CreateSprite(
-                    GetRand(App.ScreenWidth),
-                    GetRand(App.ScreenHeight),
-                    r.NextDouble(),
-                    r.NextDouble()));
+                panel.AddSplite(CreateSprite(panel, GetRand(panel.Width), GetRand(panel.Height),
+                    r.NextDouble(), r.NextDouble()));
             }
         }
         #endregion
+
+        protected override void DrawFrameBeforeSpriteDrawing()
+        {
+            base.DrawFrameBeforeSpriteDrawing();
+            FillBackground(Stock.Colors.White);
+        }
 
         #endregion
     }

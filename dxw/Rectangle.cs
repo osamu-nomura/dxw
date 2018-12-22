@@ -156,6 +156,16 @@ namespace dxw
         }
         #endregion
 
+        #region - SizeRectangle : 原点基準の矩形でサイズを返す
+        /// <summary>
+        /// 原点基準の矩形でサイズを返す
+        /// </summary>
+        public Rectangle SizeRectangle
+        {
+            get { return new Rectangle(0, 0, Width, Height);  }
+        }
+        #endregion
+
         #endregion
 
         #region ■ Constructor
@@ -210,10 +220,7 @@ namespace dxw
         /// <param name="rect">矩形</param>
         public Rectangle(Rectangle rect)
         {
-            X = rect?.X ?? 0;
-            Y = rect?.Y ?? 0;
-            Width = rect?.Width ?? 0;
-            Height = rect?.Height ?? 0;
+            Set(rect);
         }
         #endregion
 
@@ -254,8 +261,8 @@ namespace dxw
         /// <param name="rect">矩形</param>
         public void Set(Rectangle rect)
         {
-            LeftTop = rect.LeftTop;
-            Size = rect.Size;
+            LeftTop = rect?.LeftTop ?? new Point(0,0);
+            Size = rect?.Size ?? new RectangleSize(0,0);
         }
         #endregion
 
@@ -372,6 +379,25 @@ namespace dxw
             return (Math.Abs(X - target.X) < Width / 2 + target.Width / 2) &&
                    (Math.Abs(Y - target.Y) < Height / 2 + target.Height / 2);
         }
+        #endregion
+
+        #region - DrawBox : 矩形を描画する
+        /// <summary>
+        /// 矩形を描画する
+        /// </summary>
+        /// <param name="color">色</param>
+        /// <param name="isFill">塗りつぶす？</param>
+        public void DrawBox(uint color, bool isFill = false)
+            => Helper.DrawBox(this, color, isFill);
+        #endregion
+
+        #region - FillBox : 矩形を塗りつぶす
+        /// <summary>
+        /// 矩形を塗りつぶす
+        /// </summary>
+        /// <param name="color">色</param>
+        public void FillBox(uint color)
+            => Helper.DrawBox(this, color, true);
         #endregion
 
         #endregion

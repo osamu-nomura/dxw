@@ -63,6 +63,13 @@ namespace dxw
         public List<BaseSprite> Sprites { get; private set; } = new List<BaseSprite>();
         #endregion
 
+        #region - EnableCollisionCheck : 衝突判定の有効・無効
+        /// <summary>
+        /// 衝突判定の有効・無効
+        /// </summary>
+        public bool EnableCollisionCheck { get; set; } = false;
+        #endregion
+
         #endregion
 
         #region ■ Constructor
@@ -99,21 +106,21 @@ namespace dxw
         }
         #endregion
 
-        #region - Update : 更新処理
+        #region - UpdateFrameBeforeSpriteUpdate : フレームの更新（スプライト更新前）
         /// <summary>
-        /// 更新前処理
+        /// フレームの更新（スプライト更新前）
         /// </summary>
-        protected virtual void Update()
+        protected virtual void UpdateFrameBeforeSpriteUpdate()
         {
             // 派生クラスでオーバーライドする
         }
         #endregion
 
-        #region - Updated : 更新後処理
+        #region - UpdateFrameAfterSpriteUpdate : フレームの更新（スプライト更新後）
         /// <summary>
-        /// 更新後処理
+        /// フレームの更新（スプライト更新後）
         /// </summary>
-        protected void Updated()
+        protected void UpdateFrameAfterSpriteUpdate()
         {
             // 派生クラスでオーバーライドする
         }
@@ -157,6 +164,36 @@ namespace dxw
         protected void FillBackground(uint color)
         {
             App.FillBackground(color);
+        }
+        #endregion
+
+        #region - CollisionCheck : スプライトの衝突判定処理
+        /// <summary>
+        /// スプライトの衝突判定処理
+        /// </summary>
+        protected void CollisionCheck()
+        {
+            for (var i = 0; i < Sprites.Count; i++)
+            {
+                var sprite = Sprites[i];
+                for (var j = i + 1; j < Sprites.Count; j++)
+                {
+                    var target = Sprites[j];
+                    if (sprite.ColisionRect.CheckCollision(target.ColisionRect))
+                    {
+                        if (sprite.CollisionSprite != target)
+                        {
+                            sprite.CollisionSprite = target;
+                            sprite.Collision(target);
+                        }
+                    }
+                    else
+                    {
+                        if (sprite.CollisionSprite == target)
+                            sprite.CollisionSprite = null;
+                    }
+                }
+            }
         }
         #endregion
 
@@ -215,7 +252,8 @@ namespace dxw
         public virtual void MessageLoopPostProcess()
         {
             // 削除フラグをセットされたスプライトを削除する
-            Sprites.RemoveAll(s => s.Removed);
+            Sprites.Where(s => s.Remove).ForEach(s => s.Removed());
+            Sprites.RemoveAll(s => s.Remove);
         }
         #endregion
 
@@ -225,32 +263,15 @@ namespace dxw
         /// </summary>
         public virtual void UpdateFrame()
         {
-            Update();
+            UpdateFrameBeforeSpriteUpdate();
             // 所有するスプライトの状態を順次更新する
             Sprites.Where(sprite => !sprite.Disabled).ForEach(sprite => sprite.Update());
             //所有するスプライト間の衝突をチェックする
-            for (var i = 0; i < Sprites.Count; i++)
+            if (EnableCollisionCheck)
             {
-                var sprite = Sprites[i];
-                for (var j = i + 1; j < Sprites.Count; j++)
-                {
-                    var target = Sprites[j];
-                    if (sprite.ColisionRect.CheckCollision(target.ColisionRect))
-                    {
-                        if (sprite.CollisionSprite != target)
-                        {
-                            sprite.CollisionSprite = target;
-                            sprite.Collision(target);
-                        }
-                    }
-                    else
-                    {
-                        if (sprite.CollisionSprite == target)
-                            sprite.CollisionSprite = null;
-                    }
-                }
+                CollisionCheck();
             }
-            Updated();
+            UpdateFrameAfterSpriteUpdate();
         }
         #endregion
 
