@@ -94,6 +94,16 @@ namespace dxw
             => new Vector(X, Y * -1.0d);
         #endregion
 
+        #region - Collision : ベクトルが衝突した
+        /// <summary>
+        /// ベクトルが衝突した
+        /// </summary>
+        /// <param name="target">対象ベクトル</param>
+        /// <returns>衝突後のベクトル</returns>
+        public Vector Collision(Vector target)
+            => this + target * 2;
+        #endregion
+
         #endregion
 
         #region ■ Operator Overload

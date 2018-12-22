@@ -183,13 +183,13 @@ namespace dxw
         }
         #endregion
 
-        #region - Colision : 他のスプライトと衝突した
+        #region - Collision : 他のスプライトと衝突した
         /// <summary>
         /// 他のスプライトと衝突した
         /// </summary>
         /// <param name="sprite"></param>
         /// <param name="target"></param>
-        public void Colision(Sprite sprite, BaseSprite target)
+        public void Collision(Sprite sprite, BaseSprite target)
         {
             Vector = OnCollision(sprite, new CollisionEventArgs
             {

@@ -22,13 +22,13 @@ namespace dxw
         void Update(Sprite sprite);
         #endregion
 
-        #region - Colision : スプライトが他のスプライトに衝突した
+        #region - Collision : スプライトが他のスプライトに衝突した
         /// <summary>
         /// スプライトが他のスプライトに衝突した
         /// </summary>
         /// <param name="sprite">スプライト</param>
         /// <param name="target">衝突した対象</param>
-        void Colision(Sprite sprite, BaseSprite target);
+        void Collision(Sprite sprite, BaseSprite target);
         #endregion
 
         #endregion

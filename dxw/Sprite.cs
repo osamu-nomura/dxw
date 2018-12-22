@@ -270,7 +270,7 @@ namespace dxw
         {
             base.Collision(target);
             if (Motion != null)
-                Motion.Colision(this, target);
+                Motion.Collision(this, target);
             else
                 OnCollision?.Invoke(this, target);
         }

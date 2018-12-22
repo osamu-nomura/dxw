@@ -48,20 +48,13 @@ namespace Sample
                 (sender, args) => {
                     if (args.IsCollisionSprite)
                     {
-                        /*
                         var targetMotion = (args.TargetSprite as Sprite).Motion as VectorMotion;
                         var vec = targetMotion.Vector;
-                        targetMotion.Vector = RoundVector(targetMotion.Vector + args.Vector * 2);
-                        return RoundVector(args.Vector + vec * 2);
-                        */
-                        args.TargetSprite.Remove = true;
-                        return args.Vector;
+                        targetMotion.Vector = RoundVector(vec.Collision(args.Vector));
+                        return RoundVector(args.Vector.Collision(vec));
                     }
                     else
-                    {
-                        return args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical) 
-                                    * (1 + (new Random()).NextDouble());
-                    }
+                        return args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical);
                 }
             );
             sprite.OnDraw = v => v.FillBox(Stock.Colors.Red);
@@ -80,12 +73,12 @@ namespace Sample
         {
             base.LoadCompleted();
 
-            var panel = AddSplite(new Panel(this, new Rectangle(20, 20, 600, 400)));
+            var panel = AddSplite(new Panel(this, new Rectangle(20, 20, 400, 400)));
             panel.EnableCollisionCheck = true;
             panel.OnDrawBeforeSpriteDrawing = p => DrawBox(p.SizeRectangle, Stock.Colors.Black, true);
 
             var r = new Random(1000);
-            foreach (var n in Enumerable.Range(0, 100))
+            foreach (var n in Enumerable.Range(0, 10))
             {
                 panel.AddSplite(CreateSprite(panel, GetRand(panel.Width), GetRand(panel.Height),
                     r.NextDouble(), r.NextDouble()));
@@ -101,7 +94,7 @@ namespace Sample
             if (panel != null)
             {
                 var cnt = panel.Sprites.Count;
-                DrawString(10, 420, $"Sprite Count:{cnt}", Stock.Colors.Black);
+                DrawString(20, 430, $"Sprite Count:{cnt}", Stock.Colors.Black);
             }
         }
 
