@@ -252,7 +252,17 @@ namespace dxw
         public virtual void MessageLoopPostProcess()
         {
             // 削除フラグをセットされたスプライトを削除する
-            Sprites.Where(s => s.Remove).ForEach(s => s.Removed());
+            Sprites.ForEach(s =>
+            {
+                var panel = s as Panel;
+                if (panel != null)
+                {
+                    panel.Sprites.Where(c => c.Remove).ForEach(c => c.Removed());
+                    panel.Sprites.RemoveAll(c => c.Remove);
+                }
+                if (s.Remove)
+                    s.Removed();
+            });
             Sprites.RemoveAll(s => s.Remove);
         }
         #endregion
