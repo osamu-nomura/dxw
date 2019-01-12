@@ -60,6 +60,15 @@ namespace dxw
             => new Point(pt.X + (int)Math.Floor(v.X), pt.Y + (int)Math.Floor(v.Y));
         #endregion
 
+        #region - (FPoint) Operator
+        /// <summary>
+        /// (Fpoint) ← Point
+        /// </summary>
+        /// <param name="pt"></param>
+        public static explicit operator FPoint(Point pt)
+            => new FPoint(pt.X, pt.Y);
+        #endregion
+
         #endregion
 
     }
@@ -126,15 +135,6 @@ namespace dxw
         /// <param name="pt">FPoint</param>
         public static explicit operator Point (FPoint pt)
             => new Point((int)Math.Floor(pt.X), (int)Math.Floor(pt.Y));
-        #endregion
-
-        #region - (FPoint) Operator
-        /// <summary>
-        /// (Fpoint) ← Point
-        /// </summary>
-        /// <param name="pt"></param>
-        public static explicit operator FPoint (Point pt)
-            => new FPoint(pt.X, pt.Y);
         #endregion
 
         #endregion

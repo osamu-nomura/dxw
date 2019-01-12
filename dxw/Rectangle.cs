@@ -243,6 +243,17 @@ namespace dxw
         }
         #endregion
 
+        #region - Set : 指定した位置に合わせる
+        /// <summary>
+        /// 指定した位置に合わせる
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <param name="isCenter">中心基準？</param>
+        public void Set(int x, int y, bool isCenter = false)
+            => Set(new Point(x, y), isCenter);
+        #endregion
+
         #region - Set : 指定サイズに合わせる
         /// <summary>
         /// 指定サイズに合わせる
@@ -264,6 +275,36 @@ namespace dxw
             LeftTop = rect?.LeftTop ?? new Point(0,0);
             Size = rect?.Size ?? new RectangleSize(0,0);
         }
+        #endregion
+
+        #region - Set : 指定した矩形の位置とサイズに合わせる
+        /// <summary>
+        /// 指定した矩形の位置とサイズに合わせる
+        /// </summary>
+        /// <param name="pt">座標</param>
+        /// <param name="size">サイズ</param>
+        /// <param name="isCenter">中心基準？</param>
+        public void Set(Point pt, RectangleSize size, bool isCenter = false)
+        {
+            Size = size;
+            if (isCenter)
+                Center = pt;
+            else
+                LeftTop = pt;
+        }
+        #endregion
+
+        #region - Set : 指定した矩形の位置とサイズに合わせる
+        /// <summary>
+        /// 指定した矩形の位置とサイズに合わせる
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <param name="width">幅</param>
+        /// <param name="height">高さ</param>
+        /// <param name="isCenter">中心基準？</param>
+        public void Set(int x, int y, int width, int height, bool isCenter = false)
+            => Set(new Point(x, y), new RectangleSize(width, height), isCenter);
         #endregion
 
         #region - Scaling : 拡大・縮小した矩形を返す
@@ -366,6 +407,21 @@ namespace dxw
         public bool CheckPointInRegion(Point pt)
             => CheckPointInRegion(pt.X, pt.Y);
 
+        #endregion
+
+        #region - CheckRectInRegion : 矩形が領域内かどうか判定
+        /// <summary>
+        /// 矩形が領域内かどうか判定
+        /// </summary>
+        /// <param name="r">矩形</param>
+        /// <returns>True;領域内 / False:領域外</returns>
+        public bool CheckRectInRegion(Rectangle r)
+        {
+            return CheckPointInRegion(r.LeftTop) &&
+                   CheckPointInRegion(r.RightTop) &&
+                   CheckPointInRegion(r.LeftBottom) &&
+                   CheckPointInRegion(r.RightBottom);
+        }
         #endregion
 
         #region - CheckCollision : 衝突判定
