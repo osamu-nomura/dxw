@@ -88,6 +88,7 @@ namespace Sample
             }
 
             anime.FrameRate = 30;
+            anime.ImageHandles = new List<int>();
             anime.ImageHandles.Add((App as SampleApp).Images[9]);
             anime.ImageHandles.Add((App as SampleApp).Images[10]);
             anime.ImageHandles.Add((App as SampleApp).Images[11]);

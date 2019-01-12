@@ -14,7 +14,7 @@ namespace dxw
         /// <summary>
         /// アニメーション用の画像ハンドルのリスト
         /// </summary>
-        public List<int> ImageHandles { get; private set; } = null;
+        public List<int> ImageHandles { get; set; } = null;
         #endregion
 
         #region - CurrentImageHandle : 現在表示対象となる画像ハンドルへのインデックス
