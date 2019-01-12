@@ -213,6 +213,8 @@ namespace dxw
         public override void LoadCompleted()
         {
             base.LoadCompleted();
+            // 所有するスプライトに対しても順次、LoadCompletedを伝播
+            Sprites.ForEach(f => f.LoadCompleted());
             OnLoadCompleted?.Invoke(this);
         }
         #endregion
@@ -266,6 +268,8 @@ namespace dxw
         /// <param name="sprite"></param>
         public T AddSplite<T>(T sprite) where T : BaseSprite
         {
+            if (App.IsLoadCompleted)
+                sprite.LoadCompleted();
             Sprites.Add(sprite);
             return sprite;
         }

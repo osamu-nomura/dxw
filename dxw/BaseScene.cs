@@ -91,6 +91,8 @@ namespace dxw
         /// <param name="sprite"></param>
         public T AddSplite<T>(T sprite) where T : BaseSprite
         {
+            if (App.IsLoadCompleted)
+                sprite.LoadCompleted();
             Sprites.Add(sprite);
             return sprite;
         }
