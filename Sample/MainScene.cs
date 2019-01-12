@@ -18,6 +18,8 @@ namespace Sample
     {
         #region ■ Properties
 
+        private SpriteAnimation anime { get; set; }
+
         #endregion
 
         #region ■ Constructor
@@ -28,6 +30,7 @@ namespace Sample
         public MainScene(SampleApp app)
             : base(app)
         {
+            anime = new SpriteAnimation();
         }
         #endregion
 
@@ -83,6 +86,24 @@ namespace Sample
                 panel.AddSplite(CreateSprite(panel, GetRand(panel.Width), GetRand(panel.Height),
                     r.NextDouble(), r.NextDouble()));
             }
+
+            anime.FrameRate = 30;
+            anime.ImageHandles.Add((App as SampleApp).Images[9]);
+            anime.ImageHandles.Add((App as SampleApp).Images[10]);
+            anime.ImageHandles.Add((App as SampleApp).Images[11]);
+            anime.ImageHandles.Add((App as SampleApp).Images[12]);
+            anime.ImageHandles.Add((App as SampleApp).Images[13]);
+            anime.ImageHandles.Add((App as SampleApp).Images[14]);
+            anime.ImageHandles.Add((App as SampleApp).Images[15]);
+            anime.ImageHandles.Add((App as SampleApp).Images[16]);
+            anime.ImageHandles.Add((App as SampleApp).Images[17]);
+            anime.ImageHandles.Add((App as SampleApp).Images[18]);
+            anime.ImageHandles.Add((App as SampleApp).Images[19]);
+            anime.ImageHandles.Add((App as SampleApp).Images[20]);
+            anime.ImageHandles.Add((App as SampleApp).Images[21]);
+            anime.ImageHandles.Add((App as SampleApp).Images[22]);
+            anime.ImageHandles.Add((App as SampleApp).Images[23]);
+
         }
         #endregion
 
@@ -96,6 +117,12 @@ namespace Sample
                 var cnt = panel.Sprites.Count;
                 DrawString(20, 430, $"Sprite Count:{cnt}", Stock.Colors.Black);
             }
+        }
+
+        protected override void DrawFrameAfterEffectDrawing()
+        {
+            var h = anime.GetImageHandle(App.WrapTime);
+            DrawGraph(100, 100, h, true);
         }
 
         #endregion

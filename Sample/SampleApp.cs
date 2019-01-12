@@ -16,6 +16,9 @@ namespace Sample
     /// </summary>
     class SampleApp : BaseApplication
     {
+
+        public List<int> Images { get; set; }
+
         #region ■ Constructor
         /// <summary>
         /// コンストラクタ
@@ -41,6 +44,8 @@ namespace Sample
         {
             base.Init();
 
+            IsShowSystemInformation = true;
+
             // ストックの初期化
             Stock.Init();
 
@@ -50,6 +55,12 @@ namespace Sample
 
         }
         #endregion
+
+        protected override bool Loading(ulong elapsedTime)
+        {
+            Images = LoadDivGraph("ufo.png", 24, 8, 3, 64, 64);
+            return false;
+        }
 
         #region - MessageLoopEndRound : ループ後処理
         /// <summary>

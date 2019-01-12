@@ -68,6 +68,7 @@
     <Compile Include="RectangleSize.cs" />
     <Compile Include="SlideTransition.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="SpriteAnimation.cs" />
     <Compile Include="Transition.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="VectorMotion.cs" />

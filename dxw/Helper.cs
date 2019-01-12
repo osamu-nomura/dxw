@@ -503,8 +503,26 @@ namespace dxw
         /// <param name="fileName">ファイル名</param>
         /// <returns>グラフィックハンドル</returns>
         public static int LoadGraph(string fileName)
+            => DX.LoadGraph(fileName);
+        #endregion
+
+        #region - LoadDivGraph : 画像ファイルを分割して複数イメージとしてメモリへ読み込む
+        /// <summary>
+        /// 画像ファイルを分割して複数イメージとしてメモリへ読み込む
+        /// </summary>
+        /// <param name="fileName">ファイル名</param>
+        /// <param name="allNum">総数</param>
+        /// <param name="column">列数</param>
+        /// <param name="row">行数</param>
+        /// <param name="width">幅</param>
+        /// <param name="heigth">高さ</param>
+        /// <returns>グラフィックハンドルのリスト</returns>
+        public static List<int> LoadDivGraph(string fileName, int allNum, int column, int row, int width, int heigth)
         {
-            return DX.LoadGraph(fileName);
+            var buff = new int[allNum];
+            if (DX.LoadDivGraph(fileName, allNum, column, row, width, heigth, buff) == 0)
+                return new List<int>(buff);
+            return null;
         }
         #endregion
 
