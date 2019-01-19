@@ -437,22 +437,22 @@ namespace dxw
         }
         #endregion
 
-        #region - DrawBox : 矩形を描画する
+        #region - DrawFrame : 矩形を描画する
         /// <summary>
         /// 矩形を描画する
         /// </summary>
         /// <param name="color">色</param>
         /// <param name="isFill">塗りつぶす？</param>
-        public void DrawBox(uint color, bool isFill = false)
+        public void DrawFrame(uint color, bool isFill = false)
             => Helper.DrawBox(this, color, isFill);
         #endregion
 
-        #region - FillBox : 矩形を塗りつぶす
+        #region - FillFrame : 矩形を塗りつぶす
         /// <summary>
         /// 矩形を塗りつぶす
         /// </summary>
         /// <param name="color">色</param>
-        public void FillBox(uint color)
+        public void FillFrame(uint color)
             => Helper.DrawBox(this, color, true);
         #endregion
 

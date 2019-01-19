@@ -60,7 +60,7 @@ namespace Sample
                         return args.Vector.Flip(args.IsCollisionHorizontal, args.IsCollisionVertical);
                 }
             );
-            sprite.OnDraw = v => v.FillBox(Stock.Colors.Red);
+            sprite.OnDraw = v => v.FillFrame(Stock.Colors.Red);
             return sprite;
         }
 

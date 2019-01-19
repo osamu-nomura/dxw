@@ -43,9 +43,9 @@ namespace dxw
     };
     #endregion
 
-    #region - Orientation : 方向
+    #region - Orientation : 向き
     /// <summary>
-    /// 方向
+    /// 向き
     /// </summary>
     public enum Orientation
     {
@@ -291,6 +291,41 @@ namespace dxw
         RightTop,       // 右上
         LeftBottom,     // 左下
         RightBottom     // 右下
+    }
+    #endregion
+
+    #region - Direction : 方向
+    /// <summary>
+    /// 方向
+    /// </summary>
+    public enum Direction
+    {
+        Up = 0,     // 上
+        Down = 1,   // 下
+        Left = 2,   // 左
+        Right = 3   // 右
+    }
+    #endregion
+
+    #region - VerticalDirection : 垂直方向
+    /// <summary>
+    /// 垂直方向
+    /// </summary>
+    public enum VerticalDirection
+    {
+        Up = 0,     // 上
+        Down = 1    // 下
+    }
+    #endregion
+
+    #region - HorizontalDirection : 水平方向
+    /// <summary>
+    /// 水平方向
+    /// </summary>
+    public enum HorizontalDirection
+    {
+        Left = 2,   // 左
+        Right = 3   // 右
     }
     #endregion
 
