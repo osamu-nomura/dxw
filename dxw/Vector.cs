@@ -28,6 +28,26 @@ namespace dxw
         public readonly double Y;
         #endregion
 
+        #region - Magnitude : ベクトルの大きさ
+        /// <summary>
+        /// ベクトルの大きさ
+        /// </summary>
+        public double Magnitude
+        {
+            get { return Math.Sqrt((X * X) + (Y * Y));  }
+        }
+        #endregion
+
+        #region - Direction : ベクトルの方向
+        /// <summary>
+        /// ベクトルの方向
+        /// </summary>
+        public double Direction
+        {
+            get { return Math.Atan(Y / X); }
+        }
+        #endregion
+
         #endregion
 
         #region ■ Constructor
@@ -63,6 +83,26 @@ namespace dxw
         /// <returns>Vector</returns>
         public Vector ModY(double n)
             => new Vector(X, n);
+        #endregion
+
+        #region - ModMagnitude : ベクトルの大きさを変更する
+        /// <summary>
+        /// ベクトルの大きさを変更する
+        /// </summary>
+        /// <param name="n">変更値</param>
+        /// <returns>Vector</returns>
+        public Vector ModMagnitude(double n)
+            => new Vector(Math.Cos(Direction) * n, Math.Sin(Direction) * n);
+        #endregion
+
+        #region - ModDirection : ベクトルの方向を変更する
+        /// <summary>
+        /// ベクトルの方向を変更する
+        /// </summary>
+        /// <param name="n"><変更値/param>
+        /// <returns>Vector</returns>
+        public Vector ModDirection(double n)
+            => new Vector(Math.Cos(n) * Magnitude, Math.Sin(n) * Magnitude);
         #endregion
 
         #region - Flip : ベクトルを反転させる
