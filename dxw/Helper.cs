@@ -1403,6 +1403,41 @@ namespace dxw
             => new Point(x, y);
         #endregion
 
+        #region - FPt : FPoint型の生成
+        /// <summary>
+        /// FPoint型の生成
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <returns>FPoint</returns>
+        public static FPoint FPt(double x, double y)
+            => new FPoint(x, y);
+        #endregion
+
+        #region - Rect : Rectangle型の生成
+        /// <summary>
+        /// Rectangle型の生成
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <param name="width">幅</param>
+        /// <param name="heigth">高さ</param>
+        /// <returns>Rectangle</returns>
+        public static Rectangle Rect(int x, int y, int width, int heigth)
+            => new Rectangle(x, y, width, heigth);
+        #endregion
+
+        #region - Rect : Rectangle型の生成
+        /// <summary>
+        /// Rectangle型の生成
+        /// </summary>
+        /// <param name="pt">位置</param>
+        /// <param name="size">サイズ</param>
+        /// <returns></returns>
+        public static Rectangle Rect(Point pt, RectangleSize size)
+            => new Rectangle(pt, size);
+        #endregion
+
         #region - Vec : Vector型の生成
         /// <summary>
         /// Vector型の生成
@@ -1410,8 +1445,19 @@ namespace dxw
         /// <param name="x">X方向</param>
         /// <param name="y">Y方向</param>
         /// <returns>Vector</returns>
-        public static Vector Vec(double x, double y)
+        public static Vector Vec(double x = 0.0d, double y = 0.0d)
             => new Vector(x, y);
+        #endregion
+
+        #region - VecMD : 大きさと方向からVector型を生成する
+        /// <summary>
+        /// 大きさと方向からVector型を生成する
+        /// </summary>
+        /// <param name="magnitude">大きさ</param>
+        /// <param name="direction">方向</param>
+        /// <returns>Vector</returns>
+        public static Vector VecMD(double magnitude, double direction)
+            => Vector.CreateByMagnitudeAndDirection(magnitude, direction);
         #endregion
 
         #region - Distance : 2点間の距離を算出する
@@ -1437,9 +1483,9 @@ namespace dxw
         /// <param name="p2">点2の座標</param>
         /// <returns>距離</returns>
         public static double Distance(Point p1, Point p2)
-        {
-            return Distance(p1.X, p1.Y, p2.X, p2.Y);
-        }
+            => Distance(p1.X, p1.Y, p2.X, p2.Y);
+        public static double Distance(FPoint p1, FPoint p2)
+            => Distance(p1.X, p1.Y, p2.X, p2.Y);
         #endregion
 
         #region - SaveDrawScreen : 現在描画対象になっている画面をＢＭＰ形式で保存する

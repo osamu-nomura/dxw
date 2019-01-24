@@ -204,6 +204,21 @@ namespace dxw
         #endregion
 
         #endregion
+
+        #region ■ Static Methods
+
+        #region - CreateByMagnitudeAndDirection : 大きさと方向からVectorを生成する
+        /// <summary>
+        /// 大きさと方向からVectorを生成する
+        /// </summary>
+        /// <param name="magnitude">ベクトルの大きさ</param>
+        /// <param name="direction">方向</param>
+        /// <returns>Vector</returns>
+        public static Vector CreateByMagnitudeAndDirection(double magnitude, double direction)
+            => new Vector(Math.Cos(direction) * magnitude, Math.Sin(direction) * magnitude);
+        #endregion
+
+        #endregion
     }
     #endregion
 }

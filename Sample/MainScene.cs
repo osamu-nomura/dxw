@@ -20,6 +20,7 @@ namespace Sample
         #region ■ Properties
 
         private Sprite MyShip { get; set; }
+        private Sprite Enemy { get; set; }
         private Vector MyShipVector { get; set; }
 
         #endregion
@@ -32,28 +33,28 @@ namespace Sample
         public MainScene(SampleApp app)
             : base(app)
         {
-
-            MyShipVector = new Vector(0.1, 0.0);
-            MyShip = new Sprite(this, new Rectangle(10, 50, 50, 50));
+            MyShipVector = Vec(0.1, 0.0);
+            MyShip = new Sprite(this, Rect(10, 50, 10, 10));
             MyShip.OnDraw = s =>
             {
                 s.DrawFrame(Stock.Colors.Red, true);
             };
             MyShip.OnUpdate = s =>
             {
-                if (App.CheckOnKeyDown(KeyCode.KEY_L))
-                    MyShipVector = MyShipVector.ModDirection(0.0d.DegreeToRadian());
-                if (App.CheckOnKeyDown(KeyCode.KEY_R))
-                    MyShipVector = MyShipVector.ModDirection(180.0d.DegreeToRadian());
-                if (App.CheckOnKeyDown(KeyCode.KEY_U))
-                    MyShipVector = MyShipVector.ModDirection(-90.0d.DegreeToRadian());
-                if (App.CheckOnKeyDown(KeyCode.KEY_D))
-                    MyShipVector = MyShipVector.ModDirection(90.0d.DegreeToRadian());
-                var Pos = s.LeftTop + (MyShipVector * App.WrapTime);
-                s.LeftTop = Pos;
+                s.LeftTop += (MyShipVector * App.WrapTime);
+                if (s.LeftTop.X < 0 || (s.RightTop.X) > App.ScreenWidth)
+                {
+                    MyShipVector = Vec(MyShipVector.X * -1, 0);
+                }
             };
-
             AddSplite(MyShip);
+
+            Enemy = new Sprite(this, Rect(10, 300, 10, 10));
+            Enemy.OnDraw = s =>
+            {
+                s.DrawFrame(Stock.Colors.Yellow, true);
+            };
+            AddSplite(Enemy);
         }
         #endregion
 

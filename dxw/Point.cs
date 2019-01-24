@@ -36,6 +36,30 @@ namespace dxw
         }
         #endregion
 
+        #region ■ Methods
+
+        #region - Vector : 2点を結ぶベクトルを返す
+        /// <summary>
+        /// 2点を結ぶベクトルを返す
+        /// </summary>
+        /// <param name="target">対象となるポイント</param>
+        /// <returns>Vector</returns>
+        public Vector Vector(Point target)
+            => new Vector(target.X - X, target.Y - Y);
+        #endregion
+
+        #region - Distance : 2点の距離を返す
+        /// <summary>
+        /// 2点の距離を返す
+        /// </summary>
+        /// <param name="target">対象となるポイント</param>
+        /// <returns>距離</returns>
+        public double Distance(Point target)
+            => Helper.Distance(this, target);
+        #endregion
+
+        #endregion
+
         #region ■ Operator Overload
 
         #region - Plus Operator : Point + Vector
@@ -70,7 +94,6 @@ namespace dxw
         #endregion
 
         #endregion
-
     }
     #endregion
 
@@ -102,6 +125,30 @@ namespace dxw
             X = x;
             Y = y;
         }
+        #endregion
+
+        #region ■ Methods
+
+        #region - Vector : 2点を結ぶベクトルを返す
+        /// <summary>
+        /// 2点を結ぶベクトルを返す
+        /// </summary>
+        /// <param name="target">対象となるポイント</param>
+        /// <returns>Vector</returns>
+        public Vector Vector(FPoint target)
+            => new Vector(target.X - X, target.Y - Y);
+        #endregion
+
+        #region - Distance : 2点の距離を返す
+        /// <summary>
+        /// 2点の距離を返す
+        /// </summary>
+        /// <param name="target">対象となるポイント</param>
+        /// <returns>距離</returns>
+        public double Distance(FPoint target)
+            => Helper.Distance(this, target);
+        #endregion
+
         #endregion
 
         #region ■ Operator Overload
