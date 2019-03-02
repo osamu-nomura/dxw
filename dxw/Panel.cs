@@ -245,7 +245,7 @@ namespace dxw
         public override void Draw()
         {
             base.Draw();
-            SetDrawingWindow(this, ()  =>
+            SetDrawingWindow(this, true, ()  =>
             {
                 // フレームを描画（スプライト描画前）
                 DrawBeforeSpriteDrawing();
