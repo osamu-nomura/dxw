@@ -475,6 +475,45 @@ namespace dxw
             => DrawGraph(pt.X, pt.Y, handle, enableTranslate);
         #endregion
 
+        #region - DrawRectGraph : グラフィックの指定矩形部分のみを描画
+        /// <summary>
+        /// グラフィックの指定矩形部分のみを描画
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <param name="srcX">描画するグラフィック範囲のX座標</param>
+        /// <param name="srcY">描画するグラフィック範囲のY座標</param>
+        /// <param name="widht">描画するグラフィック範囲の幅</param>
+        /// <param name="height">描画するぐらふぃく範囲の高さ</param>
+        /// <param name="handle">グラフィックハンドル</param>
+        /// <param name="enableTranslate">透過を有効にする</param>
+        /// <param name="enableTurn">画像の反転を有効にする</param>
+        /// <returns>True : 成功 . False : 失敗</returns>
+        public static bool DrawRectGraph(int x, int y, int srcX, int srcY, int widht, int height, 
+            int handle, bool enableTranslate = false, bool enableTurn = false)
+        {
+            if (handle == 0)
+                return false;
+            var _x = (_drawingWindow?.X ?? 0) + x;
+            var _y = (_drawingWindow?.Y ?? 0) + y;
+            return DX.DrawRectGraph(_x, _y, srcX, srcY, widht, height, handle, DXBool(enableTranslate), DXBool(enableTurn)) == 0;
+        }
+        #endregion
+
+        #region - DrawRectGraph : 
+        /// <summary>
+        /// グラフィックの指定矩形部分のみを描画
+        /// </summary>
+        /// <param name="pt">座標</param>
+        /// <param name="srcRect">描画するグラフィックの範囲</param>
+        /// <param name="handle">グラフィックハンドル</param>
+        /// <param name="enableTranslate">透過を有効にする</param>
+        /// <param name="enableTurn">画像の反転を有効にする</param>
+        /// <returns>True : 成功 . False : 失敗</returns>
+        public static bool DrawRectGraph(Point pt, Rectangle srcRect, int handle, bool enableTranslate = false, bool enableTurn = false)
+            => DrawRectGraph(pt.X, pt.Y, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, handle, enableTranslate, enableTurn);
+        #endregion
+
         #region - DrawExtendGraph : メモリに読みこんだグラフィックの拡大縮小描画
         /// <summary>
         /// メモリに読みこんだグラフィックの拡大縮小描画
@@ -623,13 +662,17 @@ namespace dxw
         /// 描画領域を指定する
         /// </summary>
         /// <param name="r">描画領域</param>
-        public static Rectangle SetDrawingWindow(Rectangle r)
+        /// <param name="enableClipping">クリッピングを有効にする</param>
+        public static Rectangle SetDrawingWindow(Rectangle r, bool enableClipping= true)
         {
             var prevWindow = _drawingWindow;
-            if (r != null)
-                SetDrawArea(r);
-            else
-                ClearDrawArea();
+            if (enableClipping)
+            {
+                if (r != null)
+                    SetDrawArea(r);
+                else
+                    ClearDrawArea();
+            }
             _drawingWindow = r;
             return prevWindow;
         }
@@ -640,10 +683,11 @@ namespace dxw
         /// 描画領域を指定する
         /// </summary>
         /// <param name="r">描画領域</param>
+        /// <param name="enableClipping">クリッピングを有効にする</param>
         /// <param name="act">コールバック</param>
-        public static void SetDrawingWindow(Rectangle r, Action act)
+        public static void SetDrawingWindow(Rectangle r, bool enableClipping, Action act)
         {
-            var prevRect = SetDrawingWindow(r);
+            var prevRect = SetDrawingWindow(r, enableClipping);
             try
             {
                 act();
