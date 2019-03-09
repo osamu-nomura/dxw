@@ -203,6 +203,17 @@ namespace dxw
             => v * n;
         #endregion
 
+        #region - Division Operator : Vector / double
+        /// <summary>
+        /// Vector / double
+        /// </summary>
+        /// <param name="v">Vector</param>
+        /// <param name="n">Double</param>
+        /// <returns>Vector</returns>
+        public static Vector operator /(Vector v, double n)
+            => new Vector(v.X / n, v.Y / n);
+        #endregion
+
         #endregion
 
         #region ■ Static Methods
@@ -216,6 +227,17 @@ namespace dxw
         /// <returns>Vector</returns>
         public static Vector CreateByMagnitudeAndDirection(double magnitude, double direction)
             => new Vector(Math.Cos(direction) * magnitude, Math.Sin(direction) * magnitude);
+        #endregion
+
+        #region - CreateByPoint2Point : 始点と終点よりVectorを生成する
+        /// <summary>
+        /// 始点と終点よりVectorを生成する
+        /// </summary>
+        /// <param name="pt1">始点</param>
+        /// <param name="pt2">終点</param>
+        /// <returns>Vector</returns>
+        public static Vector CreateByPoint2Point(FPoint pt1, FPoint pt2)
+            => pt1.Vector(pt2);
         #endregion
 
         #endregion

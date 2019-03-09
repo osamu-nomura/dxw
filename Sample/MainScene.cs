@@ -33,23 +33,16 @@ namespace Sample
         public MainScene(SampleApp app)
             : base(app)
         {
-            MyShipVector = Vec(0.1, 0.0);
-            MyShip = new Sprite(this, Rect(10, 50, 10, 10));
+            var motion = new ParabolaMotion(FPt(20.0d, 450.0d), FPt(600.0d, 300.0d), 3000, Vec(0, 1000.0d / 9000000));
+            MyShip = new Sprite(this, Rect(20, 450, 10, 10));
+            MyShip.Motion = motion;
             MyShip.OnDraw = s =>
             {
                 s.DrawFrame(Stock.Colors.Red, true);
             };
-            MyShip.OnUpdate = s =>
-            {
-                s.LeftTop += (MyShipVector * App.WrapTime);
-                if (s.LeftTop.X < 0 || (s.RightTop.X) > App.ScreenWidth)
-                {
-                    MyShipVector = Vec(MyShipVector.X * -1, 0);
-                }
-            };
             AddSplite(MyShip);
 
-            Enemy = new Sprite(this, Rect(10, 300, 10, 10));
+            Enemy = new Sprite(this, Rect(600, 300, 10, 10));
             Enemy.OnDraw = s =>
             {
                 s.DrawFrame(Stock.Colors.Yellow, true);

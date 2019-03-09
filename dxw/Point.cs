@@ -149,6 +149,17 @@ namespace dxw
             => Helper.Distance(this, target);
         #endregion
 
+        #region - Contact : 2点が接触した
+        /// <summary>
+        /// 2点が接触した
+        /// </summary>
+        /// <param name="target">対象</param>
+        /// <param name="toleranceError">許容誤差</param>
+        /// <returns>True : 接触している / False : 接触していない</returns>
+        public bool Contact(FPoint target, double toleranceError = 0.0d)
+            => Math.Abs(X - target.X) < toleranceError && Math.Abs(Y - target.Y) < toleranceError;
+        #endregion
+
         #endregion
 
         #region ■ Operator Overload
@@ -159,7 +170,7 @@ namespace dxw
         /// </summary>
         /// <param name="pt">FPoint</param>
         /// <param name="v">Vector</param>
-        /// <returns>Point</returns>
+        /// <returns>FPoint</returns>
         public static FPoint operator +(FPoint pt, Vector v)
             => new FPoint(pt.X + v.X, pt.Y + v.Y);
         #endregion
