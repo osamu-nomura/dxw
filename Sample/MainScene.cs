@@ -33,7 +33,7 @@ namespace Sample
         public MainScene(SampleApp app)
             : base(app)
         {
-            var motion = new ParabolaMotion(FPt(20.0d, 450.0d), FPt(600.0d, 300.0d), 3000, Vec(0, 1000.0d / 9000000));
+            var motion = new ParabolaMotion(FPt(20.0d, 450.0d), FPt(600.0d, 300.0d), 3000, Vec(0, 1000.0d / 9000000), 1.0d);
             MyShip = new Sprite(this, Rect(20, 450, 10, 10));
             MyShip.Motion = motion;
             MyShip.OnDraw = s =>

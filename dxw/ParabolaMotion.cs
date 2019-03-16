@@ -105,6 +105,13 @@ namespace dxw
         public Vector Gravity { get; private set; }
         #endregion
 
+        #region - ToleranceError : 有効誤差
+        /// <summary>
+        /// 有効誤差
+        /// </summary>
+        public double ToleranceError { get; private set; }
+        #endregion
+
         #region - CurrentPosition : 現在位置
         /// <summary>
         /// 現在位置
@@ -154,12 +161,14 @@ namespace dxw
         /// <param name="goalPosition">到着位置</param>
         /// <param name="arrivalTime">到着時刻</param>
         /// <param name="gravity">重力</param>
-        public ParabolaMotion(FPoint startPosition, FPoint goalPosition, int arrivalTime, Vector gravity)
+        /// <param name="toleranceError">有効誤差</param>
+        public ParabolaMotion(FPoint startPosition, FPoint goalPosition, int arrivalTime, Vector gravity, double toleranceError)
         {
             StartPosition = startPosition;
             GoalPosition = goalPosition;
             ArrivalTime = arrivalTime;
             Gravity = gravity;
+            ToleranceError = toleranceError;
             CurrentPosition = StartPosition;
             var downX = gravity.X * Math.Pow(ArrivalTime, 2) * 0.5d;
             var downY = gravity.Y * Math.Pow(ArrivalTime, 2) * 0.5d;
@@ -180,13 +189,16 @@ namespace dxw
         {
             // 経過時間の更新
             var wrapTime = sprite.App.WrapTime;
-            ElapsedTime += wrapTime;
+            if (ElapsedTime + wrapTime <= ArrivalTime)
+                ElapsedTime += wrapTime;
+            else
+                ElapsedTime = ArrivalTime;
             // 現在位置の算出
             if (Vector.HasValue)
             {
                 var down = Gravity * Math.Pow(ElapsedTime, 2) * 0.5d;
                 var newPos = StartPosition + (Vector.Value * ElapsedTime) + down;
-                if (GoalPosition.Contact(newPos, 1.0d))
+                if (GoalPosition.Contact(newPos, ToleranceError))
                 {
                     CurrentPosition = GoalPosition;
                     Vector = null;
