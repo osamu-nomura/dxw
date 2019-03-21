@@ -34,18 +34,22 @@ namespace Sample
             : base(app)
         {
             var motion = new ParabolaMotion(FPt(20.0d, 450.0d), FPt(600.0d, 300.0d), 3000, Vec(0, 1000.0d / 9000000));
-            MyShip = new Sprite(this, Rect(20, 450, 10, 10));
-            MyShip.Motion = motion;
-            MyShip.OnDraw = s =>
+            MyShip = new Sprite(this, Rect(20, 450, 10, 10))
             {
-                s.DrawFrame(Stock.Colors.Red, true);
+                Motion = motion,
+                OnDraw = s =>
+                {
+                    s.DrawFrame(Stock.Colors.Red, true);
+                }
             };
             AddSplite(MyShip);
 
-            Enemy = new Sprite(this, Rect(600, 300, 10, 10));
-            Enemy.OnDraw = s =>
+            Enemy = new Sprite(this, Rect(600, 300, 10, 10))
             {
-                s.DrawFrame(Stock.Colors.Yellow, true);
+                OnDraw = s =>
+                {
+                    s.DrawFrame(Stock.Colors.Yellow, true);
+                }
             };
             AddSplite(Enemy);
         }

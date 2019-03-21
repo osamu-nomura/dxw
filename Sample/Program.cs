@@ -26,10 +26,11 @@ namespace Sample
             var h = 1.0d * Math.Sin(135.0d.DegreeToRadian());
 
             // アプリケーションオブジェクトの生成
-            var app = new SampleApp(SCREEN_WIDTH, SCREEN_HEIGHT, ColorBitDepth.BitDepth32);
-
-            app.IsShowSystemInformation = false;
-            app.IsShowInputStatus = false;
+            var app = new SampleApp(SCREEN_WIDTH, SCREEN_HEIGHT, ColorBitDepth.BitDepth32)
+            {
+                IsShowSystemInformation = false,
+                IsShowInputStatus = false
+            };
 
             // アプリケーションの実行
             app.Run(WindowMode.Window);

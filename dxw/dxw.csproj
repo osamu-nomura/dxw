@@ -33,10 +33,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DxLibDotNet">
+    <Reference Include="DxLibDotNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DXLib\DxLibDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="hsb">
+    <Reference Include="hsb, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\hsb\hsb\bin\Debug\hsb.dll</HintPath>
     </Reference>
     <Reference Include="System" />
