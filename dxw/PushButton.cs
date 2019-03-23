@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using hsb.Extensions;
 using static dxw.Helper;
 
 namespace dxw
@@ -11,17 +13,19 @@ namespace dxw
     {
         #region ■ Members
         /// <summary>
-        /// 標準画像
-        /// </summary>
-        private int _imageHandle = 0;
-
-        /// <summary>
         /// サイズを画像サイズに合わせる。
         /// </summary>
         private bool _fitSize = true;
         #endregion
 
         #region ■ Properties
+
+        #region - State : ステート
+        /// <summary>
+        /// ステート
+        /// </summary>
+        public bool? State { get; set; } = null;
+        #endregion
 
         #region - TappedSoundHandle : タップ音
         /// <summary>
@@ -30,20 +34,34 @@ namespace dxw
         public int TappedSoundHandle { get; set; } = 0;
         #endregion
 
+        #region - ImageHandles : 標準画像(ステート別）
+        /// <summary>
+        /// 標準画像(ステート別）
+        /// </summary>
+        public Dictionary<bool, int> ImageHandles { get; private set; } = new Dictionary<bool, int>();
+        #endregion
+
+        #region - PushedImageHandles : 押下時画像(ステート別)
+        /// <summary>
+        /// 押下時画像(ステート別)
+        /// </summary>
+        public Dictionary<bool, int> PushedImageHandles { get; private set; } = new Dictionary<bool, int>();
+        #endregion
+
         #region - ImageHandle : 標準画像
         /// <summary>
         /// 標準画像
         /// </summary>
         public int ImageHandle
         {
-            get { return _imageHandle;  }
+            get { return ImageHandles.Get(false, 0);  }
             set
             {
-                if (_imageHandle != value)
+                if (ImageHandles.Get(false, 0) != value)
                 {
-                    _imageHandle = value;
-                    if (FitButtonSize)
-                        SetImageSize(_imageHandle);
+                    ImageHandles[false] = value;
+                    if (value != 0 && FitButtonSize)
+                        SetImageSize(value);
                 }
             }
         }
@@ -53,7 +71,11 @@ namespace dxw
         /// <summary>
         /// 押下時画像
         /// </summary>
-        public int PushedImageHandle { get; set; } = 0;
+        public int PushedImageHandle
+        {
+            get { return PushedImageHandles.Get(false, 0);  }
+            set { PushedImageHandles[false] = value;  }
+        }
         #endregion
 
         #region - FitButtonSize : ボタンのサイズを画像サイズに合わせる
@@ -69,7 +91,7 @@ namespace dxw
                 {
                     _fitSize = value;
                     if (_fitSize)
-                        SetImageSize(_imageHandle);
+                        SetImageSize(ImageHandle);
                 }
             }
         }
@@ -112,7 +134,7 @@ namespace dxw
         public PushButton(BaseApplication app)
             : base(app)
         {
-
+            ImageHandle = 0;
         }
         #endregion
 
@@ -124,27 +146,19 @@ namespace dxw
         public PushButton(BaseScene scene)
             : base(scene)
         {
-
+            ImageHandle = 0;
         }
         #endregion
 
         #region - Constructor(3)
         /// <summary>
-        /// コンストラクター(3)
+        /// コンストラクタ(3)
         /// </summary>
-        /// <param name="scene">シーン</param>
-        /// <param name="x">座標(px)</param>
-        /// <param name="imageHandle">通常画像</param>
-        /// <param name="pushedImageHandle">押下時の画像</param>
-        /// <param name="callback">タップされた時のコールバック</param>
-        public PushButton(BaseScene scene, Point pt, int imageHandle, int pushedImageHandle, 
-                            Action<PushButton> callback = null) 
-                : base(scene)
+        /// <param name="parent">親スプライト</param>
+        public PushButton(BaseSprite parent)
+            : base(parent)
         {
-            LeftTop = pt;
-            ImageHandle = imageHandle;
-            PushedImageHandle = pushedImageHandle;
-            OnTapped = callback;
+            ImageHandle = 0;
         }
         #endregion
 
@@ -161,6 +175,10 @@ namespace dxw
             base.TouchUp();
             if (TappedSoundHandle != 0)
                 PlaySound(TappedSoundHandle, PlayType.Back, App?.SEVolume ?? 0);
+
+            if (State.HasValue)
+                State = !State.Value;
+
             OnTapped?.Invoke(this);
         }
         #endregion
@@ -179,7 +197,10 @@ namespace dxw
             if (OnDraw != null)
                 OnDraw(this);
             else
-                DrawGraph(X, Y, IsDown ? PushedImageHandle : ImageHandle, true);
+            {
+                var h = IsDown ? PushedImageHandles.Get(State ?? false, PushedImageHandle) : ImageHandles.Get(State ?? false, ImageHandle);
+                DrawGraph(X, Y, h, true);
+            }
         }
         #endregion
 

@@ -81,10 +81,22 @@ namespace dxw
         /// <summary>
         /// コンストラクタ(2)
         /// </summary>
-        /// <param name="app">アプリケーション</param>
+        /// <param name="scene">シーン</param>
         public BaseInteractiveSprite(BaseScene scene)
             : base(scene)
         {
+        }
+        #endregion
+
+        #region - Constructor(3)
+        /// <summary>
+        /// コンストラクタ(3)
+        /// </summary>
+        /// <param name="parent">親スプライト</param>
+        public BaseInteractiveSprite(BaseSprite parent)
+            : base(parent)
+        {
+
         }
         #endregion
 
