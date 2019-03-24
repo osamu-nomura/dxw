@@ -134,7 +134,6 @@ namespace dxw
         public PushButton(BaseApplication app)
             : base(app)
         {
-            ImageHandle = 0;
         }
         #endregion
 
@@ -146,7 +145,6 @@ namespace dxw
         public PushButton(BaseScene scene)
             : base(scene)
         {
-            ImageHandle = 0;
         }
         #endregion
 
@@ -158,7 +156,6 @@ namespace dxw
         public PushButton(BaseSprite parent)
             : base(parent)
         {
-            ImageHandle = 0;
         }
         #endregion
 
