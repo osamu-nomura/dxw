@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using hsb.Extensions;
+
 namespace dxw
 {
     #region 【Struct Point】
@@ -192,7 +194,7 @@ namespace dxw
         /// </summary>
         /// <param name="pt">FPoint</param>
         public static explicit operator Point (FPoint pt)
-            => new Point((int)Math.Floor(pt.X), (int)Math.Floor(pt.Y));
+            => new Point((int)pt.X.Floor(), (int)pt.Y.Floor()));
         #endregion
 
         #endregion
