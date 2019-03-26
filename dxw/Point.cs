@@ -194,7 +194,7 @@ namespace dxw
         /// </summary>
         /// <param name="pt">FPoint</param>
         public static explicit operator Point (FPoint pt)
-            => new Point((int)pt.X.Floor(), (int)pt.Y.Floor()));
+            => new Point((int)pt.X.Floor(), (int)pt.Y.Floor());
         #endregion
 
         #endregion

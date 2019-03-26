@@ -993,33 +993,33 @@ namespace dxw
         }
         #endregion
 
-        #region - GetHitNumberKey : 押下された数字キーを返す
+        #region - GetHitNumberKey : 押下された数字キーのキーコードを返す
         /// <summary>
-        /// 押下された数字キーを数値で返す
+        /// 押下された数字キーのキーコードを返す
         /// </summary>
-        /// <returns>押下された数字</returns>
-        public string GetHitNumberKey()
+        /// <returns>押下された数字のキーコード</returns>
+        public KeyCode? GetHitNumberKey()
         {
             if (CheckOnKeyUp(KeyCode.KEY_0) || CheckOnKeyUp(KeyCode.KEY_NUMPAD0))
-                return "0";
+                return KeyCode.KEY_0;
             if (CheckOnKeyUp(KeyCode.KEY_1) || CheckOnKeyUp(KeyCode.KEY_NUMPAD1))
-                return "1";
+                return KeyCode.KEY_1;
             if (CheckOnKeyUp(KeyCode.KEY_2) || CheckOnKeyUp(KeyCode.KEY_NUMPAD2))
-                return "2";
+                return KeyCode.KEY_2;
             if (CheckOnKeyUp(KeyCode.KEY_3) || CheckOnKeyUp(KeyCode.KEY_NUMPAD3))
-                return "3";
+                return KeyCode.KEY_3;
             if (CheckOnKeyUp(KeyCode.KEY_4) || CheckOnKeyUp(KeyCode.KEY_NUMPAD4))
-                return "4";
+                return KeyCode.KEY_4;
             if (CheckOnKeyUp(KeyCode.KEY_5) || CheckOnKeyUp(KeyCode.KEY_NUMPAD5))
-                return "5";
+                return KeyCode.KEY_5;
             if (CheckOnKeyUp(KeyCode.KEY_6) || CheckOnKeyUp(KeyCode.KEY_NUMPAD6))
-                return "6";
+                return KeyCode.KEY_6;
             if (CheckOnKeyUp(KeyCode.KEY_7) || CheckOnKeyUp(KeyCode.KEY_NUMPAD7))
-                return "7";
+                return KeyCode.KEY_7;
             if (CheckOnKeyUp(KeyCode.KEY_8) || CheckOnKeyUp(KeyCode.KEY_NUMPAD8))
-                return "8";
+                return KeyCode.KEY_8;
             if (CheckOnKeyUp(KeyCode.KEY_9) || CheckOnKeyUp(KeyCode.KEY_NUMPAD9))
-                return "9";
+                return KeyCode.KEY_9;
             return null;
         }
         #endregion
