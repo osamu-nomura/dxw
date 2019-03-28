@@ -993,6 +993,24 @@ namespace dxw
         }
         #endregion
 
+        #region - GetOnNumberKeyDowns : 押された数字キーのキーコードを取得する
+        /// <summary>
+        /// 押された数字キーのキーコードを取得する
+        /// </summary>
+        /// <returns>キーコードのリスト</returns>
+        public List<KeyCode> GetOnNumberKeyDowns()
+            => GetKeyDowns().Where(keyCode => NumKeyCodes.Contains(keyCode)).ToList();
+        #endregion
+
+        #region - GetOnNumberKeyUps : 押された数字キーのキーコードを取得する
+        /// <summary>
+        /// 離された数字キーのキーコードを取得する
+        /// </summary>
+        /// <returns>キーコードのリスト</returns>
+        public List<KeyCode> GetOnNumberKeyUps()
+            => GetKeyUps().Where(keyCode => NumKeyCodes.Contains(keyCode)).ToList();
+        #endregion
+
         #region - GetHitNumberKey : 押下された数字キーのキーコードを返す
         /// <summary>
         /// 押下された数字キーのキーコードを返す
@@ -1000,26 +1018,9 @@ namespace dxw
         /// <returns>押下された数字のキーコード</returns>
         public KeyCode? GetHitNumberKey()
         {
-            if (CheckOnKeyUp(KeyCode.KEY_0) || CheckOnKeyUp(KeyCode.KEY_NUMPAD0))
-                return KeyCode.KEY_0;
-            if (CheckOnKeyUp(KeyCode.KEY_1) || CheckOnKeyUp(KeyCode.KEY_NUMPAD1))
-                return KeyCode.KEY_1;
-            if (CheckOnKeyUp(KeyCode.KEY_2) || CheckOnKeyUp(KeyCode.KEY_NUMPAD2))
-                return KeyCode.KEY_2;
-            if (CheckOnKeyUp(KeyCode.KEY_3) || CheckOnKeyUp(KeyCode.KEY_NUMPAD3))
-                return KeyCode.KEY_3;
-            if (CheckOnKeyUp(KeyCode.KEY_4) || CheckOnKeyUp(KeyCode.KEY_NUMPAD4))
-                return KeyCode.KEY_4;
-            if (CheckOnKeyUp(KeyCode.KEY_5) || CheckOnKeyUp(KeyCode.KEY_NUMPAD5))
-                return KeyCode.KEY_5;
-            if (CheckOnKeyUp(KeyCode.KEY_6) || CheckOnKeyUp(KeyCode.KEY_NUMPAD6))
-                return KeyCode.KEY_6;
-            if (CheckOnKeyUp(KeyCode.KEY_7) || CheckOnKeyUp(KeyCode.KEY_NUMPAD7))
-                return KeyCode.KEY_7;
-            if (CheckOnKeyUp(KeyCode.KEY_8) || CheckOnKeyUp(KeyCode.KEY_NUMPAD8))
-                return KeyCode.KEY_8;
-            if (CheckOnKeyUp(KeyCode.KEY_9) || CheckOnKeyUp(KeyCode.KEY_NUMPAD9))
-                return KeyCode.KEY_9;
+            var list = GetOnNumberKeyUps();
+            if (list.Count > 0)
+                return list.First();
             return null;
         }
         #endregion

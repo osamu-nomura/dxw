@@ -190,6 +190,23 @@ namespace dxw
         private static Rectangle _drawingWindow = null;
         #endregion
 
+        #region ■ Properties
+
+        #region - NumKeyCodes : 数字キーのKeyCode
+        /// <summary>
+        /// 数字キーのKeyCode
+        /// </summary>
+        public static KeyCode[] NumKeyCodes { get; private set; } = new KeyCode[]
+            {
+                KeyCode.KEY_0, KeyCode.KEY_1, KeyCode.KEY_2, KeyCode.KEY_3, KeyCode.KEY_4,
+                KeyCode.KEY_5, KeyCode.KEY_6, KeyCode.KEY_7, KeyCode.KEY_8, KeyCode.KEY_9,
+                KeyCode.KEY_NUMPAD0, KeyCode.KEY_NUMPAD1, KeyCode.KEY_NUMPAD2, KeyCode.KEY_NUMPAD3, KeyCode.KEY_NUMPAD4,
+                KeyCode.KEY_NUMPAD5, KeyCode.KEY_NUMPAD5, KeyCode.KEY_NUMPAD7, KeyCode.KEY_NUMPAD8, KeyCode.KEY_NUMPAD9
+            };
+        #endregion
+
+        #endregion
+
         #region ■ Private Methods
 
         #region - SetActiveStateChangeCallBack : SetActiveStateChangeCallBackFunctionに渡すコールバック
@@ -1572,6 +1589,7 @@ namespace dxw
         #endregion
 
         #endregion
+
     }
     #endregion
 }
