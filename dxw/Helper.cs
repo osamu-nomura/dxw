@@ -1594,7 +1594,7 @@ namespace dxw
         /// <returns>対応数値</returns>
         public static int? NumberKeyCode2Int(KeyCode keyCode)
         {
-            switch (KeyCode)
+            switch (keyCode)
             {
                 case KeyCode.KEY_0:
                 case KeyCode.KEY_NUMPAD0:
