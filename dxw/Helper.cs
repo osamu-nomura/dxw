@@ -1586,6 +1586,52 @@ namespace dxw
             => DX.SaveDrawScreen(rect.X, rect.Y, rect.X2, rect.Y2, fileName) == 0;
         #endregion
 
+        #region - NumberKeyCode2Int : 数字キーコードを数値に変換する
+        /// <summary>
+        /// 数字キーコードを数値に変換する
+        /// </summary>
+        /// <param name="keyCode">キーコード</param>
+        /// <returns>対応数値</returns>
+        public static int? NumberKeyCode2Int(KeyCode keyCode)
+        {
+            switch (KeyCode)
+            {
+                case KeyCode.KEY_0:
+                case KeyCode.KEY_NUMPAD0:
+                    return 0;
+                case KeyCode.KEY_1:
+                case KeyCode.KEY_NUMPAD1:
+                    return 1;
+                case KeyCode.KEY_2:
+                case KeyCode.KEY_NUMPAD2:
+                    return 2;
+                case KeyCode.KEY_3:
+                case KeyCode.KEY_NUMPAD3:
+                    return 3;
+                case KeyCode.KEY_4:
+                case KeyCode.KEY_NUMPAD4:
+                    return 4;
+                case KeyCode.KEY_5:
+                case KeyCode.KEY_NUMPAD5:
+                    return 5;
+                case KeyCode.KEY_6:
+                case KeyCode.KEY_NUMPAD6:
+                    return 6;
+                case KeyCode.KEY_7:
+                case KeyCode.KEY_NUMPAD7:
+                    return 7;
+                case KeyCode.KEY_8:
+                case KeyCode.KEY_NUMPAD8:
+                    return 8;
+                case KeyCode.KEY_9:
+                case KeyCode.KEY_NUMPAD9:
+                    return 9;
+                default:
+                    return null;
+            }
+        }
+        #endregion
+
         #endregion
 
         #endregion

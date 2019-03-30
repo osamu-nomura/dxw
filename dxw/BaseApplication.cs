@@ -1011,16 +1011,16 @@ namespace dxw
             => GetKeyUps().Where(keyCode => NumKeyCodes.Contains(keyCode)).ToList();
         #endregion
 
-        #region - GetHitNumberKey : 押下された数字キーのキーコードを返す
+        #region - GetHitNumberKey : 押下された数字キーの値を返す
         /// <summary>
-        /// 押下された数字キーのキーコードを返す
+        /// 押下された数字キーの値を返す
         /// </summary>
-        /// <returns>押下された数字のキーコード</returns>
-        public KeyCode? GetHitNumberKey()
+        /// <returns>押下された数字の値</returns>
+        public int? GetHitNumberKey()
         {
-            var list = GetOnNumberKeyUps();
+            var list = GetOnNumberKeyDowns();
             if (list.Count > 0)
-                return list.First();
+                return NumberKeyCode2Int(list.First());
             return null;
         }
         #endregion
