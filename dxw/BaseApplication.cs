@@ -1188,6 +1188,26 @@ namespace dxw
         }
         #endregion
 
+        #region - PlaySound : 音声を再生する
+        /// <summary>
+        /// 音声を再生する
+        /// </summary>
+        /// <param name="soundHandle">音声リソースハンドル</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public bool PlaySound(int soundHandle)
+            => Helper.PlaySound(soundHandle, PlayType.Back, SEVolume);
+        #endregion
+
+        #region - PlayBGM : BGMを再生する
+        /// <summary>
+        /// BGMを再生する
+        /// </summary>
+        /// <param name="bgmHandle">BGMリソースハンドル</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public bool PlayBGM(int bgmHandle)
+            => Helper.PlaySound(bgmHandle, PlayType.Loop, BGMVolume);
+        #endregion
+
         #endregion
     }
     #endregion
