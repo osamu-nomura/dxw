@@ -1117,6 +1117,15 @@ namespace dxw
             => DX.GetHitKeyStateAll(keyStateBuf) == 0;
         #endregion
 
+        #region - EnableDirectInput : 直接入力を有効にする
+        /// <summary>
+        /// 直接入力を有効にする
+        /// </summary>
+        /// <param name="flag">True : 有効 / False : 無効</param>
+        public static void EnableDirectInput(bool flag)
+            => DX.SetUseDirectInputFlag(DXBool(flag));
+        #endregion
+
         #endregion
 
         #region ☆ タッチパネル入力関連関数
