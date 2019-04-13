@@ -956,13 +956,13 @@ namespace dxw
         }
         #endregion
 
-        #region - CheckKeyDown : キーボードの何れかが押下されたかチェック
+        #region - CheckOnKeyDown : キーボードの何れかが押下されたかチェック
         /// <summary>
         /// キーボードの何れかが押下されたかチェック
         /// </summary>
         /// <param name="keyCodes">キーコード(params)</param>
         /// <returns>True : 押下されている / False : されていない</returns>
-        public bool CheckKeyDown(params KeyCode[] keyCodes)
+        public bool CheckOnKeyDown(params KeyCode[] keyCodes)
         {
             foreach (var keyCode in keyCodes)
             {
@@ -1005,7 +1005,7 @@ namespace dxw
         /// </summary>
         /// <param name="keyCodes">キーコード(params)</param>
         /// <returns>True : 離された / False : されていない</returns>
-        public bool CheckKeyUp(params KeyCode[] keyCodes)
+        public bool CheckOnKeyUp(params KeyCode[] keyCodes)
         {
             foreach (var keyCode in keyCodes)
             {
