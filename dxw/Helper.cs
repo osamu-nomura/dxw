@@ -131,6 +131,40 @@ namespace dxw
     }
     #endregion
 
+    #region 【RGB】
+    /// <summary>
+    /// RGB構造体
+    /// </summary>
+    public readonly struct RGB
+    {
+        /// <summary>
+        /// 赤
+        /// </summary>
+        public readonly byte Red;
+        /// <summary>
+        /// 緑
+        /// </summary>
+        public readonly byte Green;
+        /// <summary>
+        /// 青
+        /// </summary>
+        public readonly byte Blue;
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="red"></param>
+        /// <param name="green"></param>
+        /// <param name="blue"></param>
+        public RGB(byte red, byte green, byte blue)
+            => (Red, Green, Blue) = (red, green, blue);
+        /// <summary>
+        /// 色コードを返す
+        /// </summary>
+        /// <returns>色コード</returns>
+        public uint Color() => DX.GetColor(Red, Green, Blue);
+    }
+    #endregion
+
     #region 【Static Class : Helper】
     /// <summary>
     /// ヘルパーメソッド
@@ -726,21 +760,6 @@ namespace dxw
         }
         #endregion
 
-        #region - DrawPolygon : ポリゴンを描画する
-        /// <summary>
-        /// ポリゴンを描画する
-        /// </summary>
-        /// <param name="vertexs">VERTEX2D</param>
-        /// <param name="polygonNum"></param>
-        /// <param name="h"></param>
-        /// <param name="flag"></param>
-        /// <returns></returns>
-        public static bool DrawPolygon(DX.VERTEX2D[] vertexs, int polygonNum, int h, int flag)
-        {
-            return DX.DrawPolygon2D(vertexs, polygonNum, h, flag) == 0;
-        }
-        #endregion
-
         #endregion
 
         #region ☆ 図形描画関数
@@ -877,6 +896,52 @@ namespace dxw
 
         #endregion
 
+        #region - DrawPolygon : ポリゴンを描画する
+        /// <summary>
+        /// ポリゴンを描画する
+        /// </summary>
+        /// <param name="vertexs">VERTEX2D</param>
+        /// <param name="polygonNum"></param>
+        /// <param name="h"></param>
+        /// <param name="flag"></param>
+        /// <returns></returns>
+        public static bool DrawPolygon(DX.VERTEX2D[] vertexs, int polygonNum, int h, int flag)
+        {
+            return DX.DrawPolygon2D(vertexs, polygonNum, h, flag) == 0;
+        }
+        #endregion
+
+        public static bool DrawGradationBox(int x, int y, int widht, int height, RGB fromColor, RGB toColor, Orientation orientation)
+        {
+            DX.VERTEX2D CreateVertex(int _x, int _y, RGB rgb)
+            {
+                return new DX.VERTEX2D
+                {
+                    pos = new DX.VECTOR { x = (float)_x, y = (float)_y, z = 0.0f },
+                    rhw = 1.0f,
+                    dif = new DX.COLOR_U8 { r = rgb.Red, g = rgb.Green, b = rgb.Blue, a = 255 },
+                    u = 0.0f,
+                    v = 0.0f
+                };
+            }
+
+            var vertex = new DX.VERTEX2D[]
+            {
+                // 第1ポリゴンの頂点1(左上)
+                CreateVertex(x, y, fromColor),
+                // 第1ポリゴンの頂点2(右上)
+                CreateVertex(x + widht, y, orientation.IsHorizontal() ? toColor : fromColor),
+                // 第1ポリゴンの頂点3(左下)
+                CreateVertex(x, y + height, orientation.IsVertical() ? toColor : fromColor),
+                // 第2ポリゴンの頂点1(右下)
+                CreateVertex(x + widht, y + height, toColor),
+                // 第2ポリゴンの頂点2(左下)
+                CreateVertex(x, y + height,orientation.IsVertical() ? toColor : fromColor),
+                // 第2ポリゴンの頂点3(右上)
+                CreateVertex(x + widht, y, orientation.IsHorizontal() ? toColor : fromColor),
+            };
+            return DrawPolygon(vertex, 2, DX.DX_NONE_GRAPH, 0);
+        }
         #endregion
 
         #region ☆ 文字描画関係関数
@@ -1078,6 +1143,16 @@ namespace dxw
         /// <returns>色コード</returns>
         public static uint GetColor(int red, int green, int blue) 
             => DX.GetColor(red, green, blue);
+        #endregion
+
+        #region - GetColor : 色コードを取得する
+        /// <summary>
+        /// 色コードを取得する
+        /// </summary>
+        /// <param name="rgb">RGB構造体</param>
+        /// <returns>色コード</returns>
+        public static uint GetColor(RGB rgb)
+            => DX.GetColor(rgb.Red, rgb.Green, rgb.Blue);
         #endregion
 
         #region - ClearDrawScreen : 画面に描かれたものを消去する

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using dxw;
 using hsb.Extensions;
 
+using DxLibDLL;
 using static dxw.Helper;
 
 namespace Sample
@@ -71,7 +72,8 @@ namespace Sample
         protected override void DrawFrameBeforeSpriteDrawing()
         {
             base.DrawFrameBeforeSpriteDrawing();
-            FillBackground(Stock.Colors.Black);
+            // FillBackground(Stock.Colors.Black);
+            DrawGradationBox(0, 0, App.ScreenWidth, App.ScreenHeight, new RGB(255, 0, 0), new RGB(0, 255, 0), Orientation.Both);
         }
 
         #endregion

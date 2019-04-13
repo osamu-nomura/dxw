@@ -53,6 +53,12 @@ namespace dxw
         Vertical = 1,   // 垂直
         Both = 2        // 両方
     }
+    public static class OrientationEx
+    {
+        public static bool IsHorizontal(this Orientation o) => o != Orientation.Vertical;
+        public static bool IsVertical(this Orientation o) => o != Orientation.Horizontal;
+        public static bool IsBoth(this Orientation o) => o == Orientation.Both; 
+    }
     #endregion
 
     #region - PlayType : 再生形式
