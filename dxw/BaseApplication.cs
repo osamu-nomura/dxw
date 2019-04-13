@@ -956,6 +956,23 @@ namespace dxw
         }
         #endregion
 
+        #region - CheckKeyDown : キーボードの何れかが押下されたかチェック
+        /// <summary>
+        /// キーボードの何れかが押下されたかチェック
+        /// </summary>
+        /// <param name="keyCodes">キーコード(params)</param>
+        /// <returns>True : 押下されている / False : されていない</returns>
+        public bool CheckKeyDown(params KeyCode[] keyCodes)
+        {
+            foreach (var keyCode in keyCodes)
+            {
+                if ((int)keyCode >= 0 && (int)keyCode < 256 && _keyDowns[(int)keyCode] == 1)
+                    return true;
+            }
+            return false;
+        }
+        #endregion
+
         #region - GetKeyDowns : キーボードが押下されたキーのキーコードを取得する
         /// <summary>
         /// キーボードが押下されたキーのキーコードを取得する
@@ -972,13 +989,30 @@ namespace dxw
         /// キーボードが離されたかチェック
         /// </summary>
         /// <param name="keyCode">キーコード</param>
-        /// <returns>True ;  押下されている / False : されていない</returns>
+        /// <returns>True ;  離された / False : されていない</returns>
         public bool CheckOnKeyUp(KeyCode keyCode)
         {
             if ((int)keyCode >= 0 && (int)keyCode < 256)
                 return _keyUps[(int)keyCode] == 1;
             else
                 return false;
+        }
+        #endregion
+
+        #region - CheckKeyUp : キーボードの何れかが離されたかチェック
+        /// <summary>
+        /// キーボードの何れかが離されたかチェック
+        /// </summary>
+        /// <param name="keyCodes">キーコード(params)</param>
+        /// <returns>True : 離された / False : されていない</returns>
+        public bool CheckKeyUp(params KeyCode[] keyCodes)
+        {
+            foreach (var keyCode in keyCodes)
+            {
+                if ((int)keyCode >= 0 && (int)keyCode < 256 && _keyUps[(int)keyCode] == 1)
+                    return true;
+            }
+            return false;
         }
         #endregion
 

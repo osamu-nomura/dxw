@@ -726,6 +726,21 @@ namespace dxw
         }
         #endregion
 
+        #region - DrawPolygon : ポリゴンを描画する
+        /// <summary>
+        /// ポリゴンを描画する
+        /// </summary>
+        /// <param name="vertexs">VERTEX2D</param>
+        /// <param name="polygonNum"></param>
+        /// <param name="h"></param>
+        /// <param name="flag"></param>
+        /// <returns></returns>
+        public static bool DrawPolygon(DX.VERTEX2D[] vertexs, int polygonNum, int h, int flag)
+        {
+            return DX.DrawPolygon2D(vertexs, polygonNum, h, flag) == 0;
+        }
+        #endregion
+
         #endregion
 
         #region ☆ 図形描画関数
