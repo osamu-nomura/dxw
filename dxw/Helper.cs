@@ -969,7 +969,7 @@ namespace dxw
         /// <param name="orientation">方向</param>
         /// <returns>True : 成功 / False : 失敗</returns>
         public static bool DrawGradationBox(Rectangle rect, RGB fromColor, RGB toColor, Orientation orientation)
-            => DrawGradationBox(rect, X, rect.Y, rect.Width, rect.Height, fromColor, toColor, orientation);
+            => DrawGradationBox(rect.X, rect.Y, rect.Width, rect.Height, fromColor, toColor, orientation);
         #endregion
 
         #region - DrawGradationBox : グラデーション背景の矩形を描く
