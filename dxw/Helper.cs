@@ -1213,6 +1213,24 @@ namespace dxw
             => DX.GetColor(rgb.Red, rgb.Green, rgb.Blue);
         #endregion
 
+        #region - GetGradationColor : 中間色を取得する
+        /// <summary>
+        /// 中間色を取得する
+        /// </summary>
+        /// <param name="rgb1">色1</param>
+        /// <param name="rgb2">色2</param>
+        /// <param name="rate">率(0:色1～1:色2</param>
+        /// <returns>中間色</returns>
+        public static RGB GetGradationColor(RGB rgb1, RGB rgb2, double rate)
+        {
+            byte Round(int n) => (byte)(n < 0 ? 0 : (n > 255 ? 255 : n));
+            return new RGB(
+                Round(Convert.ToInt32(((int)rgb2.Red - (int)rgb1.Red) * rate) + rgb1.Red),
+                Round(Convert.ToInt32(((int)rgb2.Green - (int)rgb1.Green) * rate) + rgb1.Green),
+                Round(Convert.ToInt32(((int)rgb2.Blue - (int)rgb1.Blue) * rate) + rgb1.Blue));
+        }
+        #endregion
+
         #region - ClearDrawScreen : 画面に描かれたものを消去する
         /// <summary>
         /// 画面に描かれたものを消去する
