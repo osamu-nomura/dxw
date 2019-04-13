@@ -904,20 +904,35 @@ namespace dxw
         /// <param name="polygonNum"></param>
         /// <param name="h"></param>
         /// <param name="flag"></param>
-        /// <returns></returns>
+        /// <returns>True : 成功 / False : 失敗</returns>
         public static bool DrawPolygon(DX.VERTEX2D[] vertexs, int polygonNum, int h, int flag)
         {
             return DX.DrawPolygon2D(vertexs, polygonNum, h, flag) == 0;
         }
         #endregion
 
+        #region - DrawGradationBox : グラデーション背景の矩形を描く
+        /// <summary>
+        /// グラデーション背景の矩形を描く
+        /// </summary>
+        /// <param name="x">X座標(px)</param>
+        /// <param name="y">Y座標(px)</param>
+        /// <param name="widht">幅(px)</param>
+        /// <param name="height">高さ(px)</param>
+        /// <param name="fromColor">開始色(RGB)</param>
+        /// <param name="toColor">終了色(RGB)</param>
+        /// <param name="orientation">方向</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
         public static bool DrawGradationBox(int x, int y, int widht, int height, RGB fromColor, RGB toColor, Orientation orientation)
         {
-            DX.VERTEX2D CreateVertex(int _x, int _y, RGB rgb)
+            var _x = (_drawingWindow?.X ?? 0) + x;
+            var _y = (_drawingWindow?.Y ?? 0) + y;
+
+            DX.VERTEX2D CreateVertex(int px, int py, RGB rgb)
             {
                 return new DX.VERTEX2D
                 {
-                    pos = new DX.VECTOR { x = (float)_x, y = (float)_y, z = 0.0f },
+                    pos = new DX.VECTOR { x = (float)px, y = (float)py, z = 0.0f },
                     rhw = 1.0f,
                     dif = new DX.COLOR_U8 { r = rgb.Red, g = rgb.Green, b = rgb.Blue, a = 255 },
                     u = 0.0f,
@@ -928,20 +943,63 @@ namespace dxw
             var vertex = new DX.VERTEX2D[]
             {
                 // 第1ポリゴンの頂点1(左上)
-                CreateVertex(x, y, fromColor),
+                CreateVertex(_x, _y, fromColor),
                 // 第1ポリゴンの頂点2(右上)
-                CreateVertex(x + widht, y, orientation.IsHorizontal() ? toColor : fromColor),
+                CreateVertex(_x + widht, _y, orientation.IsHorizontal() ? toColor : fromColor),
                 // 第1ポリゴンの頂点3(左下)
-                CreateVertex(x, y + height, orientation.IsVertical() ? toColor : fromColor),
+                CreateVertex(_x, _y + height, orientation.IsVertical() ? toColor : fromColor),
                 // 第2ポリゴンの頂点1(右下)
-                CreateVertex(x + widht, y + height, toColor),
+                CreateVertex(_x + widht, _y + height, toColor),
                 // 第2ポリゴンの頂点2(左下)
-                CreateVertex(x, y + height,orientation.IsVertical() ? toColor : fromColor),
+                CreateVertex(_x, _y + height,orientation.IsVertical() ? toColor : fromColor),
                 // 第2ポリゴンの頂点3(右上)
-                CreateVertex(x + widht, y, orientation.IsHorizontal() ? toColor : fromColor),
+                CreateVertex(_x + widht, _y, orientation.IsHorizontal() ? toColor : fromColor),
             };
             return DrawPolygon(vertex, 2, DX.DX_NONE_GRAPH, 0);
         }
+        #endregion
+
+        #region - DrawGradationBox : グラデーション背景の矩形を描く
+        /// <summary>
+        /// グラデーション背景の矩形を描く
+        /// </summary>
+        /// <param name="rect">矩形</param>
+        /// <param name="fromColor">開始色(RGB)</param>
+        /// <param name="toColor">終了色(RGB)</param>
+        /// <param name="orientation">方向</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool DrawGradationBox(Rectangle rect, RGB fromColor, RGB toColor, Orientation orientation)
+            => DrawGradationBox(rect, X, rect.Y, rect.Width, rect.Height, fromColor, toColor, orientation);
+        #endregion
+
+        #region - DrawGradationBox : グラデーション背景の矩形を描く
+        /// <summary>
+        /// グラデーション背景の矩形を描く
+        /// </summary>
+        /// <param name="pt">座標</param>
+        /// <param name="size">サイズ</param>
+        /// <param name="fromColor">開始色(RGB)</param>
+        /// <param name="toColor">終了色(RGB)</param>
+        /// <param name="orientation">方向</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool DrawGradationBox(Point pt, RectangleSize size, RGB fromColor, RGB toColor, Orientation orientation)
+            => DrawGradationBox(pt.X, pt.Y, size.Width, size.Height, fromColor, toColor, orientation);
+        #endregion
+
+        #region - DrawGradationBox : グラデーション背景の矩形を描く
+        /// <summary>
+        /// グラデーション背景の矩形を描く
+        /// </summary>
+        /// <param name="leftTop">左上座標</param>
+        /// <param name="rightBottom">右下座標</param>
+        /// <param name="fromColor">開始色(RGB)</param>
+        /// <param name="toColor">終了色(RGB)</param>
+        /// <param name="orientation">方向</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool DrawGradationBox(Point leftTop, Point rightBottom, RGB fromColor, RGB toColor, Orientation orientation)
+            => DrawGradationBox(new Rectangle(leftTop, rightBottom), fromColor, toColor, orientation);
+        #endregion
+
         #endregion
 
         #region ☆ 文字描画関係関数
