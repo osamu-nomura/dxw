@@ -18,6 +18,10 @@ namespace Sample
     {
 
         public List<int> Images { get; set; }
+        public int EnableButton { get; set; }
+        public int EnableButtonSelected { get; set; }
+        public int DisableButton { get; set; }
+        public int DisableButtonSelected { get; set; }
 
         #region ■ Constructor
         /// <summary>
@@ -59,6 +63,12 @@ namespace Sample
         protected override bool Loading(ulong elapsedTime)
         {
             Images = LoadDivGraph("ufo.png", 24, 8, 3, 64, 64);
+
+            EnableButton = LoadGraph("enable_button.png");
+            EnableButtonSelected = LoadGraph("enable_button_selected.png");
+            DisableButton = LoadGraph("disable_button.png");
+            DisableButtonSelected = LoadGraph("disable_button_selected.png");
+
             return false;
         }
 

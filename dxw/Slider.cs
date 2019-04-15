@@ -12,7 +12,7 @@ namespace dxw
     /// <summary>
     /// スライダークラス
     /// </summary>
-    public class BaseSlider : BaseInteractiveSprite
+    public class Slider : BaseInteractiveSprite
     {
         #region ■ Members
         /// <summary>
@@ -88,7 +88,25 @@ namespace dxw
         /// <summary>
         /// ハンドル
         /// </summary>
-        protected BaseSprite Handle { get; set; }
+        public BaseSprite Handle { get; set; } = null;
+        #endregion
+
+        #region - BackgroundImage : 背景イメージ
+        /// <summary>
+        /// 背景イメージ
+        /// </summary>
+        public int? BackgroundImage { get; set; } = null;
+        #endregion
+
+        #endregion
+
+        #region ■ Delegate
+
+        #region - OnValueChange : 値が変更された
+        /// <summary>
+        /// 値が変更された
+        /// </summary>
+        public Action<Slider> OnValueChange { get; set; } = null;
         #endregion
 
         #endregion
@@ -97,9 +115,11 @@ namespace dxw
         /// <summary>
         ///  コンストラクター
         /// </summary>
-        public BaseSlider(BaseScene scene) 
+        public Slider(BaseScene scene) 
                 : base(scene)
         {
+            Value = 0;
+            Step = null;
         }
         #endregion
 
@@ -177,6 +197,9 @@ namespace dxw
         /// </summary>
         protected void UpdateHandlePosition()
         {
+            if (Handle == null)
+                return;
+
             if (Orientation == Orientation.Horizontal)
             {
                 if (Value <= Min)
@@ -213,9 +236,7 @@ namespace dxw
         /// 値が変更された
         /// </summary>
         protected virtual void ValueChanged()
-        {
-            // 派生クラスでオーバーライドする
-        }
+            => OnValueChange?.Invoke(this);
         #endregion
 
         #region - TouchDown : タッチ or マウスで押された
@@ -271,6 +292,30 @@ namespace dxw
             {
                 Value = CalcValue(TouchPoint.Value);
             }
+        }
+        #endregion
+
+        #region - Draw : スライダーを描画する
+        /// <summary>
+        /// スライダーを描画する
+        /// </summary>
+        public override void Draw()
+        {
+            base.Draw();
+            if (BackgroundImage.HasValue)
+                DrawGraph(LeftTop, BackgroundImage.Value, true);
+            Handle?.Draw();
+        }
+        #endregion
+
+        #region - DrawEffect : 効果を描画する
+        /// <summary>
+        /// 効果を描画する
+        /// </summary>
+        public override void DrawEffect()
+        {
+            base.DrawEffect();
+            Handle?.DrawEffect();
         }
         #endregion
 

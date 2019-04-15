@@ -65,7 +65,6 @@ namespace Sample
         public override void LoadCompleted()
         {
             base.LoadCompleted();
-
         }
         #endregion
 
@@ -78,7 +77,7 @@ namespace Sample
             else
             {
                 var col1 = new RGB(255, 0, 0);
-                var col2 = new RGB(0, 0, 255);
+                var col2 = new RGB(0, 0, 0);
                 var col3 = GetGradationColor(col1, col2, App.ElapsedTime / 10000.0d);
                 FillBackground(col3.Color());
             }

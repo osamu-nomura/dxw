@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="BaseApplication.cs" />
     <Compile Include="BaseScene.cs" />
-    <Compile Include="BaseSlider.cs" />
+    <Compile Include="Slider.cs" />
     <Compile Include="BaseSprite.cs" />
     <Compile Include="BaseInteractiveSprite.cs" />
     <Compile Include="BaseTransition.cs" />
