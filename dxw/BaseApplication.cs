@@ -293,6 +293,13 @@ namespace dxw
         public double FPS { get; private set; } = 0d;
         #endregion
 
+        #region - IsDebug : Debugモードフラグ
+        /// <summary>
+        /// Debugモードフラグ
+        /// </summary>
+        public bool IsDebug { get; set; } = false;
+        #endregion
+
         #region - IsShowSystemInformation : システム情報表示フラグ
         /// <summary>
         /// システム情報表示フラグ
