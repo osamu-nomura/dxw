@@ -72,6 +72,13 @@ namespace Sample
         {
             base.DrawFrameBeforeSpriteDrawing();
 
+            var keys = App.HitKeys();
+            if (keys.Count > 0)
+            {
+                System.Diagnostics.Debug.WriteLine("OK");
+            }
+
+
             if (App.ElapsedTime > 10000)
                 FillBackground(Stock.Colors.Black);
             else

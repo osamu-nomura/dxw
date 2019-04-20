@@ -398,6 +398,13 @@ namespace dxw
         public uint ColorBlack { get { return _colorBlack; } }
         #endregion
 
+        #region - SystemInformationColor : システム表示色
+        /// <summary>
+        /// システム表示色
+        /// </summary>
+        public uint SystemInformationColor { get; set; }
+        #endregion
+
         #region - Random : 乱数発生器
         /// <summary>
         /// 乱数発生器
@@ -542,15 +549,15 @@ namespace dxw
         /// </summary>
         private void ShowSystemInformation()
         {
-            DrawString(5, 5, $"FPS:{FPS:##0.0} ELAPS TIME:{ElapsedTime:#,##0}ms", _colorWhite, _systemFontHandle);
+            DrawString(5, 5, $"FPS:{FPS:##0.0} ELAPS TIME:{ElapsedTime:#,##0}ms", SystemInformationColor, _systemFontHandle);
             if (IsShowInputStatus)
             {
                 var keyBuff = (FlipFlop) ? _flipKeyBuff : _flopKeyBuff;
-                DrawString(5, 25, $"KeyBuff:{string.Join("", keyBuff.Select(n => n.ToString()))}", _colorWhite, _systemFontHandle);
+                DrawString(5, 25, $"KeyBuff:{string.Join("", keyBuff.Select(n => n.ToString()))}", SystemInformationColor, _systemFontHandle);
                 for (var i = 0; i < Inputs.Count; i++)
                 {
                     var device = (Inputs[i].Device == DeviceType.Touch) ? "Touch" : "Mouse";
-                    DrawString(5, 45 + (i * 20), $"input;[{device}] (X:{Inputs[i].Point.X} Y:{Inputs[i].Point.Y} LeftButtonDown: {Inputs[i].IsMouseLeftButtonDown})", _colorWhite, _systemFontHandle);
+                    DrawString(5, 45 + (i * 20), $"input;[{device}] (X:{Inputs[i].Point.X} Y:{Inputs[i].Point.Y} LeftButtonDown: {Inputs[i].IsMouseLeftButtonDown})", SystemInformationColor, _systemFontHandle);
                 }
             }
         }
@@ -641,6 +648,7 @@ namespace dxw
             _systemFontHandle = CreateFont("Meiryo", 14, 3, FontType.AntiAlias);
             _colorWhite = GetColor(255, 255, 255);
             _colorBlack = GetColor(0, 0, 0);
+            SystemInformationColor = GetColor(255, 0, 0);
         }
         #endregion
 
