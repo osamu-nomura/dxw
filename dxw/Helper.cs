@@ -538,16 +538,18 @@ namespace dxw
         /// <param name="height">描画するぐらふぃく範囲の高さ</param>
         /// <param name="handle">グラフィックハンドル</param>
         /// <param name="enableTranslate">透過を有効にする</param>
-        /// <param name="enableTurn">画像の反転を有効にする</param>
+        /// <param name="enableVeritcalTurn">画像の垂直方向反転を有効にする</param>
+        /// <param name="enableHorizontalTurn">画像の水平方向反転を有効にする</param>
         /// <returns>True : 成功 . False : 失敗</returns>
         public static bool DrawRectGraph(int x, int y, int srcX, int srcY, int widht, int height, 
-            int handle, bool enableTranslate = false, bool enableTurn = false)
+            int handle, bool enableTranslate = false, bool enableVeritcalTurn = false, bool enableHorizontalTurn = false)
         {
             if (handle == 0)
                 return false;
             var _x = (_drawingWindow?.X ?? 0) + x;
             var _y = (_drawingWindow?.Y ?? 0) + y;
-            return DX.DrawRectGraph(_x, _y, srcX, srcY, widht, height, handle, DXBool(enableTranslate), DXBool(enableTurn)) == 0;
+            return DX.DrawRectGraph(_x, _y, srcX, srcY, widht, height, handle, 
+                    DXBool(enableTranslate), DXBool(enableVeritcalTurn), DXBool(enableHorizontalTurn)) == 0;
         }
         #endregion
 
@@ -559,10 +561,13 @@ namespace dxw
         /// <param name="srcRect">描画するグラフィックの範囲</param>
         /// <param name="handle">グラフィックハンドル</param>
         /// <param name="enableTranslate">透過を有効にする</param>
-        /// <param name="enableTurn">画像の反転を有効にする</param>
+        /// <param name="enableVeritcalTurn">画像の反転を有効にする</param>
+        /// <param name="enableHorizontalTurn">画像の水平方向反転を有効にする</param>
         /// <returns>True : 成功 . False : 失敗</returns>
-        public static bool DrawRectGraph(Point pt, Rectangle srcRect, int handle, bool enableTranslate = false, bool enableTurn = false)
-            => DrawRectGraph(pt.X, pt.Y, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, handle, enableTranslate, enableTurn);
+        public static bool DrawRectGraph(Point pt, Rectangle srcRect, int handle, bool enableTranslate = false, 
+            bool enableVeritcalTurn = false, bool enableHorizontalTurn = false)
+            => DrawRectGraph(pt.X, pt.Y, srcRect.X, srcRect.Y, srcRect.Width, srcRect.Height, handle, 
+                enableTranslate, enableVeritcalTurn, enableHorizontalTurn);
         #endregion
 
         #region - DrawExtendGraph : メモリに読みこんだグラフィックの拡大縮小描画

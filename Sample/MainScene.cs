@@ -72,11 +72,10 @@ namespace Sample
         {
             base.DrawFrameBeforeSpriteDrawing();
 
-            var keys = App.HitKeys();
-            if (keys.Count > 0)
-            {
-                System.Diagnostics.Debug.WriteLine("OK");
-            }
+            if (App.CheckOnKeyDown(KeyCode.KEY_NUMPAD0))
+                System.Diagnostics.Debug.WriteLine("KEY DOWN!");
+            if (App.CheckOnKeyUp(KeyCode.KEY_NUMPAD0))
+                System.Diagnostics.Debug.WriteLine("KEY_UP!");
 
 
             if (App.ElapsedTime > 10000)
