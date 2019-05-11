@@ -731,6 +731,8 @@ namespace dxw
                 else
                     CurrentScene?.UpdateFrame();
             }
+            // タスクの実行
+            _taskList.RemoveAll(task => task.Proc.Invoke(task.Id, task.RequestTime, this));
         }
         #endregion
 
@@ -874,9 +876,6 @@ namespace dxw
                     // フレーム更新処理
                     UpdateFrame();
 
-                    // タスクの実行
-                    _taskList.RemoveAll(task => task.Proc.Invoke(task.Id, task.RequestTime, this));
-
                     // フレームを描画
                     DrawFrame();
 
@@ -928,13 +927,13 @@ namespace dxw
         }
         #endregion
 
-        #region - CheckHitKey : キーボードが押下されているかチェック
+        #region - CheckKeyStatus : キーボードが押下されているかチェック
         /// <summary>
         /// キーボードが押下されているかチェック
         /// </summary>
         /// <param name="keyCode">キーコード</param>
         /// <returns>True ;  押下されている / False : されていない</returns>
-        public bool CheckHitKey(KeyCode keyCode)
+        public bool CheckKeyStatus(KeyCode keyCode)
         {
             var curKeyBuff = FlipFlop ? _flipKeyBuff : _flopKeyBuff;
             if ((int)keyCode >= 0 && (int)keyCode < 256)
@@ -944,12 +943,12 @@ namespace dxw
         }
         #endregion
 
-        #region - HitKeys : キーボードが押下されているキーのキーコードを取得する
+        #region - GetKeyStatus : キーボードが押下されているキーのキーコードを取得する
         /// <summary>
         /// キーボードが押下されているキーのキーコードを取得する
         /// </summary>
         /// <returns>押下されているキーコードのリスト</returns>
-        public List<KeyCode> HitKeys()
+        public List<KeyCode> GetKeyStatus()
         {
             var curKeyBuff = FlipFlop ? _flipKeyBuff : _flopKeyBuff;
             return Enumerable.Range(0, 255).Where(n => curKeyBuff[n] == 1).Select(n => (KeyCode)n).ToList();
@@ -1014,7 +1013,7 @@ namespace dxw
         }
         #endregion
 
-        #region - CheckKeyUp : キーボードの何れかが離されたかチェック
+        #region - CheckOnKeyUp : キーボードの何れかが離されたかチェック
         /// <summary>
         /// キーボードの何れかが離されたかチェック
         /// </summary>
@@ -1042,32 +1041,32 @@ namespace dxw
         }
         #endregion
 
-        #region - GetOnNumberKeyDowns : 押された数字キーのキーコードを取得する
+        #region - GetNumberKeyDowns : 押された数字キーのキーコードを取得する
         /// <summary>
         /// 押された数字キーのキーコードを取得する
         /// </summary>
         /// <returns>キーコードのリスト</returns>
-        public List<KeyCode> GetOnNumberKeyDowns()
+        public List<KeyCode> GetNumberKeyDowns()
             => GetKeyDowns().Where(keyCode => NumKeyCodes.Contains(keyCode)).ToList();
         #endregion
 
-        #region - GetOnNumberKeyUps : 押された数字キーのキーコードを取得する
+        #region - GetNumberKeyUps : 押された数字キーのキーコードを取得する
         /// <summary>
         /// 離された数字キーのキーコードを取得する
         /// </summary>
         /// <returns>キーコードのリスト</returns>
-        public List<KeyCode> GetOnNumberKeyUps()
+        public List<KeyCode> GetNumberKeyUps()
             => GetKeyUps().Where(keyCode => NumKeyCodes.Contains(keyCode)).ToList();
         #endregion
 
-        #region - GetHitNumberKey : 押下された数字キーの値を返す
+        #region - GetNumberKeyDownValue : 押下された数字キーの値を返す
         /// <summary>
         /// 押下された数字キーの値を返す
         /// </summary>
         /// <returns>押下された数字の値</returns>
-        public int? GetHitNumberKey()
+        public int? GetNumberKeyDownValue()
         {
-            var list = GetOnNumberKeyDowns();
+            var list = GetNumberKeyDowns();
             if (list.Count > 0)
                 return NumberKeyCode2Int(list.First());
             return null;
@@ -1235,26 +1234,6 @@ namespace dxw
         {
             _requestTransition = transition;
         }
-        #endregion
-
-        #region - PlaySound : 音声を再生する
-        /// <summary>
-        /// 音声を再生する
-        /// </summary>
-        /// <param name="soundHandle">音声リソースハンドル</param>
-        /// <returns>True : 成功 / False : 失敗</returns>
-        public bool PlaySound(int soundHandle)
-            => Helper.PlaySound(soundHandle, PlayType.Back, SEVolume);
-        #endregion
-
-        #region - PlayBGM : BGMを再生する
-        /// <summary>
-        /// BGMを再生する
-        /// </summary>
-        /// <param name="bgmHandle">BGMリソースハンドル</param>
-        /// <returns>True : 成功 / False : 失敗</returns>
-        public bool PlayBGM(int bgmHandle)
-            => Helper.PlaySound(bgmHandle, PlayType.Loop, BGMVolume);
         #endregion
 
         #endregion
