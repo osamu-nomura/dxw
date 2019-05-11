@@ -171,7 +171,7 @@ namespace dxw
         {
             base.TouchUp();
             if (TappedSoundHandle != 0)
-                App?.PlaySound(TappedSoundHandle);
+                PlaySound(TappedSoundHandle, PlayType.Back, App?.SEVolume ?? 50);
 
             if (State.HasValue)
                 State = !State.Value;

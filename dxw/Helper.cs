@@ -1510,6 +1510,28 @@ namespace dxw
         }
         #endregion
 
+        #region - PlaySound : 音声を再生する
+        /// <summary>
+        /// 音声を再生する(バックグラウンド）
+        /// </summary>
+        /// <param name="handle">リソースハンドル</param>
+        /// <param name="volume">音量</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool PlaySound(int handle, int volume)
+            => PlaySound(handle, PlayType.Back, volume);
+        #endregion
+
+        #region - PlaySoundLoop : 音声をループ再生する
+        /// <summary>
+        /// 音声をループ再生する
+        /// </summary>
+        /// <param name="handle">リソースハンドル</param>
+        /// <param name="volume">音量</param>
+        /// <returns>True : 成功 / False : 失敗</returns>
+        public static bool PlaySoundLoop(int handle, int volume)
+            => PlaySound(handle, PlayType.Loop, volume);
+        #endregion
+
         #region - ChangeSoundVolume : 音量を変更する
         /// <summary>
         /// 音量を変更する
