@@ -29,7 +29,7 @@ namespace dxw
         /// </summary>
         public int ImageHandle
         {
-            get { return _imageHandle; }
+            get => ImageSource?.GetImageHandle(this) ?? _imageHandle;
             set
             {
                 if (_imageHandle != value)
@@ -61,11 +61,25 @@ namespace dxw
         }
         #endregion
 
+        #region - ImageSource : スプライトの画像リソース提供
+        /// <summary>
+        /// スプライトの画像リソース提供
+        /// </summary>
+        public ISpriteImageSource ImageSource { get; set; } = null;
+        #endregion
+
         #region - Motion : スプライトのモーション定義
         /// <summary>
         /// スプライトのモーション定義
         /// </summary>
         public ISpriteMotion Motion { get; set; } = null;
+        #endregion
+
+        #region - Drawing : スプライトの描画定義
+        /// <summary>
+        /// スプライトの描画定義
+        /// </summary>
+        public ISpriteDrawing Drawing { get; set; } = null;
         #endregion
 
         #endregion
@@ -192,57 +206,6 @@ namespace dxw
         }
         #endregion
 
-        #region - Constructor(7)
-        /// <summary>
-        /// コンストラクタ(7)
-        /// </summary>
-        /// <param name="app">アプリケーション</param>
-        /// <param name="leftTop">左上座標</param>
-        /// <param name="imageHandle">画像ハンドル</param>
-        /// <param name="motion">モーション定義</param>
-        public Sprite(BaseApplication app, Point leftTop, int imageHandle, ISpriteMotion motion)
-            : this(app)
-        {
-            LeftTop = leftTop;
-            ImageHandle = imageHandle;
-            Motion = motion;
-        }
-        #endregion
-
-        #region - Constructor(8)
-        /// <summary>
-        /// コンストラクタ(8)
-        /// </summary>
-        /// <param name="scene">シーン</param>
-        /// <param name="leftTop">左上座標</param>
-        /// <param name="imageHandle">画像ハンドル</param>
-        /// <param name="motion">モーション定義</param>
-        public Sprite(BaseScene scene, Point leftTop, int imageHandle, ISpriteMotion motion)
-            : this(scene)
-        {
-            LeftTop = leftTop;
-            ImageHandle = imageHandle;
-            Motion = motion;
-        }
-        #endregion
-
-        #region - Constructor(9)
-        /// <summary>
-        /// コンストラクタ(9)
-        /// </summary>
-        /// <param name="parent">親スプライト</param>
-        /// <param name="leftTop">左上座標</param>
-        /// <param name="imageHandle">画像ハンドル</param>
-        /// <param name="motion">モーション定義</param>
-        public Sprite(BaseSprite parent, Point leftTop, int imageHandle, ISpriteMotion motion)
-            : this(parent)
-        {
-            LeftTop = leftTop;
-            ImageHandle = imageHandle;
-            Motion = motion;
-        }
-        #endregion        #endregion
-
         #endregion
 
         #region ■ Public Methods
@@ -285,6 +248,8 @@ namespace dxw
             base.Draw();
             if (OnDraw != null)
                 OnDraw(this);
+            else if (Drawing != null)
+                Drawing.Draw(this);
             else
                 DrawGraph(X, Y, ImageHandle, true);
         }
@@ -297,7 +262,10 @@ namespace dxw
         public override void DrawEffect()
         {
             base.DrawEffect();
-            OnDrawEffect?.Invoke(this);
+            if (OnDrawEffect != null)
+                OnDrawEffect(this);
+            else
+                Drawing?.DrawEffect(this);
         }
         #endregion
 

@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="BaseApplication.cs" />
     <Compile Include="BaseScene.cs" />
+    <Compile Include="ISpriteDrawing.cs" />
+    <Compile Include="ISpriteImageSource.cs" />
     <Compile Include="Slider.cs" />
     <Compile Include="BaseSprite.cs" />
     <Compile Include="BaseInteractiveSprite.cs" />

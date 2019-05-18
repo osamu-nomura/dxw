@@ -6,7 +6,7 @@ namespace dxw
     /// <summary>
     /// スプライト用アニメーションクラス
     /// </summary>
-    public class SpriteAnimation
+    public class SpriteAnimation : ISpriteImageSource
     {
         #region ■ Properties
 
@@ -69,12 +69,12 @@ namespace dxw
         /// </summary>
         /// <param name="wrapTime">前回描画時からの経過時間(ms)</param>
         /// <returns>画像ハンドル</returns>
-        public int GetImageHandle(int wrapTime)
+        public int GetImageHandle(Sprite sprite)
         {
             if ((ImageHandles?.Count ?? 0) == 0)
                 return 0;
 
-            var n = (WrapTime + wrapTime) / (1000 / FrameRate);
+            var n = (WrapTime + sprite?.App?.WrapTime ?? 0) / (1000 / FrameRate);
             if (n > 0)
             {
                 CurrentImageHandleIndex = (CurrentImageHandleIndex + n >= ImageHandles.Count) ?
@@ -82,7 +82,7 @@ namespace dxw
                 WrapTime = 0;
             }
             else
-                WrapTime += wrapTime;
+                WrapTime += sprite?.App?.WrapTime ?? 0;
             return ImageHandles[CurrentImageHandleIndex];
         }
         #endregion

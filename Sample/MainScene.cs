@@ -72,11 +72,10 @@ namespace Sample
         {
             base.DrawFrameBeforeSpriteDrawing();
 
-            if (App.CheckOnKeyDown(KeyCode.KEY_NUMPAD0))
-                System.Diagnostics.Debug.WriteLine("KEY DOWN!");
-            if (App.CheckOnKeyUp(KeyCode.KEY_NUMPAD0))
-                System.Diagnostics.Debug.WriteLine("KEY_UP!");
-
+            foreach (var key in App.GetKeyDowns())
+            {
+                System.Diagnostics.Debug.WriteLine(key.ToString());
+            }
 
             if (App.ElapsedTime > 10000)
                 FillBackground(Stock.Colors.Black);
