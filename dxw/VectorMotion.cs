@@ -167,7 +167,7 @@ namespace dxw
                 }
                 else
                 {
-                    Vector = Vector * 0.99d;
+                    Vector *= 0.99d;
                 }
             }
             Position = newPos;

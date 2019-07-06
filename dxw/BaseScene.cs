@@ -256,8 +256,7 @@ namespace dxw
             // 削除フラグをセットされたスプライトを削除する
             Sprites.ForEach(s =>
             {
-                var panel = s as Panel;
-                if (panel != null)
+                if (s is Panel panel)
                 {
                     panel.Sprites.Where(c => c.Remove).ForEach(c => c.Removed());
                     panel.Sprites.RemoveAll(c => c.Remove);

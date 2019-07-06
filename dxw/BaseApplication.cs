@@ -73,35 +73,35 @@ namespace dxw
         /// <summary>
         /// キー入力保持用バッファ
         /// </summary>
-        private byte[] _flipKeyBuff = new byte[256];
+        private readonly byte[] _flipKeyBuff = new byte[256];
         #endregion
 
         #region - _flopKeyBuff : キー入力保持用バッファ
         /// <summary>
         /// キー入力保持用バッファ
         /// </summary>
-        private byte[] _flopKeyBuff = new byte[256];
+        private readonly byte[] _flopKeyBuff = new byte[256];
         #endregion
 
         #region - _keyDowns : 押下されたキー
         /// <summary>
         /// 押下されたキー
         /// </summary>
-        private byte[] _keyDowns = new byte[256];
+        private readonly byte[] _keyDowns = new byte[256];
         #endregion
 
         #region - _keyUps : 離されたキー
         /// <summary>
         /// 離されたキー
         /// </summary>
-        private byte[] _keyUps = new byte[256];
+        private readonly byte[] _keyUps = new byte[256];
         #endregion
 
         #region - _taskList : 処理要求リクエストリスト
         /// <summary>
         /// 処理要求リクエストリスト
         /// </summary>
-        private List<Task> _taskList { get; set; } = new List<Task>();
+        private readonly List<Task> _taskList = new List<Task>();
         #endregion
 
         #region - _systemFontHandle : システムフォントハンドル
@@ -185,7 +185,7 @@ namespace dxw
         /// <summary>
         /// メッセージループ後処理キュー
         /// </summary>
-        private Queue<Action> _messageLoopPostProcessQueue = new Queue<Action>();
+        private readonly Queue<Action> _messageLoopPostProcessQueue = new Queue<Action>();
         #endregion
 
         #region - _requestTransition : 要求トランジション

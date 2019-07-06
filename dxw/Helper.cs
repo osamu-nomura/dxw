@@ -172,6 +172,7 @@ namespace dxw
     public static class Helper
     {
         #region ■ DLL Import
+        #pragma warning disable IDE1006 // 命名スタイル
         /// <summary>
         /// SetActiveStateChangeCallBackFunction
         /// DXライブラリのC#用DLLの定義では利用しづらいので直接DxLib.dllからインポートする
@@ -181,6 +182,7 @@ namespace dxw
         /// <returns></returns>
         [DllImport("DxLib.dll", EntryPoint = "dx_SetActiveStateChangeCallBackFunction")]
         extern unsafe static int SetActiveStateChangeCallBackFunction(DX.SetActiveStateChangeCallBackFunctionCallback Callback, IntPtr UserData);
+
         /// <summary>
         /// GetJoypadXInputStateで使用する構造体
         /// </summary>
@@ -203,6 +205,7 @@ namespace dxw
         /// <returns>0 : 正常 / 非0 : エラー</returns>
         [DllImport("DxLib.dll", EntryPoint = "dx_GetJoypadXInputState")]
         extern unsafe static int GetJoypadXInputState(int padNo, out _XInputState state);
+        #pragma warning restore IDE1006 // 命名スタイル
         #endregion
 
         #region ■ Members

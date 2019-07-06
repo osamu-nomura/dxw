@@ -18,11 +18,11 @@ namespace dxw
         /// <summary>
         /// トランジション処理本体
         /// </summary>
-        private Action<ulong> _update;
+        private readonly Action<ulong> _update;
         /// <summary>
         /// トランジション終了時処理
         /// </summary>
-        private Action _endTransition;
+        private readonly Action _endTransition;
         #endregion
 
         #region ■ Constructor
