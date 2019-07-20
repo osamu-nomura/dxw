@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 using DxLibDLL;
+using hsb.Extensions;
 
 namespace dxw
 {
@@ -1157,6 +1158,43 @@ namespace dxw
                 DX.GetDrawStringSize(out width, out height, out lineCount, s, s.Length);
             return new StringSize { Width = width, Height = height, LineCount = lineCount };
         }
+        #endregion
+
+        #region - DrawStringVertical : 文字列を縦書きで表示する
+        /// <summary>
+        /// 文字列を縦書きで表示する
+        /// </summary>
+        /// <param name="x">X座標(px) 文字の中央/param>
+        /// <param name="y">Y座標(px)</param>
+        /// <param name="s">描画文字列</param>
+        /// <param name="kerning">文字間隔</param>
+        /// <param name="color">色</param>
+        /// <param name="font">フォントハンドル</param>
+        public static void DrawStringVertical(int x, int y, string s, int kerning, uint color, int font = 0)
+        {
+            if (string.IsNullOrEmpty(s))
+                return;
+
+            foreach (var c in s.TextElements())
+            {
+                var size = GetDrawStringSize(c, font);
+                DrawString(x - size.Width / 2, y, c, color, font);
+                y += size.Height + kerning;
+            }
+        }
+        #endregion
+
+        #region - DrawStringVertical : 文字列を縦書きで表示する
+        /// <summary>
+        /// 文字列を縦書きで表示する
+        /// </summary>
+        /// <param name="pt">座標</param>
+        /// <param name="s">描画文字列</param>
+        /// <param name="kerning">文字間隔</param>
+        /// <param name="color">色</param>
+        /// <param name="font">フォントハンドル</param>
+        public static void DrawStringVertical(Point pt, string s, int kerning, uint color, int font = 0)
+            => DrawStringVertical(pt.X, pt.Y, s, kerning, color, font);
         #endregion
 
         #region - CreateFont : フォントを作製する

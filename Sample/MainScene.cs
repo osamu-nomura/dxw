@@ -75,21 +75,8 @@ namespace Sample
         {
             base.DrawFrameBeforeSpriteDrawing();
 
-            foreach (var key in App.GetKeyDowns())
-            {
-                System.Diagnostics.Debug.WriteLine(key.ToString());
-            }
+            DrawStringVertical(50, 30, "ABCDEFJHIJK", -10, Stock.Colors.Yellow, Stock.Font);
 
-            if (App.ElapsedTime > 10000)
-                FillBackground(Stock.Colors.Black);
-            else
-            {
-                var col1 = new RGB(255, 0, 0);
-                var col2 = new RGB(0, 0, 0);
-                var col3 = GetGradationColor(col1, col2, App.ElapsedTime / 10000.0d);
-                FillBackground(col3.Color());
-            }
-            // DrawGradationBox(0, 0, App.ScreenWidth, App.ScreenHeight, new RGB(255, 0, 0), new RGB(0, 255, 0), Orientation.Both);
         }
 
         #endregion
