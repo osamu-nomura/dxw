@@ -10,9 +10,9 @@ namespace dxw
     /// <summary>
     /// ベクトル構造体
     /// </summary>
-    public struct Vector
+    public readonly struct Vector
     {
-        #region ■ Properties
+        #region ■ Fields & Properties
 
         #region - X : X方向
         /// <summary>

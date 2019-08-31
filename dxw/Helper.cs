@@ -394,9 +394,7 @@ namespace dxw
         /// </summary>
         /// <param name="s">タイトル文字列</param>
         public static void SetMainWindowText(string s)
-        {
-            DX.SetMainWindowText(s);
-        }
+            => DX.SetMainWindowText(s);
         #endregion
 
         #region - ChangeWindowMode : ウインドウモード・フルスクリーンモードの変更を行う
@@ -1208,6 +1206,16 @@ namespace dxw
         /// <returns>フォントハンドル</returns>
         public static int CreateFont(string fontName, int size, int thick, FontType fontType) 
             => DX.CreateFontToHandle(fontName, size, thick, (int)fontType);
+        #endregion
+
+        #region - DeleteFont : フォントを破棄する
+        /// <summary>
+        /// フォントハンドルを破棄する
+        /// </summary>
+        /// <param name="font">フォントハンドル</param>
+        /// <returns>TRUE : 成功 / FALSE : 失敗</returns>
+        public static bool DeleteFont(int font)
+            => DX.DeleteFontToHandle(font) == 0;
         #endregion
 
         #endregion

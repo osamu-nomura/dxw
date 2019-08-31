@@ -12,7 +12,7 @@ namespace dxw
     /// <summary>
     /// 点構造体
     /// </summary>
-    public struct Point
+    public readonly struct Point
     {
         #region ■ Members
         /// <summary>
@@ -99,11 +99,11 @@ namespace dxw
     }
     #endregion
 
-    #region 【Class : FPoint】
+    #region 【struct : FPoint】
     /// <summary>
     /// 点構造体(実数版）
     /// </summary>
-    public struct FPoint
+    public readonly struct FPoint
     {
         #region ■ Members
         /// <summary>
