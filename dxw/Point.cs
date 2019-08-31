@@ -90,11 +90,21 @@ namespace dxw
         /// <summary>
         /// (Fpoint) ← Point
         /// </summary>
-        /// <param name="pt"></param>
+        /// <param name="pt">Point</param>
+        /// <returns>Vector</returns>
         public static explicit operator FPoint(Point pt)
             => new FPoint(pt.X, pt.Y);
         #endregion
 
+        #region - (Vector) Operator
+        /// <summary>
+        /// (Vector) ← Point
+        /// </summary>
+        /// <param name="pt">Point</param>
+        /// <returns>Vector</returns>
+        public static explicit operator Vector(Point pt)
+            => new Vector(pt.X, pt.Y);
+        #endregion
         #endregion
     }
     #endregion
@@ -197,6 +207,15 @@ namespace dxw
             => new Point((int)pt.X.Floor(), (int)pt.Y.Floor());
         #endregion
 
+        #region - (Vector) Operator
+        /// <summary>
+        /// (Vector) ← FPoint
+        /// </summary>
+        /// <param name="pt">FPoint</param>
+        /// <returns>Vector</returns>
+        public static explicit operator Vector(FPoint pt)
+            => new Vector(pt.X, pt.Y);
+        #endregion
         #endregion
     }
     #endregion
