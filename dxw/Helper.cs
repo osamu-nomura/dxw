@@ -780,14 +780,15 @@ namespace dxw
         /// <param name="x2">終点X座標(px)</param>
         /// <param name="y2">終点Y座標(px)</param>
         /// <param name="color">色</param>
+        /// <param name="thickness">線の太さ</param>
         /// <returns>True: 成功 / False: 失敗</returns>
-        public static bool DrawLine(int x1, int y1, int x2, int y2, uint color)
+        public static bool DrawLine(int x1, int y1, int x2, int y2, uint color, int thickness = 1)
         {
             var _x1 = (_drawingWindow?.X ?? 0) + x1;
             var _y1 = (_drawingWindow?.Y ?? 0) + y1;
             var _x2 = (_drawingWindow?.X ?? 0) + x2;
             var _y2 = (_drawingWindow?.Y ?? 0) + y2;
-            return DX.DrawLine(_x1, _y1, _x2, _y2, color) == 0;
+            return DX.DrawLine(_x1, _y1, _x2, _y2, color, thickness) == 0;
         }
         #endregion
 
@@ -798,14 +799,15 @@ namespace dxw
         /// <param name="pt1">起点座標(px)</param>
         /// <param name="pt2">終点座標(px)</param>
         /// <param name="color">色</param>
+        /// <param name="thickness">線の太さ</param>
         /// <returns>True: 成功 / False: 失敗</returns>
-        public static bool DrawLine(Point pt1, Point pt2, uint color)
+        public static bool DrawLine(Point pt1, Point pt2, uint color, int thickness = 1)
         {
             var _x1 = (_drawingWindow?.X ?? 0) + pt1.X;
             var _y1 = (_drawingWindow?.Y ?? 0) + pt1.Y;
             var _x2 = (_drawingWindow?.X ?? 0) + pt2.X;
             var _y2 = (_drawingWindow?.Y ?? 0) + pt2.Y;
-            return DX.DrawLine(_x1, _y1, _x2, _y2, color) == 0;
+            return DX.DrawLine(_x1, _y1, _x2, _y2, color, thickness) == 0;
         }
         #endregion
 
@@ -819,13 +821,33 @@ namespace dxw
         /// <param name="y2">終点Y座標(px)</param>
         /// <param name="color">色</param>
         /// <returns>True: 成功 / False: 失敗</returns>
-        public static bool DrawAntiAliasingLine(float x1, float y1, float x2, float y2, uint color)
+        public static bool DrawAntiAliasingLine(float x1, float y1, float x2, float y2, uint color, float thickness = 1.0f)
         {
             var _x1 = (_drawingWindow?.X ?? 0) + x1;
             var _y1 = (_drawingWindow?.Y ?? 0) + y1;
             var _x2 = (_drawingWindow?.X ?? 0) + x2;
             var _y2 = (_drawingWindow?.Y ?? 0) + y2;
-            return DX.DrawLineAA(_x1, _y1, _x2, _y2, color) == 0;
+            return DX.DrawLineAA(_x1, _y1, _x2, _y2, color, thickness) == 0;
+        }
+        #endregion
+
+        #region - DrawAntiAliasingLine : 直線を描画する(アンチエリアス適用）
+        /// <summary>
+        /// 直線を描画する(アンチエリアス適用）
+        /// </summary>
+        /// <param name="x1">起点X座標(px)</param>
+        /// <param name="y1">起点Y座用(px)</param>
+        /// <param name="x2">終点X座標(px)</param>
+        /// <param name="y2">終点Y座標(px)</param>
+        /// <param name="color">色</param>
+        /// <returns>True: 成功 / False: 失敗</returns>
+        public static bool DrawAntiAliasingLine(FPoint pt1, FPoint pt2, uint color, float thickness = 1.0f)
+        {
+            var _x1 = (_drawingWindow?.X ?? 0) + pt1.X;
+            var _y1 = (_drawingWindow?.Y ?? 0) + pt1.Y;
+            var _x2 = (_drawingWindow?.X ?? 0) + pt2.X;
+            var _y2 = (_drawingWindow?.Y ?? 0) + pt2.Y;
+            return DX.DrawLineAA((float)_x1, (float)_y1, (float)_x2, (float)_y2, color, thickness) == 0;
         }
         #endregion
 
