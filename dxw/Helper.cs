@@ -1323,6 +1323,30 @@ namespace dxw
             => DX.SetDrawScreen(screenHandle) == 0;
         #endregion
 
+        #region - SetDrawScreen : 描画先グラフィック領域の指定
+        /// <summary>
+        /// 描画先グラフィック領域の指定
+        /// </summary>
+        /// <param name="screenHandle">描画先グラフィックハンドル</param>
+        /// <param name="callback">コールバック</param>
+        /// <returns>True: 成功 / False: 失敗</returns>
+        public static bool SetDrawScreen(int screenHandle, Action callback)
+        {
+            if (DX.SetDrawScreen(screenHandle) == 0)
+            {
+                try
+                {
+                    callback();
+                    return true;
+                }
+                finally
+                {
+                    DX.SetDrawScreen(DX.DX_SCREEN_BACK);
+                }
+            }
+            return false;
+        }
+        #endregion
         #endregion
 
         #region ☆　キーボード入力関連関数
